@@ -871,7 +871,7 @@ export default{
         }
         /* Keep the built-in BP01 report label in sync even if its module stores
            an older literal version string internally. */
-        html=html.replaceAll('0.7.23','0.7.42');
+        html=html.replaceAll('0.7.23',V).replaceAll('0.7.37',V);
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
