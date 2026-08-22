@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.45";
+const V="0.7.46";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.45 戦闘UI改善3＋中央盤面拡大')
-        title.textContent='v0.7.45 戦闘UI改善3＋中央盤面拡大';
+      if(title&&title.textContent!=='v0.7.46 戦闘UI改善4＋中央盤面拡大')
+        title.textContent='v0.7.46 戦闘UI改善4＋中央盤面拡大';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.45';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.46';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.45 official probe',e);
+      console.error('BP01-084 v0.7.46 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.45公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.46公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.45デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.46デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.45 Battle UX + Official Sync';
+        v072BpReport.version='0.7.46 Battle UX + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.45 戦闘UI改善3＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.46 戦闘UI改善4＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,12 +840,12 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.45 battle UX3 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.46 battle UX4 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
 <style id="v0745CombatUX">
-/* v0.7.45 — battle UX inspired by a compact digital-card-game flow.
+/* v0.7.46 — battle UX inspired by a compact digital-card-game flow.
    Gameplay/rules are untouched: this layer only changes guidance, modals and FX. */
 .app.v04.v0745CombatUX .v04Play{position:relative!important}
 
@@ -944,7 +944,7 @@ const PATCH=`
 @keyframes v0745Toast{0%{opacity:0;transform:translate(-50%,-44%) scale(.9)}15%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(.98)}}
 
 
-/* v0.7.45: effect target selectors (e.g. 500 damage) stay compact so the board remains visible. */
+/* v0.7.46: effect target selectors (e.g. 500 damage) stay compact so the board remains visible. */
 .modal.v0745EffectChoice{
   position:fixed!important;inset:0!important;z-index:2147482400!important;
   align-items:flex-end!important;justify-content:center!important;
@@ -1220,7 +1220,185 @@ const PATCH=`
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.45 combat UX3 applied');
+  console.info('Palworld OCG v0.7.46 combat UX4 applied');
+})();
+</script>
+
+
+<style id="v0746OverlayFix">
+/* v0.7.46 — simultaneous battle overlays no longer cover each other. */
+.modal.v0745CombatModal{
+  align-items:flex-end!important;
+  padding:3px!important;
+}
+.modal.v0745CombatModal>.modalCard{
+  width:min(320px,64vw)!important;
+  max-width:320px!important;
+  max-height:27vh!important;
+  padding:4px!important;
+  border-radius:11px 11px 7px 7px!important;
+}
+.modal.v0745CombatModal .v0745CombatHead{margin-bottom:3px!important}
+.modal.v0745CombatModal .v0745CombatHead h2{font-size:8px!important;line-height:1.15!important}
+.modal.v0745CombatModal .v0745CombatSub{font-size:5.5px!important;line-height:1.2!important}
+.modal.v0745CombatModal .v0745CombatCards{gap:4px!important;padding:1px 0 2px!important}
+.modal.v0745CombatModal .v0745CombatChoice{flex-basis:49px!important;padding:2px!important;border-radius:7px!important}
+.modal.v0745CombatModal .v0745CombatChoice .card{height:48px!important;width:42px!important;min-width:42px!important;margin-bottom:2px!important}
+.modal.v0745CombatModal .v0745ChoiceLabel{padding:2px 1px!important;font-size:6px!important}
+.modal.v0745CombatModal .v0745CombatActions{margin-top:3px!important;padding-top:2px!important}
+.modal.v0745CombatModal .v0745CombatActions button{padding:4px 3px!important;font-size:6.5px!important}
+
+/* DAMAGE CHECK is informational. Keep it at the top while the next block/quick choice is at the bottom. */
+.modal.v0746DamageModal{
+  align-items:flex-start!important;
+  justify-content:center!important;
+  padding:3px!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+  z-index:2147482450!important;
+}
+.modal.v0746DamageModal>.modalCard{
+  width:min(330px,66vw)!important;
+  max-width:330px!important;
+  max-height:20vh!important;
+  overflow:auto!important;
+  padding:4px 6px!important;
+  border-radius:9px!important;
+  box-shadow:0 5px 18px #000c!important;
+}
+.modal.v0746DamageModal h1,.modal.v0746DamageModal h2,.modal.v0746DamageModal h3{font-size:8px!important;margin:0 0 2px!important}
+.modal.v0746DamageModal p,.modal.v0746DamageModal div{line-height:1.2}
+.modal.v0746DamageModal .card{max-height:45px!important;max-width:40px!important}
+
+/* Base CPU attack/reaction sheet: slightly smaller and above the hand. */
+.modal.v0746AttackModal{
+  z-index:2147482550!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:3px!important;
+  background:#0005!important;
+}
+.modal.v0746AttackModal>.modalCard{
+  width:min(390px,72vw)!important;
+  max-width:390px!important;
+  max-height:44vh!important;
+  overflow:auto!important;
+  padding:5px!important;
+  border-radius:11px!important;
+}
+
+.app.v04.v0746ModalBusy .v04HandBar{
+  z-index:1!important;
+  filter:brightness(.58)!important;
+  transition:filter .12s linear;
+}
+
+#v0746ArrowLayer{position:fixed;inset:0;z-index:2147483300;pointer-events:none;overflow:hidden}
+#v0746ArrowLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#v0746ArrowLayer .line{
+  stroke:#ffcf4c;stroke-width:7;stroke-linecap:round;
+  filter:drop-shadow(0 0 4px #ff5f38) drop-shadow(0 0 9px #000);
+  stroke-dasharray:15 9;animation:v0746Dash .34s linear infinite;
+}
+@keyframes v0746Dash{to{stroke-dashoffset:-48}}
+#v0746AttackLabel{
+  position:fixed;left:50%;top:5px;transform:translateX(-50%);
+  z-index:2147483400;pointer-events:none;display:none;
+  max-width:70vw;padding:4px 9px;border-radius:999px;
+  border:1px solid #ffd35b;background:#07140ff2;color:#fff;
+  font-size:7px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:0 4px 15px #000c;
+}
+#v0746AttackLabel.show{display:block}
+
+@media(max-height:520px) and (orientation:landscape){
+  .modal.v0745CombatModal>.modalCard{width:min(300px,60vw)!important;max-height:25vh!important}
+  .modal.v0746DamageModal>.modalCard{width:min(300px,60vw)!important;max-height:18vh!important}
+  .modal.v0746AttackModal>.modalCard{width:min(360px,68vw)!important;max-height:40vh!important}
+}
+</style>
+<script id="v0746OverlayFixScript">
+(()=>{
+  if(globalThis.__v0746OverlayFixApplied)return;
+  globalThis.__v0746OverlayFixApplied=true;
+  let scheduled=false,lastSig='',arrowStamp=0;
+  const txt=x=>String(x==null?'':x).replace(/\s+/g,' ').trim();
+  const center=el=>{if(!el)return null;const r=el.getBoundingClientRect();if(!r.width&&!r.height)return null;return{x:r.left+r.width/2,y:r.top+r.height/2}};
+  const uidEl=uid=>uid==null?null:document.querySelector('.v04Play .card[data-uid="'+Number(uid)+'"]');
+  function playerBox(owner){
+    try{
+      const boxes=[...document.querySelectorAll('.v04PlayerBox')];
+      if(!boxes.length)return null;
+      const name=txt(owner?.name).toLowerCase();
+      if(name){const hit=boxes.find(b=>txt(b.textContent).toLowerCase().includes(name));if(hit)return hit}
+      if(owner===G?.p){const hit=boxes.find(b=>/\bYOU\b/i.test(txt(b.textContent)));if(hit)return hit}
+      if(owner===G?.a){const hit=boxes.find(b=>/\bCPU\b/i.test(txt(b.textContent)));if(hit)return hit}
+      return owner===G?.p?boxes[boxes.length-1]:boxes[0];
+    }catch(_e){return null}
+  }
+  function targetEl(attOwner,target){
+    try{
+      if(!target)return null;
+      if(target.type==='player')return playerBox(typeof other==='function'?other(attOwner):G?.p);
+      return uidEl(target.uid);
+    }catch(_e){return null}
+  }
+  function label(){
+    let e=document.getElementById('v0746AttackLabel');
+    if(!e){e=document.createElement('div');e.id='v0746AttackLabel';document.documentElement.appendChild(e)}
+    return e;
+  }
+  function arrowLayer(){
+    let e=document.getElementById('v0746ArrowLayer');
+    if(!e){e=document.createElement('div');e.id='v0746ArrowLayer';document.documentElement.appendChild(e)}
+    return e;
+  }
+  function flashAttack(attOwner,atk,target){
+    try{
+      const a=center(uidEl(atk?.uid)),b=center(targetEl(attOwner,target));
+      const def=typeof other==='function'?other(attOwner):null;
+      const targetName=target?.type==='player'?(def?.name||'YOU'):(target?.uid?txt(targetEl(attOwner,target)?.textContent).slice(0,18):'対象');
+      const l=label();l.textContent='⚔ '+(atk?.name||'攻撃')+' → '+targetName;l.classList.add('show');
+      const stamp=++arrowStamp;
+      setTimeout(()=>{if(stamp===arrowStamp)l.classList.remove('show')},1450);
+      if(!a||!b)return;
+      const lay=arrowLayer();lay.innerHTML='';
+      const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),defs=document.createElementNS(ns,'defs'),m=document.createElementNS(ns,'marker');
+      m.setAttribute('id','v0746ArrowHead');m.setAttribute('markerWidth','11');m.setAttribute('markerHeight','11');m.setAttribute('refX','9');m.setAttribute('refY','3');m.setAttribute('orient','auto');m.setAttribute('markerUnits','strokeWidth');
+      const p=document.createElementNS(ns,'path');p.setAttribute('d','M0,0 L0,6 L10,3 z');p.setAttribute('fill','#ffd454');m.appendChild(p);defs.appendChild(m);svg.appendChild(defs);
+      const line=document.createElementNS(ns,'line');line.setAttribute('x1',a.x);line.setAttribute('y1',a.y);line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);line.setAttribute('class','line');line.setAttribute('marker-end','url(#v0746ArrowHead)');svg.appendChild(line);lay.appendChild(svg);
+      setTimeout(()=>{if(stamp===arrowStamp)lay.innerHTML=''},1350);
+    }catch(_e){}
+  }
+  function classify(){
+    scheduled=false;
+    try{
+      const app=document.querySelector('.app.v04');
+      let busy=false;
+      document.querySelectorAll('.modal').forEach(m=>{
+        const t=txt(m.textContent);
+        m.classList.toggle('v0746DamageModal',/^DAMAGE CHECK\b/i.test(t)||/DAMAGE CHECK/i.test(t));
+        m.classList.toggle('v0746AttackModal',/CPUの攻撃|相手の攻撃/.test(t)&&!/ブロックしますか/.test(t));
+        if(m.classList.contains('v0745CombatModal')||m.classList.contains('v0746AttackModal'))busy=true;
+      });
+      if(app)app.classList.toggle('v0746ModalBusy',busy);
+      if(globalThis.pendingBlock&&pendingBlock?.atk&&pendingBlock?.target){
+        const sig=[pendingBlock.atk.uid,pendingBlock.target.type,pendingBlock.target.uid||'player',G?.turnSeq||''].join(':');
+        if(sig!==lastSig){lastSig=sig;setTimeout(()=>flashAttack(pendingBlock.attOwner||G?.a,pendingBlock.atk,pendingBlock.target),30)}
+      }else lastSig='';
+    }catch(_e){}
+  }
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(classify)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true})}catch(_e){}
+  if(typeof declareBattle==='function'){
+    const base=declareBattle;
+    declareBattle=function(attOwner,attUid,target,after){
+      let atk=null;try{atk=(attOwner?.pals||[]).find(x=>x.uid===attUid)||G?.a?.pals?.find(x=>x.uid===attUid)||G?.p?.pals?.find(x=>x.uid===attUid)}catch(_e){}
+      const r=base(attOwner,attUid,target,after);setTimeout(()=>flashAttack(attOwner,atk||{uid:attUid,name:'攻撃'},target),20);return r;
+    };
+  }
+  classify();setTimeout(classify,250);setTimeout(classify,900);
+  console.info('Palworld OCG v0.7.46 overlay separation + attack cue applied');
 })();
 </script>
 
@@ -1239,7 +1417,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.45-battle-ux3-official-rule-sync");
+      h.set("x-palworld-bridge","v0.7.46-battle-ux4-official-rule-sync");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -1264,7 +1442,7 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.45 — 戦闘UI改善3・公式ルール同期・中央盤面拡大";
+        m.description="Palworld OCG v0.7.46 — 戦闘UI改善4・公式ルール同期・中央盤面拡大";
         m.start_url="/?pwa=1&v=0743";
         m.scope="/";
         m.display=m.display||"standalone";
@@ -1278,7 +1456,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.45 battle UX3 + official rule sync + center + rotated hand swipe fix\n";
+        sw+="\n// v0.7.46 battle UX4 + official rule sync + center + rotated hand swipe fix\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
