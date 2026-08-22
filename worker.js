@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.43";
+const V="0.7.44";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.43 戦闘UI改善＋中央盤面拡大')
-        title.textContent='v0.7.43 戦闘UI改善＋中央盤面拡大';
+      if(title&&title.textContent!=='v0.7.44 戦闘UI改善2＋中央盤面拡大')
+        title.textContent='v0.7.44 戦闘UI改善2＋中央盤面拡大';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.43';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.44';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.43 official probe',e);
+      console.error('BP01-084 v0.7.44 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.43公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.44公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.43デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.44デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.43 Battle UX + Official Sync';
+        v072BpReport.version='0.7.44 Battle UX + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.43 戦闘UI改善＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.44 戦闘UI改善2＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,38 +840,38 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.43 battle UX + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.44 battle UX2 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
-<style id="v0743CombatUX">
-/* v0.7.43 — battle UX inspired by a compact digital-card-game flow.
+<style id="v0744CombatUX">
+/* v0.7.44 — battle UX inspired by a compact digital-card-game flow.
    Gameplay/rules are untouched: this layer only changes guidance, modals and FX. */
-.app.v04.v0743CombatUX .v04Play{position:relative!important}
+.app.v04.v0744CombatUX .v04Play{position:relative!important}
 
 /* Selected attacker + legal targets are obvious at a glance. */
-.app.v04.v0743CombatUX .v04Play .card.attackSelected{
+.app.v04.v0744CombatUX .v04Play .card.attackSelected{
   outline:2px solid #ff665a!important;
   box-shadow:0 0 0 2px #240000aa inset,0 0 16px #ff4d3dcc!important;
   transform:translateY(-2px) scale(1.025);
   z-index:8;
 }
-.app.v04.v0743CombatUX .v04Play .zone.validTarget,
-.app.v04.v0743CombatUX .v04Play .stack.target{
+.app.v04.v0744CombatUX .v04Play .zone.validTarget,
+.app.v04.v0744CombatUX .v04Play .stack.target{
   border-color:#ffd95b!important;
   box-shadow:0 0 0 1px #fff1a8 inset,0 0 14px #ffd95b99!important;
-  animation:v0743TargetPulse .72s ease-in-out infinite alternate;
+  animation:v0744TargetPulse .72s ease-in-out infinite alternate;
 }
-.app.v04.v0743CombatUX .v04Play .zone.validTarget .card{
+.app.v04.v0744CombatUX .v04Play .zone.validTarget .card{
   filter:brightness(1.12) saturate(1.12);
 }
-@keyframes v0743TargetPulse{
+@keyframes v0744TargetPulse{
   from{filter:brightness(.94)}
   to{filter:brightness(1.18)}
 }
 
 /* Small instruction chip, instead of making the player scan the side controls. */
-.v0743CombatHint{
+.v0744CombatHint{
   position:absolute;left:50%;top:4px;transform:translateX(-50%);
   z-index:32;display:none;align-items:center;gap:6px;
   max-width:72%;padding:4px 10px;border-radius:999px;
@@ -879,81 +879,82 @@ const PATCH=`
   box-shadow:0 4px 16px #000b;font-size:8px;font-weight:950;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;
 }
-.v0743CombatHint.show{display:flex}
-.v0743CombatHint:before{content:"⚔";color:#ffd85e;font-size:10px}
+.v0744CombatHint.show{display:flex}
+.v0744CombatHint:before{content:"⚔";color:#ffd85e;font-size:10px}
 
 /* Battle reaction sheet: compact, bottom-oriented and focused on the current choice. */
-.modal.v0743CombatModal{
+.modal.v0744CombatModal{
+  position:fixed!important;inset:0!important;z-index:2147482600!important;
   align-items:flex-end!important;justify-content:center!important;
-  padding:6px!important;background:#0008!important;backdrop-filter:blur(2px);
+  padding:5px!important;background:#0009!important;backdrop-filter:blur(2px);
 }
-.modal.v0743CombatModal>.modalCard{
-  width:min(760px,96vw)!important;max-width:760px!important;
-  max-height:55vh!important;overflow:auto!important;
+.modal.v0744CombatModal>.modalCard{
+  width:min(560px,92vw)!important;max-width:560px!important;
+  max-height:50vh!important;overflow:auto!important;
   padding:8px!important;border-radius:16px 16px 8px 8px!important;
   border:1px solid #d2b64f!important;
   background:linear-gradient(180deg,#0c1d2a,#08130f 72%)!important;
   box-shadow:0 -10px 32px #000c!important;
 }
-.v0743CombatHead{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
-.v0743CombatHead h2{margin:0!important;font-size:13px!important;color:#ffe072!important}
-.v0743CombatSub{font-size:8px;color:#c6d8cf;line-height:1.35;margin-top:2px}
-.v0743CombatCards{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 5px;align-items:stretch}
-.v0743CombatChoice{
-  flex:0 0 92px;border:1px solid #557568;border-radius:10px;background:#071711;
+.v0744CombatHead{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.v0744CombatHead h2{margin:0!important;font-size:13px!important;color:#ffe072!important}
+.v0744CombatSub{font-size:8px;color:#c6d8cf;line-height:1.35;margin-top:2px}
+.v0744CombatCards{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 5px;align-items:stretch}
+.v0744CombatChoice{
+  flex:0 0 78px;border:1px solid #557568;border-radius:10px;background:#071711;
   padding:4px;cursor:pointer;box-shadow:0 3px 10px #0008;
 }
-.v0743CombatChoice .card{height:92px!important;width:82px!important;min-width:82px!important;margin:0 auto 4px!important}
-.v0743CombatChoice .v0743ChoiceLabel{
+.v0744CombatChoice .card{height:76px!important;width:68px!important;min-width:68px!important;margin:0 auto 4px!important}
+.v0744CombatChoice .v0744ChoiceLabel{
   display:block;text-align:center;border-radius:7px;padding:4px 2px;
   background:#154f3d;border:1px solid #78c9a9;color:#fff;font-size:8px;font-weight:950;
 }
-.v0743CombatActions{display:flex;gap:6px;margin-top:6px}
-.v0743CombatActions button{flex:1!important;padding:7px 5px!important;font-size:9px!important;font-weight:950!important;border-radius:9px!important}
-.v0743Skip{background:#372a2a!important;border-color:#8d6868!important}
-.v0743QuickRow{display:grid;grid-template-columns:86px minmax(0,1fr);gap:7px;align-items:center;border-top:1px solid #29463a;padding:6px 0}
-.v0743QuickRow:first-of-type{border-top:0}
-.v0743QuickRow .card{height:88px!important;width:78px!important;min-width:78px!important}
-.v0743QuickBtns{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-.v0743QuickBtns button{padding:7px 4px!important;font-size:8px!important;font-weight:900!important;border-radius:8px!important}
+.v0744CombatActions{display:flex;gap:6px;margin-top:6px;position:sticky;bottom:0;z-index:5;padding-top:5px;background:linear-gradient(180deg,#08130f00,#08130f 35%)}
+.v0744CombatActions button{flex:1!important;padding:7px 5px!important;font-size:9px!important;font-weight:950!important;border-radius:9px!important}
+.v0744Skip{background:#372a2a!important;border-color:#8d6868!important}
+.v0744QuickRow{display:grid;grid-template-columns:86px minmax(0,1fr);gap:7px;align-items:center;border-top:1px solid #29463a;padding:6px 0}
+.v0744QuickRow:first-of-type{border-top:0}
+.v0744QuickRow .card{height:88px!important;width:78px!important;min-width:78px!important}
+.v0744QuickBtns{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.v0744QuickBtns button{padding:7px 4px!important;font-size:8px!important;font-weight:900!important;border-radius:8px!important}
 
 /* Attack arrow / impact / result toast. Appended to <html>, so body rotation does not distort coordinates. */
-#v0743BattleFxLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
-#v0743BattleFxLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-#v0743BattleFxLayer .v0743AttackLine{
+#v0744BattleFxLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
+#v0744BattleFxLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#v0744BattleFxLayer .v0744AttackLine{
   stroke:#ffd75a;stroke-width:5;stroke-linecap:round;
   filter:drop-shadow(0 0 5px #ff6b3d) drop-shadow(0 0 9px #000);
-  stroke-dasharray:14 8;animation:v0743Dash .38s linear infinite;
+  stroke-dasharray:14 8;animation:v0744Dash .38s linear infinite;
 }
-@keyframes v0743Dash{to{stroke-dashoffset:-44}}
-.v0743Impact{
+@keyframes v0744Dash{to{stroke-dashoffset:-44}}
+.v0744Impact{
   position:fixed;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;
   border:3px solid #fff2a5;box-shadow:0 0 0 4px #ff634788,0 0 22px #ff553e;
-  animation:v0743Impact .42s ease-out forwards;
+  animation:v0744Impact .62s ease-out forwards;
 }
-@keyframes v0743Impact{from{transform:scale(.35);opacity:1}to{transform:scale(2.7);opacity:0}}
-.v0743ResultToast{
+@keyframes v0744Impact{from{transform:scale(.35);opacity:1}to{transform:scale(2.7);opacity:0}}
+.v0744ResultToast{
   position:fixed;left:50%;top:18%;transform:translate(-50%,-50%) scale(.92);
   min-width:130px;max-width:70vw;padding:7px 12px;border-radius:12px;
   border:1px solid #e8ca5b;background:#07140ff2;color:#fff;text-align:center;
   font-size:10px;font-weight:950;box-shadow:0 7px 22px #000c;
-  animation:v0743Toast .72s ease-out forwards;
+  animation:v0744Toast .72s ease-out forwards;
 }
-.v0743ResultToast b{color:#ffd85d}
-@keyframes v0743Toast{0%{opacity:0;transform:translate(-50%,-44%) scale(.9)}15%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(.98)}}
+.v0744ResultToast b{color:#ffd85d}
+@keyframes v0744Toast{0%{opacity:0;transform:translate(-50%,-44%) scale(.9)}15%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(.98)}}
 
 @media(max-height:520px) and (orientation:landscape){
-  .v0743CombatHint{font-size:7px;padding:3px 8px;top:2px}
-  .modal.v0743CombatModal>.modalCard{max-height:64vh!important}
-  .v0743CombatChoice{flex-basis:82px}.v0743CombatChoice .card{height:80px!important;width:72px!important;min-width:72px!important}
-  .v0743ResultToast{top:15%;font-size:8px;padding:5px 9px}
+  .v0744CombatHint{font-size:7px;padding:3px 8px;top:2px}
+  .modal.v0744CombatModal>.modalCard{max-height:52vh!important}
+  .v0744CombatChoice{flex-basis:72px}.v0744CombatChoice .card{height:70px!important;width:62px!important;min-width:62px!important}
+  .v0744ResultToast{top:15%;font-size:8px;padding:5px 9px}
 }
 </style>
 
-<script id="v0743CombatUXScript">
+<script id="v0744CombatUXScript">
 (()=>{
-  if(globalThis.__v0743CombatUXApplied)return;
-  globalThis.__v0743CombatUXApplied=true;
+  if(globalThis.__v0744CombatUXApplied)return;
+  globalThis.__v0744CombatUXApplied=true;
 
   let scheduled=false;
   let lastArrowAt=0;
@@ -990,10 +991,10 @@ const PATCH=`
     return uidEl(target.uid);
   }
   function fxLayer(){
-    let x=document.getElementById('v0743BattleFxLayer');
+    let x=document.getElementById('v0744BattleFxLayer');
     if(x)return x;
     x=document.createElement('div');
-    x.id='v0743BattleFxLayer';
+    x.id='v0744BattleFxLayer';
     document.documentElement.appendChild(x);
     return x;
   }
@@ -1005,16 +1006,16 @@ const PATCH=`
     const svg=document.createElementNS(ns,'svg');
     const defs=document.createElementNS(ns,'defs');
     const marker=document.createElementNS(ns,'marker');
-    marker.setAttribute('id','v0743ArrowHead');marker.setAttribute('markerWidth','10');marker.setAttribute('markerHeight','10');
+    marker.setAttribute('id','v0744ArrowHead');marker.setAttribute('markerWidth','10');marker.setAttribute('markerHeight','10');
     marker.setAttribute('refX','8');marker.setAttribute('refY','3');marker.setAttribute('orient','auto');marker.setAttribute('markerUnits','strokeWidth');
     const path=document.createElementNS(ns,'path');path.setAttribute('d','M0,0 L0,6 L9,3 z');path.setAttribute('fill','#ffd75a');
     marker.appendChild(path);defs.appendChild(marker);svg.appendChild(defs);
     const line=document.createElementNS(ns,'line');
     line.setAttribute('x1',a.x);line.setAttribute('y1',a.y);line.setAttribute('x2',b.x);line.setAttribute('y2',b.y);
-    line.setAttribute('marker-end','url(#v0743ArrowHead)');line.setAttribute('class','v0743AttackLine');svg.appendChild(line);layer.appendChild(svg);
-    const impact=document.createElement('div');impact.className='v0743Impact';impact.style.left=b.x+'px';impact.style.top=b.y+'px';layer.appendChild(impact);
+    line.setAttribute('marker-end','url(#v0744ArrowHead)');line.setAttribute('class','v0744AttackLine');svg.appendChild(line);layer.appendChild(svg);
+    const impact=document.createElement('div');impact.className='v0744Impact';impact.style.left=b.x+'px';impact.style.top=b.y+'px';layer.appendChild(impact);
     lastArrowAt=Date.now();
-    setTimeout(()=>{if(layer&&Date.now()-lastArrowAt>=380)layer.innerHTML=''},430);
+    setTimeout(()=>{if(layer&&Date.now()-lastArrowAt>=720)layer.innerHTML=''},780);
   }
   function arrowBetween(attOwner,atk,target){
     try{drawArrowPoints(centerOf(uidEl(atk?.uid)),centerOf(targetEl(attOwner,target)))}catch(_e){}
@@ -1022,7 +1023,7 @@ const PATCH=`
   function toast(html){
     try{
       const layer=fxLayer();
-      const t=document.createElement('div');t.className='v0743ResultToast';t.innerHTML=html;layer.appendChild(t);
+      const t=document.createElement('div');t.className='v0744ResultToast';t.innerHTML=html;layer.appendChild(t);
       setTimeout(()=>t.remove(),760);
     }catch(_e){}
   }
@@ -1042,14 +1043,14 @@ const PATCH=`
       if(!pendingBlock)return'';
       const head=(pendingBlock.atk?.name||'相手')+' → '+targetName(pendingBlock);
       const rows=(pendingBlock.blockers||[]).map(c=>
-        '<div class="v0743CombatChoice" onclick="chooseBlock('+c.uid+')">'+
+        '<div class="v0744CombatChoice" onclick="chooseBlock('+c.uid+')">'+
           cardHTML(c,{select:true})+
-          '<span class="v0743ChoiceLabel">ブロック</span></div>'
+          '<span class="v0744ChoiceLabel">ブロック</span></div>'
       ).join('');
-      return '<div class="modal v0743CombatModal"><div class="modalCard">'+
-        '<div class="v0743CombatHead"><div><h2>ブロックしますか？</h2><div class="v0743CombatSub">'+safeText(head)+'<br>ブロックするパルを選択してください。</div></div></div>'+
-        '<div class="v0743CombatCards">'+rows+'</div>'+
-        '<div class="v0743CombatActions"><button class="v0743Skip" onclick="chooseBlock(null)">ブロックしない</button></div>'+
+      return '<div class="modal v0744CombatModal"><div class="modalCard">'+
+        '<div class="v0744CombatHead"><div><h2>ブロックしますか？</h2><div class="v0744CombatSub">'+safeText(head)+'<br>ブロックするパルを選択してください。</div></div></div>'+
+        '<div class="v0744CombatCards">'+rows+'</div>'+
+        '<div class="v0744CombatActions"><button class="v0744Skip" onclick="chooseBlock(null)">ブロックしない</button></div>'+
         '</div></div>';
     };
   }
@@ -1058,16 +1059,16 @@ const PATCH=`
     quickModalHTML=function(){
       if(!pendingQuick)return'';
       const rows=(pendingQuick.ints||[]).map(c=>
-        '<div class="v0743QuickRow">'+cardHTML(c,{select:true})+
-        '<div><b style="font-size:9px">'+safeText(c.name)+'</b><div class="v0743CombatSub">この攻撃を無効にする</div>'+
-        '<div class="v0743QuickBtns" style="margin-top:5px">'+
+        '<div class="v0744QuickRow">'+cardHTML(c,{select:true})+
+        '<div><b style="font-size:9px">'+safeText(c.name)+'</b><div class="v0744CombatSub">この攻撃を無効にする</div>'+
+        '<div class="v0744QuickBtns" style="margin-top:5px">'+
         '<button '+(standingSouls(G.p)<1?'disabled':'')+' onclick="event.stopPropagation();chooseInterrupt('+c.uid+',\'soul\')">1ソウル＋このカード</button>'+
         '<button '+(G.p.hand.length<2?'disabled':'')+' onclick="event.stopPropagation();chooseInterrupt('+c.uid+',\'discard\')">このカード＋手札1枚</button>'+
         '</div></div></div>'
       ).join('');
-      return '<div class="modal v0743CombatModal"><div class="modalCard">'+
-        '<div class="v0743CombatHead"><div><h2>割り込みを使いますか？</h2><div class="v0743CombatSub">相手ターンのバトル中。使うカードとコストを選択してください。</div></div></div>'+
-        rows+'<div class="v0743CombatActions"><button class="v0743Skip" onclick="skipInterrupt()">使わない</button></div>'+
+      return '<div class="modal v0744CombatModal"><div class="modalCard">'+
+        '<div class="v0744CombatHead"><div><h2>割り込みを使いますか？</h2><div class="v0744CombatSub">相手ターンのバトル中。使うカードとコストを選択してください。</div></div></div>'+
+        rows+'<div class="v0744CombatActions"><button class="v0744Skip" onclick="skipInterrupt()">使わない</button></div>'+
         '</div></div>';
     };
   }
@@ -1094,7 +1095,7 @@ const PATCH=`
     declareBattle=function(attOwner,attUid,target,after){
       let a=null,b=null,isCpu=false;
       try{
-        isCpu=!!attOwner?.isAI;
+        isCpu=(attOwner===G?.a)||!!attOwner?.isAI;
         if(isCpu){
           a=centerOf(uidEl(attUid));
           b=centerOf(targetEl(attOwner,target));
@@ -1154,11 +1155,11 @@ const PATCH=`
     scheduled=false;
     try{
       const app=document.querySelector('.app.v04');
-      if(app)app.classList.add('v0743CombatUX');
+      if(app)app.classList.add('v0744CombatUX');
       const play=playRoot();
       if(!play)return;
-      let hint=play.querySelector('.v0743CombatHint');
-      if(!hint){hint=document.createElement('div');hint.className='v0743CombatHint';play.appendChild(hint)}
+      let hint=play.querySelector('.v0744CombatHint');
+      if(!hint){hint=document.createElement('div');hint.className='v0744CombatHint';play.appendChild(hint)}
       if(globalThis.G&&G?.selected){
         const atk=G.p?.pals?.find(x=>x.uid===G.selected);
         hint.textContent=(atk?.name?atk.name+'：':'')+'攻撃対象をタップ';
@@ -1182,7 +1183,7 @@ const PATCH=`
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.43 combat UX applied');
+  console.info('Palworld OCG v0.7.44 combat UX applied');
 })();
 </script>
 
@@ -1201,7 +1202,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.43-battle-ux-official-rule-sync");
+      h.set("x-palworld-bridge","v0.7.44-battle-ux2-official-rule-sync");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -1226,7 +1227,7 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.43 — 戦闘UI改善・公式ルール同期・中央盤面拡大";
+        m.description="Palworld OCG v0.7.44 — 戦闘UI改善2・公式ルール同期・中央盤面拡大";
         m.start_url="/?pwa=1&v=0743";
         m.scope="/";
         m.display=m.display||"standalone";
@@ -1240,7 +1241,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.43 battle UX + official rule sync + center + rotated hand swipe fix\n";
+        sw+="\n// v0.7.44 battle UX2 + official rule sync + center + rotated hand swipe fix\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
