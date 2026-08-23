@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.47";
+const V="0.7.48";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.47 戦闘UI安定化＋中央盤面拡大')
-        title.textContent='v0.7.47 戦闘UI安定化＋中央盤面拡大';
+      if(title&&title.textContent!=='v0.7.48 カード詳細UI改善＋戦闘安定化')
+        title.textContent='v0.7.48 カード詳細UI改善＋戦闘安定化';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.47';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.48';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.47 official probe',e);
+      console.error('BP01-084 v0.7.48 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.47公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.48公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.47デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.48デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.47 Battle UX + Official Sync';
+        v072BpReport.version='0.7.48 Battle UX + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.47 戦闘UI安定化＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.48 カード詳細UI改善＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,12 +840,12 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.47 battle UX3 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.48 battle UX3 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
 <style id="v0745CombatUX">
-/* v0.7.47 — battle UX inspired by a compact digital-card-game flow.
+/* v0.7.48 — battle UX inspired by a compact digital-card-game flow.
    Gameplay/rules are untouched: this layer only changes guidance, modals and FX. */
 .app.v04.v0745CombatUX .v04Play{position:relative!important}
 
@@ -944,7 +944,7 @@ const PATCH=`
 @keyframes v0745Toast{0%{opacity:0;transform:translate(-50%,-44%) scale(.9)}15%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(.98)}}
 
 
-/* v0.7.47: effect target selectors (e.g. 500 damage) stay compact so the board remains visible. */
+/* v0.7.48: effect target selectors (e.g. 500 damage) stay compact so the board remains visible. */
 .modal.v0745EffectChoice{
   position:fixed!important;inset:0!important;z-index:2147482400!important;
   align-items:flex-end!important;justify-content:center!important;
@@ -1186,12 +1186,15 @@ const PATCH=`
         }else lastPendingBattleSig='';
       }catch(_e){}
 
-      /* Compact generic target-selection sheets such as "500ダメージを与えるパル". */
+      /* Compact generic target-selection sheets and long-press card details. */
       try{
         document.querySelectorAll('.modal:not(.v0745CombatModal)').forEach(m=>{
           const txt=(m.textContent||'').replace(/\s+/g,' ');
-          if(/ダメージを与えるパル|対象.{0,8}パル|パルを選/i.test(txt))m.classList.add('v0745EffectChoice');
-          else m.classList.remove('v0745EffectChoice');
+          const effectLike=/ダメージを与えるパル|対象.{0,8}パル|パルを選/i.test(txt);
+          const cards=m.querySelectorAll('.card');
+          const detailLike=!effectLike && cards.length===1 && /状態|REST|STAND|能力|COST|POWER|STRIKE|コスト/i.test(txt);
+          m.classList.toggle('v0745EffectChoice',effectLike);
+          m.classList.toggle('v0748CardDetail',detailLike);
         });
       }catch(_e){}
 
@@ -1216,17 +1219,40 @@ const PATCH=`
     render=function(){const r=baseRenderCombatUX();scheduleCombatUX();return r};
   }
 
+  /* v0.7.48: a long-press detail is a temporary preview, not a blocking modal.
+     Release the press to close it. Tapping elsewhere also dismisses it after the
+     underlying tap has been delivered, so hand play/select remains responsive. */
+  function dismissCardDetailSoon(){
+    setTimeout(()=>{
+      try{
+        if(!document.querySelector('.modal.v0748CardDetail'))return;
+        if(typeof detailUid!=='undefined')detailUid=null;
+        if(typeof render==='function')render();
+        else document.querySelectorAll('.modal.v0748CardDetail').forEach(x=>x.remove());
+      }catch(_e){}
+    },0);
+  }
+  document.addEventListener('pointerup',ev=>{
+    try{if(document.querySelector('.modal.v0748CardDetail'))dismissCardDetailSoon()}catch(_e){}
+  },true);
+  document.addEventListener('pointerdown',ev=>{
+    try{
+      const m=document.querySelector('.modal.v0748CardDetail');
+      if(m&&!ev.target?.closest?.('.modal.v0748CardDetail>.modalCard'))dismissCardDetailSoon();
+    }catch(_e){}
+  },true);
+
   try{new MutationObserver(scheduleCombatUX).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.47 combat UX stable applied');
+  console.info('Palworld OCG v0.7.48 combat UX stable applied');
 })();
 </script>
 
 
-<style id="v0747SafeOverlayFix">
-/* v0.7.47 stability recovery: compact only existing battle modals.
+<style id="v0748SafeOverlayFix">
+/* v0.7.48 stability recovery: compact only existing battle modals.
    No additional battle hooks or observers are installed here. */
 .modal.v0745CombatModal{
   align-items:flex-end!important;
@@ -1248,6 +1274,37 @@ const PATCH=`
 @media(max-height:520px) and (orientation:landscape){
   .modal.v0745CombatModal>.modalCard{width:min(305px,62vw)!important;max-height:27vh!important}
 }
+
+/* v0.7.48: long-press card detail is a compact top preview.
+   The lower hand remains visible and touchable. */
+.modal.v0748CardDetail{
+  position:fixed!important;inset:0!important;z-index:2147482350!important;
+  align-items:flex-start!important;justify-content:center!important;
+  padding:3px!important;background:#0004!important;backdrop-filter:none!important;
+  pointer-events:none!important;
+}
+.modal.v0748CardDetail>.modalCard{
+  pointer-events:auto!important;
+  margin:2px auto 0!important;
+  width:min(330px,58vw)!important;max-width:330px!important;
+  max-height:46vh!important;overflow:auto!important;
+  padding:5px!important;border-radius:10px!important;
+  box-shadow:0 6px 18px #000b!important;
+}
+.modal.v0748CardDetail .card{
+  width:86px!important;min-width:86px!important;max-width:86px!important;
+  height:118px!important;max-height:118px!important;
+}
+.modal.v0748CardDetail h1,.modal.v0748CardDetail h2,.modal.v0748CardDetail h3{
+  font-size:10px!important;line-height:1.15!important;margin:0 0 3px!important;
+}
+.modal.v0748CardDetail p,.modal.v0748CardDetail .muted,.modal.v0748CardDetail .small{
+  font-size:6.5px!important;line-height:1.25!important;
+}
+@media(max-height:520px) and (orientation:landscape){
+  .modal.v0748CardDetail>.modalCard{width:min(300px,54vw)!important;max-height:42vh!important;padding:4px!important}
+  .modal.v0748CardDetail .card{width:76px!important;min-width:76px!important;max-width:76px!important;height:104px!important;max-height:104px!important}
+}
 </style>
 
 `;
@@ -1265,7 +1322,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.47-battle-ux-stable-official-rule-sync");
+      h.set("x-palworld-bridge","v0.7.48-battle-ux-stable-official-rule-sync");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -1290,8 +1347,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.47 — 戦闘UI安定化・公式ルール同期・中央盤面拡大";
-        m.start_url="/?pwa=1&v=0747";
+        m.description="Palworld OCG v0.7.48 — カード詳細UI改善・戦闘安定化・公式ルール同期";
+        m.start_url="/?pwa=1&v=0748";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -1304,7 +1361,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.47 battle UX stable + official rule sync + center + rotated hand swipe fix\n";
+        sw+="\n// v0.7.48 battle UX stable + official rule sync + center + rotated hand swipe fix\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
