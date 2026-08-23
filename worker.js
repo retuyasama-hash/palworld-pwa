@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.55";
+const V="0.7.56";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.55 能力確認＋消費表示＋アサイン強化＋カード詳細全画面＋配置選択＋建築物攻撃')
-        title.textContent='v0.7.55 能力確認＋消費表示＋アサイン強化＋カード詳細全画面＋配置選択＋建築物攻撃';
+      if(title&&title.textContent!=='v0.7.56')
+        title.textContent='v0.7.56';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.54';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.56';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.54 Fullscreen Detail + Placement + Structure Attack + Official Sync';
+        v072BpReport.version='0.7.56 UX Polish + Ability Guard + Assignment + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.55 能力確認＋消費表示＋アサイン強化＋カード詳細全画面＋配置選択＋建築物攻撃＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.56';
       }catch(_e){}
       return r;
     };
@@ -2094,7 +2094,7 @@ const PATCH=`
 }
 .modal.v0754ChoiceSheet>.modalCard{
   width:min(560px,80vw)!important;max-width:560px!important;
-  max-height:34vh!important;min-height:0!important;overflow:auto!important;
+  max-height:min(44dvh,260px)!important;min-height:0!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;
   padding:6px!important;border-radius:14px 14px 8px 8px!important;
   border:1px solid #4f8b70!important;background:#071711f4!important;
   box-shadow:0 -8px 26px #000c!important;
@@ -2106,7 +2106,7 @@ const PATCH=`
 .modal.v0754ChoiceSheet .choiceGrid{
   display:flex!important;grid-template-columns:none!important;
   gap:5px!important;overflow-x:auto!important;overflow-y:hidden!important;
-  align-items:flex-start!important;padding:1px 1px 4px!important;
+  align-items:flex-start!important;padding:1px 1px 4px!important;flex:1 1 auto!important;min-height:0!important;
   scroll-snap-type:x proximity;
 }
 .modal.v0754ChoiceSheet .choiceGrid>div{
@@ -2121,7 +2121,7 @@ const PATCH=`
 .modal.v0754ChoiceSheet .choiceGrid .card .stats,
 .modal.v0754ChoiceSheet .choiceGrid .card .no{font-size:5px!important;line-height:1!important}
 .modal.v0754ChoiceSheet .choices{
-  margin-top:4px!important;display:flex!important;gap:5px!important;justify-content:flex-end!important;
+  margin-top:4px!important;display:flex!important;gap:5px!important;justify-content:flex-end!important;flex:0 0 auto!important;position:sticky!important;bottom:0!important;z-index:4!important;padding:4px 2px max(6px,env(safe-area-inset-bottom))!important;background:#071711f8!important;
 }
 .modal.v0754ChoiceSheet .choices button{
   width:auto!important;min-width:74px!important;padding:4px 8px!important;
@@ -2151,7 +2151,7 @@ const PATCH=`
 }
 
 @media(max-height:520px) and (orientation:landscape){
-  .modal.v0754ChoiceSheet>.modalCard{width:min(520px,76vw)!important;max-height:30vh!important;padding:4px!important}
+  .modal.v0754ChoiceSheet>.modalCard{width:min(520px,76vw)!important;max-height:min(46dvh,235px)!important;padding:4px!important}
   .modal.v0754ChoiceSheet .choiceGrid>div{flex-basis:58px!important;min-width:58px!important}
   .modal.v0754ChoiceSheet .choiceGrid .card{width:56px!important;min-width:56px!important;max-width:56px!important;height:70px!important;min-height:70px!important;max-height:70px!important}
   .v0754DamageCheckPanel{max-height:50px!important;padding:2px 5px!important}
@@ -2233,14 +2233,14 @@ const PATCH=`
 }
 .v0754AssignBadge{
   position:absolute!important;
-  left:50%!important;top:-9px!important;transform:translateX(-50%)!important;
-  max-width:96px!important;padding:2px 5px!important;border-radius:999px!important;
+  left:3px!important;top:3px!important;transform:none!important;
+  max-width:calc(100% - 6px)!important;padding:2px 4px!important;border-radius:6px!important;
   background:#ffe66d!important;color:#15170f!important;border:1px solid #fff7b5!important;
   font-size:6px!important;line-height:1.05!important;font-weight:1000!important;
   white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
   pointer-events:none!important;z-index:40!important;box-shadow:0 2px 6px #000b!important;
 }
-.v0754AssignBadge.v0754OnStructure{top:auto!important;bottom:-9px!important}
+.v0754AssignBadge.v0754OnStructure{top:auto!important;bottom:3px!important}
 .v0754AssignToast{
   position:fixed!important;left:50%!important;top:10%!important;transform:translateX(-50%)!important;
   z-index:2147483000!important;max-width:min(680px,82vw)!important;
@@ -2253,8 +2253,8 @@ const PATCH=`
 }
 @keyframes v0754AssignToastIn{from{opacity:0;transform:translate(-50%,-6px) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
 @media(max-height:520px) and (orientation:landscape){
-  .v0754AssignBadge{font-size:5.5px!important;top:-8px!important;padding:2px 4px!important;max-width:84px!important}
-  .v0754AssignBadge.v0754OnStructure{top:auto!important;bottom:-8px!important}
+  .v0754AssignBadge{font-size:5.5px!important;top:2px!important;left:2px!important;padding:2px 3px!important;max-width:calc(100% - 4px)!important}
+  .v0754AssignBadge.v0754OnStructure{top:auto!important;bottom:2px!important}
   .v0754AssignToast{top:7%!important;font-size:8px!important;padding:4px 9px!important}
 }
 </style>
@@ -2336,8 +2336,8 @@ const PATCH=`
           if(!pal||!pal._v0754AssignedToUid)return;
           const source=pl.supports.find(function(s){return s.uid===pal._v0754AssignedToUid});
           const sourceName=(source&&source.name)||pal._v0754AssignedToName||'建築物';
-          cardNodes(pal.uid).forEach(function(n){n.classList.add('v0754AssignedPal');addBadge(n,'作業中 → '+sourceName,false)});
-          if(source){cardNodes(source.uid).forEach(function(n){n.classList.add('v0754AssignedStructure');addBadge(n,'← '+pal.name,true)})}
+          cardNodes(pal.uid).forEach(function(n){n.classList.add('v0754AssignedPal');addBadge(n,'ASSIGN → '+sourceName,false)});
+          if(source){cardNodes(source.uid).forEach(function(n){n.classList.add('v0754AssignedStructure');addBadge(n,pal.name+' → ASSIGN',true)})}
         })
       })
     }catch(_e){}
@@ -2347,7 +2347,7 @@ const PATCH=`
   document.addEventListener('pointerup',schedule,{passive:true});
   addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,200);setTimeout(sync,800);
-  console.info('Palworld OCG v0.7.55 assignment clarity applied');
+  console.info('Palworld OCG v0.7.56 assignment clarity applied');
 })();
 </script>
 
@@ -2390,7 +2390,7 @@ const PATCH=`
 (()=>{
   if(globalThis.__v0755AbilityConfirmApplied)return;
   globalThis.__v0755AbilityConfirmApplied=true;
-  let armed=false;
+  let armed=false,lastCommitKey='',lastCommitAt=0,openKey='';
 
   function esc(v){return String(v==null?'':v).replace(/[&<>\"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]||m})}
   function num(v){v=Number(v||0);return isFinite(v)?v:0}
@@ -2441,9 +2441,11 @@ const PATCH=`
     const seen=new Set();
     return rows.filter(function(r){const k=r.label+'|'+(r.arrow?r.before+'>'+r.after:r.text);if(seen.has(k))return false;seen.add(k);return true})
   }
-  function close(){try{document.querySelectorAll('.v0755AbilityConfirm').forEach(function(n){n.remove()})}catch(_e){}}
+  function close(){openKey='';try{document.querySelectorAll('.v0755AbilityConfirm').forEach(function(n){n.remove()})}catch(_e){}}
   function show(pl,c,uid,oldActivate){
-    close();
+    const key=String((G&&G.turnSeq)||0)+'|'+String(uid);
+    if(openKey===key&&document.querySelector('.v0755AbilityConfirm'))return;
+    close();openKey=key;
     const rows=costRows(pl,c);
     const costs=rows.length?rows.map(function(r){
       return '<div class="v0755CostRow"><span>'+esc(r.label)+'</span><strong>'+(r.arrow?esc(r.before)+' → '+esc(r.after):esc(r.text))+'</strong></div>'
@@ -2451,16 +2453,19 @@ const PATCH=`
     const modal=document.createElement('div');modal.className='v0755AbilityConfirm';
     modal.innerHTML='<div class="v0755AbilityCard" role="dialog" aria-modal="true">'+
       '<div class="v0755AbilityTitle">'+esc(c.name)+' の能力を使いますか？</div>'+
-      '<div class="v0755AbilitySub">'+esc(c.no||'')+' / 現在の消費量を確認してから実行します</div>'+
+      '<div class="v0755AbilitySub">実行前に消費内容を確認してください</div>'+
       '<div class="v0755AbilityEffect">'+esc(c.ability||'能力テキストなし')+'</div>'+
       '<div class="v0755AbilityCost">'+costs+'</div>'+
-      '<div class="v0755AbilityNote">※「能力を使う」を押すまで素材・食材・ソウル・カード状態は変更されません。</div>'+
+      '<div class="v0755AbilityNote">確定するまで素材・食材・ソウル・カード状態は変更されません。</div>'+
       '<div class="v0755AbilityButtons"><button class="v0755AbilityCancel" type="button">キャンセル</button><button class="v0755AbilityUse" type="button">能力を使う</button></div>'+
       '</div>';
     document.body.appendChild(modal);
     modal.addEventListener('pointerdown',function(ev){if(ev.target===modal)close()});
     modal.querySelector('.v0755AbilityCancel').onclick=function(){close()};
     modal.querySelector('.v0755AbilityUse').onclick=function(){
+      const btn=this,commitKey=String((G&&G.turnSeq)||0)+'|'+String(uid),now=Date.now();
+      if(btn.disabled||armed||(lastCommitKey===commitKey&&now-lastCommitAt<900))return;
+      btn.disabled=true;btn.textContent='実行中…';lastCommitKey=commitKey;lastCommitAt=now;
       close();armed=true;try{oldActivate.call(globalThis,pl,uid)}finally{armed=false}
     };
   }
@@ -2477,9 +2482,118 @@ const PATCH=`
       wrapped.__v0755Wrapped=true;wrapped.__v0755Old=oldActivate;activateAbility=wrapped;
     }
   }catch(_e){console.warn('v0.7.55 ability confirm wrap failed',_e)}
-  console.info('Palworld OCG v0.7.55 ability confirmation applied');
+  console.info('Palworld OCG v0.7.56 ability confirmation applied');
 })();
 </script>
+
+<style id="v0756PolishStyle">
+/* v0.7.56 — keep action controls inside phone safe areas and make CPU actions readable. */
+.modal.v0754ChoiceSheet{padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+.v0756CpuSpeedBtn{
+  flex:0 0 auto!important;margin-left:4px!important;padding:2px 6px!important;min-height:0!important;
+  border-radius:999px!important;border:1px solid #ffffff35!important;background:#0b2119dd!important;
+  color:#dff8e9!important;font-size:6.5px!important;line-height:1.25!important;font-weight:900!important;
+  white-space:nowrap!important;opacity:.9!important;z-index:30!important;
+}
+.v0756CpuAction{
+  position:fixed!important;left:50%!important;top:24px!important;transform:translateX(-50%)!important;
+  z-index:2147483300!important;max-width:min(720px,82vw)!important;padding:5px 10px!important;
+  border-radius:10px!important;border:1px solid #7dcfa3!important;background:#071a13f2!important;
+  color:#ecfff4!important;box-shadow:0 5px 20px #000b!important;font-size:8px!important;line-height:1.25!important;
+  font-weight:900!important;text-align:center!important;pointer-events:none!important;
+}
+@media(max-height:520px) and (orientation:landscape){
+  .v0756CpuAction{top:18px!important;font-size:7px!important;padding:4px 8px!important}
+  .v0756CpuSpeedBtn{font-size:6px!important;padding:2px 5px!important}
+}
+</style>
+<script id="v0756PolishScript">
+(()=>{
+  if(globalThis.__v0756PolishApplied)return;
+  globalThis.__v0756PolishApplied=true;
+  const KEY='palworld_cpu_speed_v0756';
+  const MODES=['normal','fast','instant'];
+  const LABELS={normal:'CPU ×1',fast:'CPU ×2',instant:'CPU 即時'};
+  let mode='normal',cpuQueue=[],cpuShowing=false,cpuTimer=0,queued=false;
+  try{const v=localStorage.getItem(KEY);if(MODES.includes(v))mode=v}catch(_e){}
+
+  function cpuTurn(){
+    try{return !!(G&&G.turn&&G[G.turn]&&G[G.turn].isAI)}catch(_e){return false}
+  }
+  function delayFor(ms){
+    let d=Math.max(0,Number(ms)||0);
+    if(!cpuTurn())return d;
+    if(mode==='instant')return Math.min(d,24);
+    if(mode==='fast')return Math.max(d,280);
+    return Math.max(d,620);
+  }
+  function saveMode(v){mode=v;try{localStorage.setItem(KEY,v)}catch(_e){}syncButton()}
+  function cycleMode(){saveMode(MODES[(MODES.indexOf(mode)+1)%MODES.length])}
+  function syncButton(){
+    let b=document.getElementById('v0756CpuSpeedBtn');
+    const title=document.querySelector('.v04Title');
+    if(!title)return;
+    if(!b){
+      b=document.createElement('button');b.id='v0756CpuSpeedBtn';b.type='button';b.className='v0756CpuSpeedBtn';
+      b.title='CPUの行動表示速度を切り替え';b.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();cycleMode()});
+      title.insertAdjacentElement('afterend',b);
+    }
+    b.textContent=LABELS[mode]||LABELS.normal;
+  }
+  function cleanLog(v){return String(v==null?'':v).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()}
+  function enqueueCpu(msg){
+    msg=cleanLog(msg);if(!msg)return;
+    if(cpuQueue[cpuQueue.length-1]===msg)return;
+    cpuQueue.push(msg);if(cpuQueue.length>6)cpuQueue.shift();pumpCpu();
+  }
+  function pumpCpu(){
+    if(cpuShowing||!cpuQueue.length||mode==='instant')return;
+    cpuShowing=true;
+    const msg=cpuQueue.shift();
+    let el=document.querySelector('.v0756CpuAction');
+    if(!el){el=document.createElement('div');el.className='v0756CpuAction';document.body.appendChild(el)}
+    el.textContent='CPU：'+msg;
+    clearTimeout(cpuTimer);
+    cpuTimer=setTimeout(function(){try{el.remove()}catch(_e){}cpuShowing=false;pumpCpu()},mode==='fast'?420:760);
+  }
+
+  /* AI scheduling helper used by the current app. Rules/state are untouched; only presentation delay changes. */
+  try{
+    if(typeof v070Schedule==='function'&&!v070Schedule.__v0756Wrapped){
+      const base=v070Schedule;
+      const wrapped=function(fn,ms){
+        const args=Array.from(arguments);args[1]=delayFor(ms);return base.apply(this,args);
+      };
+      wrapped.__v0756Wrapped=true;wrapped.__v0756Old=base;v070Schedule=wrapped;
+    }
+  }catch(_e){}
+
+  /* Show CPU action logs long enough to follow even when a particular AI path does not use v070Schedule. */
+  try{
+    if(typeof log==='function'&&!log.__v0756Wrapped){
+      const baseLog=log;
+      const wrappedLog=function(msg){const wasCpu=cpuTurn();const r=baseLog.apply(this,arguments);if(wasCpu)enqueueCpu(msg);return r};
+      wrappedLog.__v0756Wrapped=true;wrappedLog.__v0756Old=baseLog;log=wrappedLog;
+    }
+  }catch(_e){}
+
+  function sync(){
+    queued=false;
+    try{
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.56')title.textContent='v0.7.56';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.56'});
+      syncButton();
+    }catch(_e){}
+  }
+  function schedule(){if(queued)return;queued=true;requestAnimationFrame(sync)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true})}catch(_e){}
+  addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
+  document.addEventListener('pointerup',schedule,{passive:true});
+  sync();setTimeout(sync,200);setTimeout(sync,900);
+  console.info('Palworld OCG v0.7.56 UI polish + CPU pacing applied');
+})();
+</script>
+
 
 `;
 
@@ -2496,7 +2610,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.55-ability-confirm-assign-clarity-fullscreen-detail-placement-structure-attack");
+      h.set("x-palworld-bridge","v0.7.56-ux-polish-ability-guard-assign-persistent-cpu-speed");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -2521,8 +2635,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.55 — 能力使用確認・消費前後表示・アサイン表示強化・カード詳細全画面・召喚場所選択・建築物攻撃・公式ルール同期";
-        m.start_url="/?pwa=1&v=0755";
+        m.description="Palworld OCG v0.7.56 — アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
+        m.start_url="/?pwa=1&v=0756";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -2535,7 +2649,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.55 ability confirmation + resource before/after + fullscreen card detail + placement selection + structure attack + official rule sync\n";
+        sw+="\n// v0.7.56 UX polish + ability double-fire guard + persistent assignment + CPU speed control + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
