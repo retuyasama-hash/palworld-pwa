@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.61";
+const V="0.7.62";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -204,11 +204,11 @@ const PATCH=`
 
       const title=document.querySelector('.v04Title');
       if(title&&title.textContent!=='v0.7.61')
-        title.textContent='v0.7.61';
+        title.textContent='v0.7.62';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.61';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.62';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.56 UX Polish + Ability Guard + Assignment + Official Sync';
+        v072BpReport.version='0.7.62 Rule Audit + Diagnostics + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.61';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.62';
       }catch(_e){}
       return r;
     };
@@ -2580,8 +2580,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.61')title.textContent='v0.7.61';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.61'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.61')title.textContent='v0.7.62';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.62'});
       syncButton();
     }catch(_e){}
   }
@@ -3419,6 +3419,292 @@ const PATCH=`
 })();
 </script>
 
+
+<style id="v0762DiagnosticsStyle">
+.v0762DiagBtn{
+  border:1px solid #8bc8b4!important;background:#0b211c!important;color:#eafff7!important;
+  border-radius:999px!important;padding:3px 7px!important;font-size:7px!important;font-weight:900!important;
+  white-space:nowrap!important;box-shadow:0 2px 8px #0008!important;z-index:90!important;
+}
+.v0762DiagBtn.hasError{border-color:#ff756c!important;background:#3a1112!important;color:#fff0ef!important}
+.v0762DiagOverlay{
+  position:fixed!important;inset:0!important;z-index:2147483200!important;background:#000b!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;padding:8px!important;
+}
+.v0762DiagOverlay[hidden]{display:none!important}
+.v0762DiagPanel{
+  width:min(720px,94vw)!important;max-height:90dvh!important;overflow:auto!important;
+  background:#071713!important;border:1px solid #6fb5a0!important;border-radius:14px!important;
+  color:#f5fffb!important;padding:12px!important;box-shadow:0 14px 42px #000d!important;
+}
+.v0762DiagHead{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;margin-bottom:8px!important}
+.v0762DiagTitle{font-size:15px!important;font-weight:950!important;color:#fff!important}
+.v0762DiagClose{border:1px solid #829a93!important;background:#14241f!important;color:#fff!important;border-radius:8px!important;padding:5px 10px!important}
+.v0762DiagSummary{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;margin-bottom:8px!important}
+.v0762DiagStat{border:1px solid #274c40!important;background:#0b211b!important;border-radius:9px!important;padding:7px!important;text-align:center!important}
+.v0762DiagStat b{display:block!important;font-size:15px!important}.v0762DiagStat span{font-size:7px!important;color:#bdd2cb!important}
+.v0762DiagActions{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin:8px 0!important}
+.v0762DiagActions button{border:1px solid #557c70!important;background:#102b23!important;color:#fff!important;border-radius:8px!important;padding:7px 10px!important;font-size:8px!important;font-weight:850!important}
+.v0762DiagActions button.primary{border-color:#d7ba58!important;background:#483b0c!important;color:#fff7d2!important}
+.v0762DiagNote{font-size:7.5px!important;line-height:1.45!important;color:#bdcec8!important;margin:6px 0!important}
+.v0762DiagList{display:flex!important;flex-direction:column!important;gap:5px!important;margin-top:8px!important}
+.v0762DiagItem{border:1px solid #3f5750!important;background:#0b1512!important;border-radius:9px!important;padding:7px!important}
+.v0762DiagItem.error{border-color:#873b3d!important;background:#231012!important}
+.v0762DiagCode{font-size:10px!important;font-weight:950!important;color:#ff9d95!important}.v0762DiagMsg{font-size:8px!important;margin-top:2px!important}.v0762DiagMeta{font-size:6.5px!important;color:#9db0aa!important;margin-top:3px!important;word-break:break-word!important}
+.v0762ErrorToast{
+  position:fixed!important;left:50%!important;bottom:max(9px,env(safe-area-inset-bottom))!important;transform:translateX(-50%)!important;
+  z-index:2147483250!important;max-width:82vw!important;border:1px solid #ff716b!important;background:#3b0d10f2!important;
+  color:#fff!important;border-radius:10px!important;padding:7px 12px!important;box-shadow:0 8px 28px #000c!important;
+  font-size:9px!important;font-weight:900!important;pointer-events:auto!important;text-align:center!important;
+}
+@media(max-height:520px) and (orientation:landscape){
+  .v0762DiagPanel{max-height:94dvh!important;padding:8px!important}.v0762DiagTitle{font-size:12px!important}
+  .v0762DiagSummary{gap:4px!important}.v0762DiagStat{padding:4px!important}.v0762DiagStat b{font-size:11px!important}
+  .v0762DiagActions button{padding:5px 8px!important;font-size:7px!important}.v0762DiagItem{padding:5px!important}
+}
+</style>
+<script id="v0762DiagnosticsScript">
+(()=>{
+  if(globalThis.__v0762DiagnosticsApplied)return;
+  globalThis.__v0762DiagnosticsApplied=true;
+
+  const VERSION='0.7.62';
+  const STORE='palworld_diag_v0762';
+  const MAX=80;
+  const OFFICIAL_QA_TOTAL=97;
+  const OFFICIAL_CHECKED_AT='2026-08-23';
+  let busyTest=false, validating=false, toastTimer=0, lastSig='';
+
+  const CODE={
+    JS:'ERR-SYSTEM-0001',PROMISE:'ERR-SYSTEM-0002',CORE:'ERR-SYSTEM-0100',
+    STATE:'ERR-STATE-0001',NUMBER:'ERR-STATE-0002',ZONE:'ERR-ZONE-0001',DUP:'ERR-ZONE-0002',
+    DAMAGE:'ERR-DMG-0001',DAMAGE_GRAVE:'ERR-DMG-0002',DAMAGE_LIFE:'ERR-DMG-0003',
+    BATTLE:'ERR-BATTLE-0001',ABILITY:'ERR-ABILITY-0001',PLAY:'ERR-PLAY-0001',ASSIGN:'ERR-ASSIGN-0001',
+    RULE:'ERR-RULE-0001',RULE_RUN:'ERR-RULE-0002',CARD_DB:'ERR-RULE-0100'
+  };
+  globalThis.PAL_DIAG_CODES=CODE;
+
+  function clean(v){return String(v==null?'':v).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()}
+  function safeNum(v){return typeof v==='number'&&Number.isFinite(v)}
+  function cardLite(c){
+    if(!c)return null;
+    return {uid:c.uid??null,no:c.no||'',name:c.name||'',kind:c.kind||'',rest:!!c.rest,damage:Number(c.damage||0),power:Number(c.power||0),tempPower:Number(c.tempPower||0),strike:Number(c.strike||0),tempStrike:Number(c.tempStrike||0),lucky:!!c.lucky};
+  }
+  function playerLite(pl){
+    if(!pl)return null;
+    const zones={};
+    ['deck','hand','pals','supports','grave','exile'].forEach(z=>zones[z]=Array.isArray(pl[z])?pl[z].map(cardLite):[]);
+    return {name:pl.name||'',life:pl.life,soulDeck:pl.soulDeck,standingSouls:Array.isArray(pl.souls)?pl.souls.filter(x=>!x.rest).length:null,souls:Array.isArray(pl.souls)?pl.souls.length:null,material:pl.material,ingredient:pl.ingredient,zones};
+  }
+  function snapshot(extra){
+    let game=null;
+    try{
+      if(typeof G!=='undefined'&&G)game={turn:G.turn,turnSeq:G.turnSeq,phase:G.phase,over:!!G.over,winner:G.winner||'',reason:G.reason||'',p:playerLite(G.p),a:playerLite(G.a),logs:Array.isArray(G.logs)?G.logs.slice(0,20).map(clean):[]};
+    }catch(_e){}
+    return {version:VERSION,at:new Date().toISOString(),game,extra:extra||null};
+  }
+  function load(){try{const a=JSON.parse(localStorage.getItem(STORE)||'[]');return Array.isArray(a)?a:[]}catch(_e){return []}}
+  function save(a){try{localStorage.setItem(STORE,JSON.stringify(a.slice(0,MAX)))}catch(_e){}}
+  function codeLabel(code){return code||CODE.CORE}
+  function showToast(entry){
+    try{
+      let t=document.getElementById('v0762ErrorToast');
+      if(!t){t=document.createElement('button');t.type='button';t.id='v0762ErrorToast';t.className='v0762ErrorToast';t.addEventListener('click',openPanel);document.body.appendChild(t)}
+      t.textContent='⚠ '+entry.code+'　'+entry.message+'　（タップで診断）';t.hidden=false;
+      clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(t)t.hidden=true},4200);
+    }catch(_e){}
+  }
+  function record(code,message,meta,err,quiet){
+    try{
+      const stack=clean(err&&err.stack||'').slice(0,1800);
+      const sig=[code,message,meta&&meta.op,stack.slice(0,120)].join('|');
+      const now=Date.now();
+      const old=load();
+      if(old[0]&&old[0].sig===sig&&now-Number(old[0].ts||0)<1200)return old[0];
+      const entry={id:'D'+now.toString(36).toUpperCase(),ts:now,sig,code:codeLabel(code),message:clean(message).slice(0,300),meta:meta||null,stack,state:snapshot(meta)};
+      old.unshift(entry);save(old);syncButton();
+      if(!quiet)showToast(entry);
+      return entry;
+    }catch(_e){return null}
+  }
+  globalThis.palDiagRecord=record;
+
+  function checkPlayer(pl,label,issues){
+    if(!pl||typeof pl!=='object'){issues.push([CODE.STATE,label+' player object missing']);return}
+    const nums=['life','soulDeck','material','ingredient'];
+    nums.forEach(k=>{if(pl[k]!=null&&(!safeNum(pl[k])||pl[k]<0&&k!=='life'))issues.push([CODE.NUMBER,label+' '+k+'='+String(pl[k])])});
+    if(!Array.isArray(pl.souls))issues.push([CODE.ZONE,label+' souls is not array']);
+    const zones=['deck','hand','pals','supports','grave','exile'];
+    const seen=new Map();
+    zones.forEach(z=>{
+      if(!Array.isArray(pl[z])){issues.push([CODE.ZONE,label+' '+z+' is not array']);return}
+      pl[z].forEach((c,i)=>{
+        if(!c||typeof c!=='object'){issues.push([CODE.ZONE,label+' '+z+'['+i+'] invalid']);return}
+        const uid=String(c.uid??'');
+        if(uid){if(seen.has(uid))issues.push([CODE.DUP,label+' UID '+uid+' duplicated in '+seen.get(uid)+' / '+z]);else seen.set(uid,z)}
+        if(c.damage!=null&&(!safeNum(Number(c.damage))||Number(c.damage)<0))issues.push([CODE.NUMBER,label+' '+z+' '+(c.no||c.name||uid)+' damage='+String(c.damage)]);
+      });
+    });
+  }
+  function validate(context,quiet){
+    if(validating)return true;validating=true;
+    try{
+      if(typeof G==='undefined'||!G)return true;
+      const issues=[];
+      if(!G.p||!G.a)issues.push([CODE.STATE,'G.p / G.a missing']);
+      else{checkPlayer(G.p,'YOU',issues);checkPlayer(G.a,'OPPONENT',issues)}
+      if(G.turn!=null&&!['p','a'].includes(G.turn))issues.push([CODE.STATE,'invalid turn='+String(G.turn)]);
+      issues.slice(0,8).forEach(x=>record(x[0],x[1],{op:'validate',context:context||''},null,quiet));
+      return !issues.length;
+    }catch(e){record(CODE.STATE,'state validation crashed',{op:'validate',context},e,quiet);return false}
+    finally{validating=false}
+  }
+  globalThis.palValidateState=validate;
+
+  function wrap(name,code,after){
+    try{
+      const old=globalThis[name];if(typeof old!=='function'||old.__v0762DiagWrapped)return;
+      const wrapped=function(){
+        let r;
+        try{r=old.apply(this,arguments)}catch(e){record(code||CODE.CORE,name+' threw an exception',{op:name,args:[...arguments].slice(0,3).map(x=>typeof x==='object'?(x?.no||x?.name||x?.uid||'[object]'):x)},e);throw e}
+        try{if(after)after(arguments,r);else setTimeout(()=>validate(name,true),0)}catch(e){record(CODE.CORE,name+' diagnostic hook failed',{op:name},e,true)}
+        return r;
+      };
+      wrapped.__v0762DiagWrapped=true;wrapped.__v0762DiagOld=old;globalThis[name]=wrapped;
+    }catch(e){record(CODE.CORE,'failed to wrap '+name,{op:'wrap'},e,true)}
+  }
+
+  function wrapPlayerDamage(){
+    try{
+      const old=globalThis.playerDamage;if(typeof old!=='function'||old.__v0762DiagWrapped)return;
+      const wrapped=function(def,amount){
+        const n=Math.max(0,Number(amount)||0),beforeLife=Number(def?.life),beforeDeck=Array.isArray(def?.deck)?def.deck.slice():[],beforeGrave=Array.isArray(def?.grave)?def.grave.slice():[];
+        const expected=[];let lucky=false;
+        for(let i=0;i<n&&i<beforeDeck.length;i++){const c=beforeDeck[i];expected.push(c);if(c?.lucky){lucky=true;break}}
+        let r;
+        try{r=old.apply(this,arguments)}catch(e){record(CODE.DAMAGE,'playerDamage exception',{op:'playerDamage',amount:n,def:def?.name||''},e);throw e}
+        try{
+          const grave=Array.isArray(def?.grave)?def.grave:[];
+          const moved=expected.every(c=>grave.some(g=>g?.uid===c?.uid));
+          if(!moved)record(CODE.DAMAGE_GRAVE,'Damage Check card did not reach graveyard as expected',{op:'playerDamage',amount:n,expected:expected.map(cardLite),def:def?.name||''});
+          if(n>0&&safeNum(beforeLife)&&safeNum(Number(def?.life))){
+            const expectedLife=lucky?beforeLife:beforeLife-n;
+            if(Number(def.life)!==expectedLife)record(CODE.DAMAGE_LIFE,'life change does not match Damage Check result',{op:'playerDamage',amount:n,lucky,beforeLife,expectedLife,actualLife:Number(def.life),revealed:expected.map(cardLite)});
+          }
+          setTimeout(()=>validate('playerDamage',true),0);
+        }catch(e){record(CODE.DAMAGE,'playerDamage audit failed',{op:'playerDamage'},e,true)}
+        return r;
+      };
+      wrapped.__v0762DiagWrapped=true;wrapped.__v0762DiagOld=old;globalThis.playerDamage=wrapped;
+    }catch(e){record(CODE.DAMAGE,'failed to install playerDamage audit',{op:'install'},e,true)}
+  }
+
+  function cardDbAudit(){
+    const out={total:0,issues:[]};
+    try{
+      if(typeof CARD_DB==='undefined'||!CARD_DB||typeof CARD_DB!=='object'){out.issues.push('CARD_DB missing');return out}
+      const vals=Object.values(CARD_DB);out.total=vals.length;const nos=new Set();
+      vals.forEach((c,i)=>{
+        if(!c||typeof c!=='object'){out.issues.push('invalid card entry #'+i);return}
+        const no=String(c.no||'');if(!no)out.issues.push('card without number: '+(c.name||i));else if(nos.has(no))out.issues.push('duplicate card number: '+no);else nos.add(no);
+        if(!c.name)out.issues.push(no+' name missing');if(!c.kind)out.issues.push(no+' kind missing');
+        if(c.cost!=null&&!safeNum(Number(c.cost)))out.issues.push(no+' invalid cost');
+      });
+      out.issues.slice(0,20).forEach(m=>record(CODE.CARD_DB,m,{op:'cardDbAudit'},null,true));
+    }catch(e){record(CODE.CARD_DB,'CARD_DB audit crashed',{op:'cardDbAudit'},e,true);out.issues.push(String(e))}
+    return out;
+  }
+
+  function collectFailures(x,path,out,seen){
+    if(x==null||typeof x!=='object')return;if(seen.has(x))return;seen.add(x);
+    if(Array.isArray(x)){x.forEach((v,i)=>collectFailures(v,path+'['+i+']',out,seen));return}
+    const status=String(x.status??x.result??'').toLowerCase();
+    const bad=x.ok===false||x.pass===false||x.passed===false||['fail','failed','mismatch','error','ng'].includes(status);
+    if(bad)out.push({path,id:x.id||x.no||x.cardNo||'',status:status||'failed',reason:x.reason||x.reasons||x.message||x.detail||''});
+    Object.keys(x).forEach(k=>collectFailures(x[k],path?path+'.'+k:k,out,seen));
+  }
+  async function runOfficialAudit(){
+    if(busyTest)return;busyTest=true;renderPanel();
+    try{
+      cardDbAudit();
+      if(typeof v072RunBP01Tests==='function')await v072RunBP01Tests();
+      else record(CODE.RULE_RUN,'official test runner is not available',{op:'v072RunBP01Tests'});
+      let report=null;try{if(typeof v072BpReport!=='undefined')report=v072BpReport}catch(_e){}
+      const fails=[];collectFailures(report,'report',fails,new WeakSet());
+      fails.slice(0,30).forEach(f=>record(CODE.RULE,'official regression test failed: '+(f.id||f.path),{op:'officialAudit',failure:f},null));
+      validate('officialAudit',true);
+      try{localStorage.setItem('palworld_diag_last_official_v0762',JSON.stringify({at:new Date().toISOString(),qaTotal:OFFICIAL_QA_TOTAL,failCount:fails.length,report}))}catch(_e){}
+      if(!fails.length)showInfoToast('✅ 公式回帰テスト：検出されたFAIL 0件');
+      else showInfoToast('⚠ 公式回帰テスト：FAIL '+fails.length+'件');
+    }catch(e){record(CODE.RULE_RUN,'official audit runner crashed',{op:'officialAudit'},e)}
+    finally{busyTest=false;renderPanel()}
+  }
+
+  function showInfoToast(msg){
+    try{
+      let t=document.getElementById('v0762InfoToast');if(!t){t=document.createElement('div');t.id='v0762InfoToast';t.className='v0762ErrorToast';t.style.borderColor='#7fd0b4';t.style.background='#0b2b22f2';document.body.appendChild(t)}
+      t.textContent=msg;t.hidden=false;setTimeout(()=>{if(t)t.hidden=true},3200);
+    }catch(_e){}
+  }
+  function diagText(){
+    const a=load();let last=null;try{last=JSON.parse(localStorage.getItem('palworld_diag_last_official_v0762')||'null')}catch(_e){}
+    return JSON.stringify({appVersion:VERSION,generatedAt:new Date().toISOString(),officialQATotal:OFFICIAL_QA_TOTAL,officialCheckedAt:OFFICIAL_CHECKED_AT,lastOfficialAudit:last,errors:a,current:snapshot({op:'manualExport'})},null,2);
+  }
+  async function copyText(t){
+    try{await navigator.clipboard.writeText(t);showInfoToast('診断ログをコピーしました');return}catch(_e){}
+    try{const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();showInfoToast('診断ログをコピーしました')}catch(e){record(CODE.JS,'diagnostic copy failed',{op:'copy'},e,true)}
+  }
+  function clearLogs(){save([]);try{localStorage.removeItem('palworld_diag_last_official_v0762')}catch(_e){}syncButton();renderPanel();showInfoToast('診断ログを消去しました')}
+
+  function syncButton(){
+    try{
+      const n=load().length;let b=document.getElementById('v0762DiagBtn');
+      const title=document.querySelector('.v04Title');if(!title)return;
+      if(!b){b=document.createElement('button');b.id='v0762DiagBtn';b.type='button';b.className='v0762DiagBtn';b.addEventListener('click',openPanel);title.insertAdjacentElement('afterend',b)}
+      b.textContent=n?'診断 ⚠'+n:'診断 ✓';b.classList.toggle('hasError',n>0);
+    }catch(_e){}
+  }
+  function esc(v){return String(v??'').replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]))}
+  function renderPanel(){
+    const o=document.getElementById('v0762DiagOverlay');if(!o)return;
+    const entries=load();let last=null;try{last=JSON.parse(localStorage.getItem('palworld_diag_last_official_v0762')||'null')}catch(_e){}
+    let scenarioCount='?';try{if(typeof v0712ScenarioCases==='function')scenarioCount=String(v0712ScenarioCases().length)}catch(_e){}
+    let db=cardDbAudit();
+    const items=entries.slice(0,20).map(e=>'<div class="v0762DiagItem error"><div class="v0762DiagCode">'+esc(e.code)+'</div><div class="v0762DiagMsg">'+esc(e.message)+'</div><div class="v0762DiagMeta">'+esc(new Date(e.ts).toLocaleString())+' / '+esc(e.meta?.op||'')+' / '+esc(e.id)+'</div></div>').join('');
+    o.innerHTML='<div class="v0762DiagPanel"><div class="v0762DiagHead"><div class="v0762DiagTitle">ルール監査・診断 v'+VERSION+'</div><button class="v0762DiagClose" data-act="close">閉じる</button></div>'+        '<div class="v0762DiagSummary"><div class="v0762DiagStat"><b>'+entries.length+'</b><span>保存エラー</span></div><div class="v0762DiagStat"><b>'+db.total+'</b><span>CARD_DB</span></div><div class="v0762DiagStat"><b>'+scenarioCount+'</b><span>回帰ケース</span></div><div class="v0762DiagStat"><b>'+OFFICIAL_QA_TOTAL+'</b><span>公式Q&A総数</span></div></div>'+        '<div class="v0762DiagActions"><button class="primary" data-act="official">'+(busyTest?'テスト実行中…':'公式テスト実行')+'</button><button data-act="state">現在状態を検査</button><button data-act="copy">診断ログをコピー</button><button data-act="clear">ログ消去</button></div>'+        '<div class="v0762DiagNote">自動監視：JavaScript例外、Promise失敗、ゾーン重複、無効な数値、Damage Checkの墓地移動・LIFE変化、主要処理の例外を監視します。公式Q&Aは現在97件。アプリ内の自動回帰ケースが97件すべてを個別再現しているわけではないため、未網羅分は「確認済み」とは扱いません。公式情報確認日：'+OFFICIAL_CHECKED_AT+'。</div>'+        '<div class="v0762DiagNote">前回公式テスト：'+esc(last?.at||'未実行')+' / 検出FAIL：'+esc(last?.failCount??'-')+'</div>'+        '<div class="v0762DiagList">'+(items||'<div class="v0762DiagItem"><div class="v0762DiagMsg">現在、保存されている処理エラーはありません。</div></div>')+'</div></div>';
+    o.querySelector('[data-act="close"]')?.addEventListener('click',closePanel);
+    o.querySelector('[data-act="official"]')?.addEventListener('click',runOfficialAudit);
+    o.querySelector('[data-act="state"]')?.addEventListener('click',()=>{const ok=validate('manual',false);showInfoToast(ok?'✅ 現在状態：異常なし':'⚠ 現在状態：異常を記録しました');renderPanel()});
+    o.querySelector('[data-act="copy"]')?.addEventListener('click',()=>copyText(diagText()));
+    o.querySelector('[data-act="clear"]')?.addEventListener('click',clearLogs);
+  }
+  function openPanel(){
+    let o=document.getElementById('v0762DiagOverlay');if(!o){o=document.createElement('div');o.id='v0762DiagOverlay';o.className='v0762DiagOverlay';document.body.appendChild(o)}
+    o.hidden=false;renderPanel();
+  }
+  function closePanel(){const o=document.getElementById('v0762DiagOverlay');if(o)o.hidden=true}
+
+  addEventListener('error',e=>{try{record(CODE.JS,e.message||'uncaught JavaScript error',{op:'window.error',file:e.filename||'',line:e.lineno||0,col:e.colno||0},e.error)}catch(_e){}});
+  addEventListener('unhandledrejection',e=>{try{const r=e.reason;record(CODE.PROMISE,clean(r?.message||r||'unhandled promise rejection'),{op:'unhandledrejection'},r instanceof Error?r:null)}catch(_e){}});
+
+  wrapPlayerDamage();
+  wrap('resolveBattle',CODE.BATTLE);
+  wrap('stateCheck',CODE.STATE);
+  wrap('activateAbility',CODE.ABILITY);
+  wrap('playFromHand',CODE.PLAY);
+  wrap('chooseAssign',CODE.ASSIGN);
+  wrap('v0713FlushAutos',CODE.CORE);
+  wrap('finishTurn',CODE.CORE);
+
+  function boot(){syncButton();validate('boot',true);cardDbAudit()}
+  try{new MutationObserver(()=>requestAnimationFrame(syncButton)).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  addEventListener('pageshow',boot,{passive:true});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
+  boot();setTimeout(boot,500);setTimeout(boot,1600);
+  console.info('Palworld OCG v0.7.62 rule audit + diagnostics applied');
+})();
+</script>
+
 `;
 
 function noCache(h){
@@ -3434,7 +3720,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.61-ux-polish-ability-guard-assign-persistent-cpu-speed");
+      h.set("x-palworld-bridge","v0.7.62-rule-audit-diagnostics");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -3459,8 +3745,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.61 — アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
-        m.start_url="/?pwa=1&v=0761";
+        m.description="Palworld OCG v0.7.62 — ルール監査・診断・ アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
+        m.start_url="/?pwa=1&v=0762";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -3473,7 +3759,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.61 UX polish + ability double-fire guard + persistent assignment + CPU speed control + official rule sync\n";
+        sw+="\n// v0.7.62 rule audit + diagnostics + official sync + runtime error codes\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
