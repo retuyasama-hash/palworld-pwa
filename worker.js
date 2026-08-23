@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.51";
+const V="0.7.52";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.51 配置選択＋建築物攻撃修正')
-        title.textContent='v0.7.51 配置選択＋建築物攻撃修正';
+      if(title&&title.textContent!=='v0.7.52 カード詳細全画面＋配置選択＋建築物攻撃')
+        title.textContent='v0.7.52 カード詳細全画面＋配置選択＋建築物攻撃';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.51';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.52';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.51 official probe',e);
+      console.error('BP01-084 v0.7.52 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.51公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.52公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.51デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.52デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.51 Placement + Structure Attack + Official Sync';
+        v072BpReport.version='0.7.52 Fullscreen Detail + Placement + Structure Attack + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.51 配置選択＋建築物攻撃＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.52 カード詳細全画面＋配置選択＋建築物攻撃＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,7 +840,7 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.51 placement + structure attack + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.52 placement + structure attack + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
@@ -1246,7 +1246,7 @@ const PATCH=`
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.51 combat UX stable applied');
+  console.info('Palworld OCG v0.7.52 combat UX stable applied');
 })();
 </script>
 
@@ -1505,7 +1505,7 @@ const PATCH=`
   sync();
   setTimeout(sync,250);
   setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.51 hand/summon presentation applied');
+  console.info('Palworld OCG v0.7.52 hand/summon presentation applied');
 })();
 </script>
 
@@ -1680,7 +1680,7 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});
   addEventListener('resize',schedule,{passive:true});
   sync(); setTimeout(sync,250); setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.51 hand/summon motion polish applied');
+  console.info('Palworld OCG v0.7.52 hand/summon motion polish applied');
 })();
 </script>
 
@@ -1875,9 +1875,215 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});
   document.addEventListener('pointerup',schedule,{passive:true});
   sync();setTimeout(sync,250);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.51 placement selection + Structure attack fix applied');
+  console.info('Palworld OCG v0.7.52 placement selection + Structure attack fix applied');
 })();
 </script>
+
+<style id="v0752FullscreenCardDetailStyle">
+/* v0.7.52 — tap the compact left-side detail panel to inspect the selected card full-screen. */
+.app.v04.v0738CenterRifleFix .v04Detail{
+  cursor:zoom-in!important;
+  position:relative!important;
+  touch-action:manipulation!important;
+}
+.app.v04.v0738CenterRifleFix .v04Detail:after{
+  content:"タップで全画面";
+  position:absolute;
+  right:3px;
+  bottom:3px;
+  z-index:8;
+  padding:2px 4px;
+  border-radius:6px;
+  background:#000b;
+  border:1px solid #ffffff33;
+  color:#eafff3;
+  font-size:5.5px;
+  font-weight:900;
+  line-height:1;
+  pointer-events:none;
+}
+.v0752FullDetailOverlay{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483600!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:10px!important;
+  background:rgba(0,8,6,.94)!important;
+  backdrop-filter:blur(5px)!important;
+}
+.v0752FullDetailPanel{
+  position:relative!important;
+  width:min(1180px,96vw)!important;
+  height:min(680px,94dvh)!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  border:2px solid #7ecfa5!important;
+  border-radius:18px!important;
+  background:linear-gradient(160deg,#102a22,#07150f 70%)!important;
+  box-shadow:0 18px 70px #000!important;
+  padding:14px!important;
+}
+.v0752FullDetailClose{
+  position:absolute!important;
+  top:8px!important;
+  right:8px!important;
+  z-index:20!important;
+  width:44px!important;
+  height:44px!important;
+  border-radius:50%!important;
+  border:1px solid #ffffff55!important;
+  background:#07110eee!important;
+  color:#fff!important;
+  font-size:28px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+}
+.v0752FullDetailBody{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(220px,42%) minmax(0,1fr)!important;
+  grid-template-rows:auto minmax(0,1fr)!important;
+  gap:12px!important;
+  padding:2px 52px 2px 2px!important;
+}
+.v0752FullDetailBody>div:first-child{
+  grid-column:1 / -1!important;
+  min-width:0!important;
+  padding-right:4px!important;
+}
+.v0752FullDetailBody>.v04BigCard{
+  grid-column:1!important;
+  grid-row:2!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  border-radius:14px!important;
+  border-width:2px!important;
+}
+.v0752FullDetailBody>div:last-child{
+  grid-column:2!important;
+  grid-row:2!important;
+  min-width:0!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+}
+.v0752FullDetailBody .v04DetailHead{
+  font-size:clamp(16px,2.3vw,28px)!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+  overflow:visible!important;
+}
+.v0752FullDetailBody .v04DetailMeta{
+  font-size:clamp(10px,1.4vw,16px)!important;
+  margin-top:4px!important;
+}
+.v0752FullDetailBody .v04BigOverlay{
+  padding:12px!important;
+}
+.v0752FullDetailBody .v04BigName{
+  font-size:clamp(14px,2vw,24px)!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin-bottom:8px!important;
+}
+.v0752FullDetailBody .v04Stats{
+  gap:7px!important;
+}
+.v0752FullDetailBody .v04Stat{
+  font-size:clamp(10px,1.35vw,16px)!important;
+  padding:4px 7px!important;
+}
+.v0752FullDetailBody .v04Effect{
+  display:block!important;
+  flex:1 1 auto!important;
+  max-height:none!important;
+  min-height:0!important;
+  overflow:auto!important;
+  padding:14px!important;
+  font-size:clamp(12px,1.65vw,20px)!important;
+  line-height:1.55!important;
+  border-radius:12px!important;
+  border-color:#5c9b7e!important;
+  background:#06130fee!important;
+}
+.v0752FullDetailBody .v04ImgNote{
+  font-size:clamp(9px,1.1vw,13px)!important;
+  opacity:.78!important;
+}
+@media(max-height:520px) and (orientation:landscape){
+  .v0752FullDetailOverlay{padding:4px!important}
+  .v0752FullDetailPanel{width:98vw!important;height:96dvh!important;padding:7px!important;border-radius:12px!important}
+  .v0752FullDetailClose{top:4px!important;right:4px!important;width:36px!important;height:36px!important;font-size:23px!important}
+  .v0752FullDetailBody{grid-template-columns:minmax(180px,39%) minmax(0,1fr)!important;gap:7px!important;padding-right:41px!important}
+  .v0752FullDetailBody .v04Effect{padding:8px!important;font-size:11px!important;line-height:1.4!important}
+  .v0752FullDetailBody .v04BigOverlay{padding:7px!important}
+  .v0752FullDetailBody .v04BigName{font-size:13px!important;margin-bottom:4px!important}
+  .v0752FullDetailBody .v04Stat{font-size:9px!important;padding:2px 4px!important}
+}
+</style>
+<script id="v0752FullscreenCardDetailScript">
+(()=>{
+  if(globalThis.__v0752FullscreenCardDetailApplied)return;
+  globalThis.__v0752FullscreenCardDetailApplied=true;
+
+  function closeFullDetail(){
+    const old=document.getElementById('v0752FullDetailOverlay');
+    if(old)old.remove();
+  }
+
+  function openFullDetail(){
+    const src=document.getElementById('v04Detail');
+    if(!src)return;
+    if(!src.querySelector('.v04DetailMeta')){
+      try{if(typeof toast==='function')toast('先にカードをタップしてください')}catch(_e){}
+      return;
+    }
+    closeFullDetail();
+    const overlay=document.createElement('div');
+    overlay.id='v0752FullDetailOverlay';
+    overlay.className='v0752FullDetailOverlay';
+    const panel=document.createElement('div');
+    panel.className='v0752FullDetailPanel';
+    const close=document.createElement('button');
+    close.type='button';
+    close.className='v0752FullDetailClose';
+    close.setAttribute('aria-label','カード詳細を閉じる');
+    close.textContent='×';
+    const body=document.createElement('div');
+    body.className='v0752FullDetailBody';
+    body.innerHTML=src.innerHTML;
+    panel.appendChild(close);
+    panel.appendChild(body);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+    close.addEventListener('click',function(ev){ev.stopPropagation();closeFullDetail()});
+    overlay.addEventListener('click',function(ev){if(ev.target===overlay)closeFullDetail()});
+  }
+
+  document.addEventListener('click',function(ev){
+    const d=ev.target&&ev.target.closest?ev.target.closest('#v04Detail'):null;
+    if(!d)return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    openFullDetail();
+  },true);
+
+  document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeFullDetail()});
+  addEventListener('pageshow',closeFullDetail,{passive:true});
+  console.info('Palworld OCG v0.7.52 fullscreen card detail applied');
+})();
+</script>
+
 
 `;
 
@@ -1894,7 +2100,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.51-placement-structure-attack-official-rule-sync");
+      h.set("x-palworld-bridge","v0.7.52-fullscreen-detail-placement-structure-attack");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -1919,8 +2125,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.51 — 召喚場所選択・建築物攻撃修正・手札/召喚UI改善・公式ルール同期";
-        m.start_url="/?pwa=1&v=0751";
+        m.description="Palworld OCG v0.7.52 — カード詳細全画面・召喚場所選択・建築物攻撃修正・手札/召喚UI改善・公式ルール同期";
+        m.start_url="/?pwa=1&v=0752";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -1933,7 +2139,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.51 placement selection + structure attack + hand/summon UX + official rule sync\n";
+        sw+="\n// v0.7.52 fullscreen card detail + placement selection + structure attack + hand/summon UX + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
