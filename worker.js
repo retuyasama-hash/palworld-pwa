@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.57";
+const V="0.7.58";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.57')
-        title.textContent='v0.7.57';
+      if(title&&title.textContent!=='v0.7.58')
+        title.textContent='v0.7.58';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.57';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.58';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.57';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.58';
       }catch(_e){}
       return r;
     };
@@ -2347,7 +2347,7 @@ const PATCH=`
   document.addEventListener('pointerup',schedule,{passive:true});
   addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,200);setTimeout(sync,800);
-  console.info('Palworld OCG v0.7.57 assignment clarity applied');
+  console.info('Palworld OCG v0.7.58 assignment clarity applied');
 })();
 </script>
 
@@ -2482,12 +2482,12 @@ const PATCH=`
       wrapped.__v0755Wrapped=true;wrapped.__v0755Old=oldActivate;activateAbility=wrapped;
     }
   }catch(_e){console.warn('v0.7.55 ability confirm wrap failed',_e)}
-  console.info('Palworld OCG v0.7.57 ability confirmation applied');
+  console.info('Palworld OCG v0.7.58 ability confirmation applied');
 })();
 </script>
 
 <style id="v0756PolishStyle">
-/* v0.7.57 — keep action controls inside phone safe areas and make CPU actions readable. */
+/* v0.7.58 — keep action controls inside phone safe areas and make CPU actions readable. */
 .modal.v0754ChoiceSheet{padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
 .v0756CpuSpeedBtn{
   flex:0 0 auto!important;margin-left:4px!important;padding:2px 6px!important;min-height:0!important;
@@ -2580,8 +2580,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.57')title.textContent='v0.7.57';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.57'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.58')title.textContent='v0.7.58';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.58'});
       syncButton();
     }catch(_e){}
   }
@@ -2590,14 +2590,14 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
   document.addEventListener('pointerup',schedule,{passive:true});
   sync();setTimeout(sync,200);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.57 UI polish + CPU pacing applied');
+  console.info('Palworld OCG v0.7.58 UI polish + CPU pacing applied');
 })();
 </script>
 
 
 
 <style id="v0757CenterActionStyle">
-/* v0.7.57 — center action callout + slightly larger, easier-to-read hand cards. */
+/* v0.7.58 — center action callout + slightly larger, easier-to-read hand cards. */
 .app.v04.v0738CenterRifleFix .v04HandBar{
   height:100px!important;
   min-height:100px!important;
@@ -2783,9 +2783,141 @@ const PATCH=`
       };
       wrapped.__v0757Wrapped=true;wrapped.__v0757Old=base;log=wrapped;
     }
-  }catch(_e){console.warn('v0.7.57 center action wrap failed',_e)}
+  }catch(_e){console.warn('v0.7.58 center action wrap failed',_e)}
   addEventListener('pageshow',()=>{hide();q.length=0;showing=false},{passive:true});
-  console.info('Palworld OCG v0.7.57 center action display applied');
+  console.info('Palworld OCG v0.7.58 center action display applied');
+})();
+</script>
+
+
+<style id="v0758DamageRevealStyle">
+/* v0.7.58 — show the revealed DAMAGE CHECK card as a large image like the user's reference. */
+.v0758DamageReveal{
+  position:fixed!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  pointer-events:none!important;z-index:2147482890!important;padding:12px!important;
+}
+.v0758DamageReveal[hidden]{display:none!important}
+.v0758DamageRevealPanel{
+  width:min(420px,82vw)!important;max-width:420px!important;
+  background:linear-gradient(180deg,rgba(20,20,28,.97),rgba(9,9,14,.96))!important;
+  border:1px solid rgba(242,209,101,.9)!important;border-radius:18px!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.05) inset!important;
+  padding:14px 16px!important;color:#fff!important;text-align:center!important;
+}
+.v0758DamageRevealTitle{
+  font-size:15px!important;font-weight:900!important;letter-spacing:.04em!important;color:#fff!important;
+}
+.v0758DamageRevealSub{
+  margin-top:4px!important;font-size:10px!important;line-height:1.35!important;color:#ebedf5!important;opacity:.95!important;
+}
+.v0758DamageRevealCardWrap{
+  margin:12px auto 10px!important;display:flex!important;justify-content:center!important;align-items:center!important;
+}
+.v0758DamageRevealCard{
+  width:138px!important;max-width:138px!important;height:auto!important;transform:scale(1.02)!important;transform-origin:center center!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.36)!important;
+}
+.v0758DamageRevealCard .infoBtn,
+.v0758DamageRevealCard button,
+.v0758DamageRevealCard .v0754AssignOnPal,
+.v0758DamageRevealCard .v0754AssignOnSource{display:none!important}
+.v0758DamageRevealFoot{
+  font-size:9px!important;line-height:1.2!important;color:#f2d56f!important;font-weight:800!important;
+}
+@media (max-height:520px) and (orientation:landscape){
+  .v0758DamageRevealPanel{width:min(360px,78vw)!important;padding:11px 13px!important}
+  .v0758DamageRevealTitle{font-size:13px!important}
+  .v0758DamageRevealSub{font-size:8px!important}
+  .v0758DamageRevealCard{width:112px!important;max-width:112px!important}
+}
+</style>
+<script id="v0758DamageRevealScript">
+(()=>{
+  if(globalThis.__v0758DamageRevealApplied)return;
+  globalThis.__v0758DamageRevealApplied=true;
+  let seen='',timer=0,queued=false;
+
+  function norm(v){return String(v==null?'':v).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()}
+  function esc(s){return String(s).replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]))}
+  function findPanel(){
+    try{
+      const play=document.querySelector('.v04Play')||document.body;
+      const nodes=[...play.querySelectorAll('.v0754DamageCheckPanel, div, section, aside, main')];
+      for(const el of nodes){
+        const text=norm(el.textContent||'');
+        if(!/DAMAGE CHECK/i.test(text))continue;
+        const rect=el.getBoundingClientRect();
+        if(!rect.width||!rect.height)continue;
+        const card=el.querySelector('.card');
+        if(!card)continue;
+        return el;
+      }
+    }catch(_e){}
+    return null;
+  }
+  function buildSig(panel){
+    const text=norm(panel?.textContent||'');
+    const name=norm(panel?.querySelector('.card .name')?.textContent||'');
+    return text+'|'+name;
+  }
+  function makeCardHtml(card){
+    try{
+      const clone=card.cloneNode(true);
+      clone.classList.add('v0758DamageRevealCard');
+      clone.querySelectorAll('button,.infoBtn,.v0754AssignOnPal,.v0754AssignOnSource').forEach(x=>x.remove());
+      clone.removeAttribute('onclick');clone.removeAttribute('onpointerup');clone.removeAttribute('onpointerdown');
+      return clone.outerHTML;
+    }catch(_e){return ''}
+  }
+  function parseText(panel){
+    const raw=norm(panel.textContent||'');
+    let sub=raw.replace(/DAMAGE CHECK/ig,'').trim();
+    sub=sub.replace(/^[:：\-\s]+/,'').trim();
+    if(!sub)sub='ダメージでめくれたカード';
+    return sub;
+  }
+  function ensure(){
+    let el=document.getElementById('v0758DamageReveal');
+    if(el)return el;
+    el=document.createElement('div');el.id='v0758DamageReveal';el.className='v0758DamageReveal';el.hidden=true;
+    document.body.appendChild(el);return el;
+  }
+  function hide(){const el=document.getElementById('v0758DamageReveal');if(el)el.hidden=true}
+  function cpuMode(){
+    try{const t=(document.getElementById('v0756CpuSpeedBtn')?.textContent||'').trim();if(t.includes('即時'))return 'instant';if(t.includes('×2'))return 'fast'}catch(_e){}
+    return 'normal';
+  }
+  function show(panel){
+    const card=panel.querySelector('.card'); if(!card)return;
+    const name=norm(card.querySelector('.name')?.textContent||'');
+    const sub=parseText(panel);
+    const el=ensure();
+    el.innerHTML='<div class="v0758DamageRevealPanel"><div class="v0758DamageRevealTitle">ダメージチェック</div><div class="v0758DamageRevealSub">'+esc(sub)+'</div><div class="v0758DamageRevealCardWrap">'+makeCardHtml(card)+'</div><div class="v0758DamageRevealFoot">'+esc(name||'カードを公開')+'</div></div>';
+    el.hidden=false;
+    clearTimeout(timer);
+    const m=cpuMode();
+    const dur=m==='instant'?900:(m==='fast'?1200:1650);
+    timer=setTimeout(hide,dur);
+  }
+  function scan(){
+    queued=false;
+    try{
+      const panel=findPanel();
+      if(!panel)return;
+      const sig=buildSig(panel);
+      if(!sig||sig===seen)return;
+      seen=sig;
+      show(panel);
+      setTimeout(()=>{if(seen===sig)seen=''},700);
+    }catch(_e){}
+  }
+  function schedule(){if(queued)return;queued=true;requestAnimationFrame(scan)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true})}catch(_e){}
+  document.addEventListener('pointerup',schedule,{passive:true});
+  addEventListener('pageshow',()=>{hide();seen='';schedule()},{passive:true});
+  addEventListener('resize',schedule,{passive:true});
+  schedule();setTimeout(schedule,300);setTimeout(schedule,1000);
+  console.info('Palworld OCG v0.7.58 damage reveal popup applied');
 })();
 </script>
 
@@ -2804,7 +2936,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.57-ux-polish-ability-guard-assign-persistent-cpu-speed");
+      h.set("x-palworld-bridge","v0.7.58-ux-polish-ability-guard-assign-persistent-cpu-speed");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -2829,8 +2961,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.57 — アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
-        m.start_url="/?pwa=1&v=0757";
+        m.description="Palworld OCG v0.7.58 — アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
+        m.start_url="/?pwa=1&v=0758";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -2843,7 +2975,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.57 UX polish + ability double-fire guard + persistent assignment + CPU speed control + official rule sync\n";
+        sw+="\n// v0.7.58 UX polish + ability double-fire guard + persistent assignment + CPU speed control + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
