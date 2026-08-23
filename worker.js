@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.49";
+const V="0.7.51";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.49 手札・召喚UI改善＋戦闘安定化')
-        title.textContent='v0.7.49 手札・召喚UI改善＋戦闘安定化';
+      if(title&&title.textContent!=='v0.7.51 配置選択＋建築物攻撃修正')
+        title.textContent='v0.7.51 配置選択＋建築物攻撃修正';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.49';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.51';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.49 official probe',e);
+      console.error('BP01-084 v0.7.51 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.49公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.51公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.49デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.51デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.49 Hand/Summon UX + Official Sync';
+        v072BpReport.version='0.7.51 Placement + Structure Attack + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.49 手札・召喚UI改善＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.51 配置選択＋建築物攻撃＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,7 +840,7 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.49 hand/summon UX + battle UX3 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.51 placement + structure attack + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
@@ -1246,7 +1246,7 @@ const PATCH=`
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.49 combat UX stable applied');
+  console.info('Palworld OCG v0.7.51 combat UX stable applied');
 })();
 </script>
 
@@ -1307,8 +1307,8 @@ const PATCH=`
 }
 </style>
 
-<style id="v0749HandSummonUX">
-/* v0.7.49 — hand / summon presentation. Rules and card-resolution logic are untouched. */
+<style id="v0750HandSummonUX">
+/* v0.7.51 — hand / summon presentation retained from v0.7.50. */
 
 /* The small version pill beside the start-screen title was hard to read on a phone. */
 .modalCard h2 .badge.official,
@@ -1348,7 +1348,7 @@ const PATCH=`
   transform:translateY(-2px)!important;
   box-shadow:0 2px 7px #0009,0 0 0 1px #76d2a777 inset!important;
 }
-.app.v04.v0738CenterRifleFix .v04Hand>.card.v0749HandSelected{
+.app.v04.v0738CenterRifleFix .v04Hand>.card.v0750HandSelected{
   transform:translateY(-7px) scale(1.035)!important;
   outline:2px solid #ffe078!important;
   box-shadow:0 5px 12px #000c,0 0 15px #ffd85c99!important;
@@ -1357,10 +1357,10 @@ const PATCH=`
 }
 
 /* Newly drawn cards get a short, non-blocking visual cue. */
-.app.v04.v0738CenterRifleFix .v04Hand>.card.v0749HandEnter{
-  animation:v0749HandEnter .34s ease-out both!important;
+.app.v04.v0738CenterRifleFix .v04Hand>.card.v0750HandEnter{
+  animation:v0750HandEnter .34s ease-out both!important;
 }
-@keyframes v0749HandEnter{
+@keyframes v0750HandEnter{
   0%{opacity:.28;filter:brightness(1.55) saturate(1.15)}
   55%{opacity:1;filter:brightness(1.18) saturate(1.08)}
   100%{opacity:1;filter:none}
@@ -1371,7 +1371,7 @@ const PATCH=`
   border:2px solid #ffde62!important;
   background:linear-gradient(180deg,#4b3d18cc,#80681a88)!important;
   box-shadow:0 0 0 2px #fff4 inset,0 0 20px #ffd84ebb!important;
-  animation:v0749PlacementPulse .62s ease-in-out infinite alternate!important;
+  animation:v0750PlacementPulse .62s ease-in-out infinite alternate!important;
 }
 .app.v04.v0738CenterRifleFix .zone.placementTarget:after{
   content:"ここに登場"!important;
@@ -1381,7 +1381,7 @@ const PATCH=`
   color:#fff8d5!important;
   text-shadow:0 1px 3px #000,0 0 5px #9a6300!important;
 }
-@keyframes v0749PlacementPulse{
+@keyframes v0750PlacementPulse{
   from{filter:brightness(.94)}
   to{filter:brightness(1.2)}
 }
@@ -1401,10 +1401,10 @@ const PATCH=`
 }
 
 /* Summoned / deployed card flashes once after it appears on the field. */
-.app.v04.v0738CenterRifleFix .v04Play .card.v0749SummonEnter{
-  animation:v0749SummonEnter .48s ease-out both!important;
+.app.v04.v0738CenterRifleFix .v04Play .card.v0750SummonEnter{
+  animation:v0750SummonEnter .48s ease-out both!important;
 }
-@keyframes v0749SummonEnter{
+@keyframes v0750SummonEnter{
   0%{opacity:.3;filter:brightness(1.8) saturate(1.2);box-shadow:0 0 24px #ffe77dcc}
   45%{opacity:1;filter:brightness(1.25) saturate(1.1);box-shadow:0 0 18px #ffe77daa}
   100%{opacity:1;filter:none}
@@ -1439,10 +1439,10 @@ const PATCH=`
 }
 </style>
 
-<script id="v0749HandSummonUXScript">
+<script id="v0750HandSummonUXScript">
 (()=>{
-  if(globalThis.__v0749HandSummonUXApplied)return;
-  globalThis.__v0749HandSummonUXApplied=true;
+  if(globalThis.__v0750HandSummonUXApplied)return;
+  globalThis.__v0750HandSummonUXApplied=true;
 
   let scheduled=false;
   let knownHand=null;
@@ -1459,7 +1459,7 @@ const PATCH=`
     try{
       const app=document.querySelector('.app.v04');
       if(!app){knownHand=null;knownField=null;return}
-      app.classList.add('v0749HandSummonUX');
+      app.classList.add('v0750HandSummonUX');
 
       const handEls=[...document.querySelectorAll('.v04Hand>.card[data-uid]')];
       const handNow=uidSet(handEls);
@@ -1467,12 +1467,12 @@ const PATCH=`
       /* Visualise the selected hand card when the current upstream exposes its selection uid. */
       let selected=null;
       try{if(typeof v0725SelectedHandUid!=='undefined'&&v0725SelectedHandUid!=null)selected=String(v0725SelectedHandUid)}catch(_e){}
-      handEls.forEach(el=>el.classList.toggle('v0749HandSelected',selected!=null&&String(el.dataset.uid)===selected));
+      handEls.forEach(el=>el.classList.toggle('v0750HandSelected',selected!=null&&String(el.dataset.uid)===selected));
 
       if(knownHand!==null){
         handEls.forEach(el=>{
           const id=String(el.dataset.uid||'');
-          if(id&&!knownHand.has(id))clearTransient(el,'v0749HandEnter',380);
+          if(id&&!knownHand.has(id))clearTransient(el,'v0750HandEnter',380);
         });
       }
       knownHand=handNow;
@@ -1485,7 +1485,7 @@ const PATCH=`
       if(knownField!==null){
         fieldEls.forEach(el=>{
           const id=String(el.dataset.uid||'');
-          if(id&&!knownField.has(id))clearTransient(el,'v0749SummonEnter',520);
+          if(id&&!knownField.has(id))clearTransient(el,'v0750SummonEnter',520);
         });
       }
       knownField=fieldNow;
@@ -1505,7 +1505,377 @@ const PATCH=`
   sync();
   setTimeout(sync,250);
   setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.49 hand/summon presentation applied');
+  console.info('Palworld OCG v0.7.51 hand/summon presentation applied');
+})();
+</script>
+
+<style id="v0750HandSummonMotion">
+/* v0.7.51 — visual-only hand / summon motion polish retained from v0.7.50.
+   No rule, cost, target, damage, draw-count or summon-resolution logic is changed. */
+
+/* Version pill: one more step up in readability without overpowering the title. */
+.badge.official{
+  font-size:11px!important;
+  line-height:1.15!important;
+  padding:2px 7px!important;
+  border-radius:7px!important;
+  letter-spacing:.15px!important;
+}
+
+/* Slight hand overlap gives a held-hand feel while keeping every card touchable. */
+.app.v04.v0738CenterRifleFix .v04Hand>.card{
+  margin-left:-2px!important;
+  will-change:transform,filter,box-shadow,opacity;
+}
+.app.v04.v0738CenterRifleFix .v04Hand>.card:first-child{margin-left:0!important}
+.app.v04.v0738CenterRifleFix .v04Hand>.card.v0750HandSelected{
+  transform:translateY(-9px) scale(1.055)!important;
+  z-index:24!important;
+}
+.app.v04.v0738CenterRifleFix .v04Hand>.card.v0750HandPress{
+  transform:translateY(-5px) scale(1.025)!important;
+  filter:brightness(1.12)!important;
+}
+
+/* Drawn cards rise into the hand instead of only flashing. */
+@keyframes v0750HandEnter{
+  0%{opacity:.12;transform:translateY(18px) scale(.84);filter:brightness(1.65) saturate(1.18)}
+  58%{opacity:1;transform:translateY(-2px) scale(1.025);filter:brightness(1.18) saturate(1.08)}
+  100%{opacity:1;transform:none;filter:none}
+}
+
+/* Flying visual clone used only while a hand card moves to the battlefield. */
+.v0750SummonGhost{
+  position:fixed!important;
+  z-index:2147483300!important;
+  pointer-events:none!important;
+  margin:0!important;
+  transform-origin:center center!important;
+  overflow:hidden!important;
+  border-radius:6px!important;
+  box-shadow:0 4px 16px #000c,0 0 18px #ffe17699!important;
+  will-change:left,top,width,height,transform,opacity,filter!important;
+}
+.v0750SummonLanding{
+  animation:v0750SummonLanding .52s ease-out both!important;
+  position:relative!important;
+  z-index:18!important;
+}
+@keyframes v0750SummonLanding{
+  0%{transform:scale(.82);filter:brightness(1.7) saturate(1.25);box-shadow:0 0 28px #ffe47dcc}
+  52%{transform:scale(1.06);filter:brightness(1.2) saturate(1.1);box-shadow:0 0 18px #ffe47daa}
+  100%{transform:none;filter:none;box-shadow:none}
+}
+
+/* Make the valid placement slots read like a clear destination, not just a border. */
+.app.v04.v0738CenterRifleFix .zone.placementTarget{
+  box-shadow:0 0 0 2px #fff5 inset,0 0 25px #ffd84ed0!important;
+}
+.app.v04.v0738CenterRifleFix .zone.placementTarget:after{
+  font-size:10px!important;
+  letter-spacing:.25px!important;
+}
+
+@media(max-height:520px) and (orientation:landscape){
+  .badge.official{font-size:10px!important;padding:2px 6px!important}
+  .app.v04.v0738CenterRifleFix .v04Hand>.card{margin-left:-1px!important}
+  .app.v04.v0738CenterRifleFix .v04Hand>.card.v0750HandSelected{transform:translateY(-7px) scale(1.045)!important}
+}
+</style>
+
+<script id="v0750HandSummonMotionScript">
+(()=>{
+  if(globalThis.__v0750HandSummonMotionApplied)return;
+  globalThis.__v0750HandSummonMotionApplied=true;
+
+  let scheduled=false;
+  let knownField=null;
+  let handSnapshots=new Map();
+  const uid=el=>String((el&&el.dataset&&el.dataset.uid)||'');
+
+  function snapshotHand(){
+    const map=new Map();
+    document.querySelectorAll('.v04Hand>.card[data-uid]').forEach(el=>{
+      try{
+        const id=uid(el); if(!id)return;
+        const r=el.getBoundingClientRect();
+        map.set(id,{left:r.left,top:r.top,width:r.width,height:r.height,html:el.outerHTML});
+      }catch(_e){}
+    });
+    return map;
+  }
+
+  function fieldCards(){
+    return [...document.querySelectorAll('.v04Play .palrow .card[data-uid],.v04Play .supportrow .card[data-uid]')];
+  }
+
+  function flyFromHand(snap,dest){
+    try{
+      const dr=dest.getBoundingClientRect();
+      if(!snap||!dr.width||!dr.height)return;
+      const wrap=document.createElement('div');
+      wrap.innerHTML=snap.html;
+      const ghost=wrap.firstElementChild;
+      if(!ghost)return;
+      ghost.removeAttribute('onclick');
+      ghost.querySelectorAll('[onclick]').forEach(x=>x.removeAttribute('onclick'));
+      ghost.classList.add('v0750SummonGhost');
+      Object.assign(ghost.style,{left:snap.left+'px',top:snap.top+'px',width:snap.width+'px',height:snap.height+'px'});
+      document.body.appendChild(ghost);
+
+      const sx=snap.left, sy=snap.top, sw=snap.width, sh=snap.height;
+      const dx=dr.left, dy=dr.top, dw=dr.width, dh=dr.height;
+      const mx=(sx+dx)/2, my=Math.min(sy,dy)-Math.max(14,Math.abs(dy-sy)*.12);
+      const keyframes=[
+        {left:sx+'px',top:sy+'px',width:sw+'px',height:sh+'px',opacity:.96,transform:'scale(1) rotate(0deg)',filter:'brightness(1)'},
+        {offset:.55,left:mx+'px',top:my+'px',width:((sw+dw)/2)+'px',height:((sh+dh)/2)+'px',opacity:1,transform:'scale(1.12) rotate(-1.5deg)',filter:'brightness(1.28) saturate(1.12)'},
+        {left:dx+'px',top:dy+'px',width:dw+'px',height:dh+'px',opacity:.92,transform:'scale(1) rotate(0deg)',filter:'brightness(1.12)'}
+      ];
+      const anim=ghost.animate(keyframes,{duration:430,easing:'cubic-bezier(.18,.82,.22,1)',fill:'forwards'});
+      const finish=()=>{
+        try{ghost.remove()}catch(_e){}
+        try{dest.classList.remove('v0750SummonLanding');void dest.offsetWidth;dest.classList.add('v0750SummonLanding');setTimeout(()=>dest.classList.remove('v0750SummonLanding'),560)}catch(_e){}
+      };
+      anim.onfinish=finish; anim.oncancel=finish;
+      setTimeout(()=>{if(ghost.isConnected)finish()},540);
+    }catch(_e){}
+  }
+
+  function sync(){
+    scheduled=false;
+    try{
+      const app=document.querySelector('.app.v04');
+      if(!app){knownField=null;handSnapshots=new Map();return}
+
+      const prevHand=handSnapshots;
+      const fields=fieldCards();
+      const nowField=new Set(fields.map(uid).filter(Boolean));
+      if(knownField!==null){
+        fields.forEach(el=>{
+          const id=uid(el);
+          if(id&&!knownField.has(id)&&prevHand.has(id))flyFromHand(prevHand.get(id),el);
+        });
+      }
+      knownField=nowField;
+      handSnapshots=snapshotHand();
+    }catch(_e){}
+  }
+
+  function schedule(){
+    if(scheduled)return;
+    scheduled=true;
+    requestAnimationFrame(()=>requestAnimationFrame(sync));
+  }
+
+  document.addEventListener('pointerdown',ev=>{
+    const el=ev.target.closest&&ev.target.closest('.v04Hand>.card[data-uid]');
+    if(!el||ev.target.closest('.actBtn,.infoBtn'))return;
+    el.classList.add('v0750HandPress');
+  },{passive:true});
+  ['pointerup','pointercancel'].forEach(type=>document.addEventListener(type,()=>{
+    document.querySelectorAll('.v0750HandPress').forEach(el=>el.classList.remove('v0750HandPress'));
+  },{passive:true}));
+
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  addEventListener('pageshow',sync,{passive:true});
+  addEventListener('resize',schedule,{passive:true});
+  sync(); setTimeout(sync,250); setTimeout(sync,900);
+  console.info('Palworld OCG v0.7.51 hand/summon motion polish applied');
+})();
+</script>
+
+<style id="v0751PlacementStructureAttackFix">
+/* v0.7.51 — explicit deployment-slot choice + legal Structure attack targeting. */
+.app.v04.v0738CenterRifleFix .zone.v0751PlacementChoice{
+  position:relative!important;
+  cursor:pointer!important;
+  border:2px solid #ffe16a!important;
+  background:linear-gradient(180deg,#584d1ed6,#2e2812d6)!important;
+  box-shadow:0 0 0 2px #fff5 inset,0 0 30px #ffd84ee8!important;
+  animation:v0751SlotPulse .62s ease-in-out infinite alternate!important;
+}
+.app.v04.v0738CenterRifleFix .zone.v0751PlacementChoice:after{
+  content:"ここに登場"!important;
+  position:absolute!important;
+  inset:auto 2px 3px!important;
+  display:block!important;
+  text-align:center!important;
+  font-size:10px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+  color:#fff!important;
+  text-shadow:0 1px 4px #000!important;
+  pointer-events:none!important;
+}
+.app.v04.v0738CenterRifleFix .zone.v0751StructureTarget{
+  border:2px solid #ffbd55!important;
+  box-shadow:0 0 0 2px #fff4 inset,0 0 24px #ff9f43cc!important;
+  cursor:pointer!important;
+  animation:v0751TargetPulse .62s ease-in-out infinite alternate!important;
+}
+.app.v04.v0738CenterRifleFix .zone.v0751StructureTarget:before{
+  content:"攻撃可能";
+  position:absolute;
+  z-index:7;
+  top:2px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:1px 4px;
+  border-radius:999px;
+  background:#7b351be8;
+  color:#fff4d6;
+  font-size:8px;
+  font-weight:950;
+  white-space:nowrap;
+  pointer-events:none;
+}
+@keyframes v0751SlotPulse{from{filter:brightness(.92)}to{filter:brightness(1.25)}}
+@keyframes v0751TargetPulse{from{filter:brightness(.96)}to{filter:brightness(1.18)}}
+</style>
+
+<script id="v0751PlacementStructureAttackScript">
+(()=>{
+  if(globalThis.__v0751PlacementStructureAttackApplied)return;
+  globalThis.__v0751PlacementStructureAttackApplied=true;
+  let scheduled=false;
+
+  function isPermanent(c){return !!c&&['Pal','Structure','Gear'].includes(String(c.kind||''))}
+
+  /* Route the local player's permanent cards through the confirm -> placement flow.
+     CPU / remote resolution paths are left alone. */
+  try{
+    if(typeof playFromHand==='function'&&!playFromHand.__v0751Wrapped){
+      const basePlayFromHand=playFromHand;
+      const wrapped=function(pl,uid){
+        try{
+          const c=pl&&pl.hand&&pl.hand.find(x=>Number(x.uid)===Number(uid));
+          if(typeof G!=='undefined'&&G&&pl===G.p&&!pl.isAI&&G.turn==='p'&&G.phase==='MAIN'&&isPermanent(c)&&typeof requestPlayFromHand==='function'){
+            return requestPlayFromHand(Number(uid));
+          }
+        }catch(_e){}
+        return basePlayFromHand(pl,uid);
+      };
+      wrapped.__v0751Wrapped=true;
+      playFromHand=wrapped;
+    }
+  }catch(_e){}
+
+  function patchTryPlay(){
+    try{
+      if(typeof v0725TryPlay!=='function'||v0725TryPlay.__v0751Wrapped)return;
+      const base=v0725TryPlay;
+      const wrapped=function(uid){
+        try{
+          const c=G&&G.p&&G.p.hand&&G.p.hand.find(x=>Number(x.uid)===Number(uid));
+          if(isPermanent(c)&&typeof requestPlayFromHand==='function')return requestPlayFromHand(Number(uid));
+        }catch(_e){}
+        return base(uid);
+      };
+      wrapped.__v0751Wrapped=true;
+      v0725TryPlay=wrapped;
+    }catch(_e){}
+  }
+
+  /* Comprehensive rules: a Structure itself is a legal attack target regardless of Rest/Stand.
+     Pal legality remains delegated to the existing engine, including Taunt / Assault restrictions. */
+  try{
+    if(typeof canBeAttacked==='function'&&!canBeAttacked.__v0751Wrapped){
+      const baseCanBeAttacked=canBeAttacked;
+      const wrapped=function(atk,target){
+        if(target&&String(target.kind||'')==='Structure')return true;
+        return baseCanBeAttacked(atk,target);
+      };
+      wrapped.__v0751Wrapped=true;
+      canBeAttacked=wrapped;
+    }
+  }catch(_e){}
+
+  function ownSide(){return document.querySelector('.v04Play .side.player')||document.querySelector('.v04Play .player.side')}
+  function enemySide(){return document.querySelector('.v04Play .side.enemy')||document.querySelector('.v04Play .enemy.side')}
+
+  function addChoice(zone,slot){
+    if(!zone)return;
+    zone.classList.add('placementTarget','v0751PlacementChoice');
+    zone.dataset.v0751PlacementSlot=String(slot);
+    zone.onclick=function(ev){
+      try{ev.preventDefault();ev.stopPropagation()}catch(_e){}
+      try{if(typeof confirmPlacement==='function')confirmPlacement(slot)}catch(_e){}
+    };
+  }
+
+  function ensurePlacementChoices(){
+    try{
+      if(typeof pendingPlacement==='undefined'||!pendingPlacement)return;
+      const side=ownSide();if(!side)return;
+      const kind=String(pendingPlacement.kind||'');
+      if(kind==='Pal'){
+        const row=side.querySelector('.palrow');if(!row)return;
+        const zones=[...row.children].filter(x=>x.classList&&x.classList.contains('zone'));
+        for(let i=0;i<5;i++){
+          let z=zones[i];
+          if(!z){z=document.createElement('div');z.className='zone';z.textContent='PAL';row.appendChild(z)}
+          if(!z.querySelector('.card'))addChoice(z,i);
+        }
+      }else if(kind==='Structure'||kind==='Gear'){
+        const row=side.querySelector('.supportrow');if(!row)return;
+        let zones=[...row.children].filter(x=>x.classList&&x.classList.contains('zone'));
+        zones.forEach((z,i)=>{if(!z.querySelector('.card'))addChoice(z,i)});
+        /* Structures / Gear have no published base-count cap; always expose one extra selectable slot. */
+        if(!zones.some(z=>!z.querySelector('.card'))){
+          const slot=zones.length;
+          const z=document.createElement('div');z.className='zone';z.textContent='BUILD / GEAR';row.appendChild(z);addChoice(z,slot);
+        }
+      }
+    }catch(_e){}
+  }
+
+  function reinforceStructureTargets(){
+    try{
+      if(typeof G==='undefined'||!G||!G.selected||G.turn!=='p'||G.phase!=='MAIN')return;
+      const atk=G.p&&G.p.pals&&G.p.pals.find(x=>Number(x.uid)===Number(G.selected));
+      if(!atk)return;
+      const side=enemySide();if(!side)return;
+      side.querySelectorAll('.supportrow .zone').forEach(z=>{
+        const cardEl=z.querySelector('.card[data-uid]');if(!cardEl)return;
+        const id=Number(cardEl.dataset.uid);
+        const c=G.a&&G.a.supports&&G.a.supports.find(x=>Number(x.uid)===id);
+        if(!c||String(c.kind||'')!=='Structure')return;
+        let legal=true;
+        try{if(typeof canAttackCard==='function')legal=!!canAttackCard(atk,c,G.a)}catch(_e){}
+        if(!legal)return;
+        z.classList.add('validTarget','v0751StructureTarget');
+        cardEl.classList.add('selectable');
+        cardEl.onclick=function(ev){
+          try{ev.preventDefault();ev.stopPropagation()}catch(_e){}
+          try{if(typeof clickEnemyTarget==='function')clickEnemyTarget('structure',id)}catch(_e){}
+        };
+      });
+    }catch(_e){}
+  }
+
+  function syncCopy(){
+    try{
+      document.querySelectorAll('.v04Play .mid').forEach(el=>{
+        const t=String(el.textContent||'');
+        if(t.includes('REST中のパル・建築物'))el.textContent=t.replace('REST中のパル・建築物','REST中のパル / 建築物');
+        else if(t.includes('レスト中のパル・建築物'))el.textContent=t.replace('レスト中のパル・建築物','レスト中のパル / 建築物');
+      });
+    }catch(_e){}
+  }
+
+  function sync(){
+    scheduled=false;
+    patchTryPlay();
+    ensurePlacementChoices();
+    reinforceStructureTargets();
+    syncCopy();
+  }
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(sync)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  addEventListener('pageshow',sync,{passive:true});
+  document.addEventListener('pointerup',schedule,{passive:true});
+  sync();setTimeout(sync,250);setTimeout(sync,900);
+  console.info('Palworld OCG v0.7.51 placement selection + Structure attack fix applied');
 })();
 </script>
 
@@ -1524,7 +1894,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.49-hand-summon-ux-battle-stable-official-rule-sync");
+      h.set("x-palworld-bridge","v0.7.51-placement-structure-attack-official-rule-sync");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -1549,8 +1919,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.49 — 手札・召喚UI改善・カード詳細UI改善・戦闘安定化・公式ルール同期";
-        m.start_url="/?pwa=1&v=0749";
+        m.description="Palworld OCG v0.7.51 — 召喚場所選択・建築物攻撃修正・手札/召喚UI改善・公式ルール同期";
+        m.start_url="/?pwa=1&v=0751";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -1563,7 +1933,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.49 hand/summon UX + battle UX stable + official rule sync + center + rotated hand swipe fix\n";
+        sw+="\n// v0.7.51 placement selection + structure attack + hand/summon UX + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
