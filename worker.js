@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.58";
+const V="0.7.59";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.58')
-        title.textContent='v0.7.58';
+      if(title&&title.textContent!=='v0.7.59')
+        title.textContent='v0.7.59';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.58';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.59';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.58';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.59';
       }catch(_e){}
       return r;
     };
@@ -2347,7 +2347,7 @@ const PATCH=`
   document.addEventListener('pointerup',schedule,{passive:true});
   addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,200);setTimeout(sync,800);
-  console.info('Palworld OCG v0.7.58 assignment clarity applied');
+  console.info('Palworld OCG v0.7.59 assignment clarity applied');
 })();
 </script>
 
@@ -2482,12 +2482,12 @@ const PATCH=`
       wrapped.__v0755Wrapped=true;wrapped.__v0755Old=oldActivate;activateAbility=wrapped;
     }
   }catch(_e){console.warn('v0.7.55 ability confirm wrap failed',_e)}
-  console.info('Palworld OCG v0.7.58 ability confirmation applied');
+  console.info('Palworld OCG v0.7.59 ability confirmation applied');
 })();
 </script>
 
 <style id="v0756PolishStyle">
-/* v0.7.58 — keep action controls inside phone safe areas and make CPU actions readable. */
+/* v0.7.59 — keep action controls inside phone safe areas and make CPU actions readable. */
 .modal.v0754ChoiceSheet{padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
 .v0756CpuSpeedBtn{
   flex:0 0 auto!important;margin-left:4px!important;padding:2px 6px!important;min-height:0!important;
@@ -2580,8 +2580,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.58')title.textContent='v0.7.58';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.58'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.59')title.textContent='v0.7.59';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.59'});
       syncButton();
     }catch(_e){}
   }
@@ -2590,14 +2590,14 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
   document.addEventListener('pointerup',schedule,{passive:true});
   sync();setTimeout(sync,200);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.58 UI polish + CPU pacing applied');
+  console.info('Palworld OCG v0.7.59 UI polish + CPU pacing applied');
 })();
 </script>
 
 
 
 <style id="v0757CenterActionStyle">
-/* v0.7.58 — center action callout + slightly larger, easier-to-read hand cards. */
+/* v0.7.59 — center action callout + slightly larger, easier-to-read hand cards. */
 .app.v04.v0738CenterRifleFix .v04HandBar{
   height:100px!important;
   min-height:100px!important;
@@ -2783,15 +2783,15 @@ const PATCH=`
       };
       wrapped.__v0757Wrapped=true;wrapped.__v0757Old=base;log=wrapped;
     }
-  }catch(_e){console.warn('v0.7.58 center action wrap failed',_e)}
+  }catch(_e){console.warn('v0.7.59 center action wrap failed',_e)}
   addEventListener('pageshow',()=>{hide();q.length=0;showing=false},{passive:true});
-  console.info('Palworld OCG v0.7.58 center action display applied');
+  console.info('Palworld OCG v0.7.59 center action display applied');
 })();
 </script>
 
 
 <style id="v0758DamageRevealStyle">
-/* v0.7.58 — show the revealed DAMAGE CHECK card as a large image like the user's reference. */
+/* v0.7.59 — show the revealed DAMAGE CHECK card as a large image like the user's reference. */
 .v0758DamageReveal{
   position:fixed!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
   pointer-events:none!important;z-index:2147482890!important;padding:12px!important;
@@ -2917,7 +2917,169 @@ const PATCH=`
   addEventListener('pageshow',()=>{hide();seen='';schedule()},{passive:true});
   addEventListener('resize',schedule,{passive:true});
   schedule();setTimeout(schedule,300);setTimeout(schedule,1000);
-  console.info('Palworld OCG v0.7.58 damage reveal popup applied');
+  console.info('Palworld OCG v0.7.59 damage reveal popup applied');
+})();
+</script>
+
+
+<style id="v0759DamageRevealFixStyle">
+/* v0.7.59 — DAMAGE CHECK result card is reconstructed from CARD_DB when the strip contains only text. */
+.v0759DamageReveal{
+  position:fixed!important;inset:0!important;z-index:2147482920!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:10px!important;pointer-events:none!important;
+}
+.v0759DamageReveal[hidden]{display:none!important}
+.v0759DamageRevealBox{
+  width:min(390px,78vw)!important;max-width:390px!important;
+  background:linear-gradient(180deg,rgba(17,18,25,.98),rgba(7,8,12,.97))!important;
+  border:1px solid #e7cb6f!important;border-radius:18px!important;
+  padding:12px 16px 13px!important;text-align:center!important;color:#fff!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.52),0 0 0 1px rgba(255,255,255,.05) inset!important;
+}
+.v0759DamageRevealHead{font-size:14px!important;line-height:1.15!important;font-weight:950!important;letter-spacing:.08em!important;color:#fff!important}
+.v0759DamageRevealWho{margin-top:4px!important;font-size:9px!important;line-height:1.25!important;color:#cfd4df!important}
+.v0759DamageCardStage{display:flex!important;justify-content:center!important;align-items:center!important;margin:10px auto 8px!important;min-height:148px!important}
+.v0759DamageCardStage .card{
+  width:118px!important;min-width:118px!important;max-width:118px!important;
+  height:158px!important;min-height:158px!important;max-height:158px!important;
+  margin:0!important;transform:scale(1.03)!important;transform-origin:center!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.42)!important;pointer-events:none!important;
+}
+.v0759DamageCardStage .card .name{font-size:8px!important;line-height:1.05!important}
+.v0759DamageCardStage .card .stats,.v0759DamageCardStage .card .no{font-size:6.5px!important}
+.v0759DamageCardStage .card button,.v0759DamageCardStage .card .infoBtn{display:none!important}
+.v0759DamageRevealName{font-size:12px!important;line-height:1.25!important;font-weight:900!important;color:#fff!important}
+.v0759DamageRevealEffect{margin-top:3px!important;font-size:9px!important;line-height:1.2!important;color:#f0d46f!important;font-weight:800!important}
+@media (max-height:520px) and (orientation:landscape){
+  .v0759DamageRevealBox{width:min(350px,72vw)!important;padding:9px 13px 10px!important}
+  .v0759DamageRevealHead{font-size:12px!important}
+  .v0759DamageCardStage{margin:7px auto 5px!important;min-height:122px!important}
+  .v0759DamageCardStage .card{width:94px!important;min-width:94px!important;max-width:94px!important;height:126px!important;min-height:126px!important;max-height:126px!important}
+  .v0759DamageRevealName{font-size:10px!important}
+  .v0759DamageRevealEffect{font-size:7.5px!important}
+}
+</style>
+<script id="v0759DamageRevealFixScript">
+(()=>{
+  if(globalThis.__v0759DamageRevealFixApplied)return;
+  globalThis.__v0759DamageRevealFixApplied=true;
+  let queued=false,lastPanel=null,lastCardNo='',lastShow=0,timer=0;
+
+  function norm(v){return String(v==null?'':v).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim()}
+  function esc(v){return String(v==null?'':v).replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]))}
+  function getDamagePanel(){
+    try{
+      const root=document.querySelector('.v04Play')||document;
+      const marked=[...root.querySelectorAll('.v0754DamageCheckPanel')].filter(x=>/DAMAGE CHECK/i.test(norm(x.textContent)));
+      if(marked.length)return marked[0];
+      const nodes=[...root.querySelectorAll('div,section,aside,main')];
+      let best=null,bestArea=Infinity;
+      for(const el of nodes){
+        if(!/DAMAGE CHECK/i.test(norm(el.textContent)))continue;
+        const r=el.getBoundingClientRect();
+        if(!r.width||!r.height||r.height<24)continue;
+        const area=r.width*r.height;
+        if(area<bestArea){best=el;bestArea=area}
+      }
+      return best;
+    }catch(_e){return null}
+  }
+  function cardDefs(){
+    try{return (typeof CARD_DB!=='undefined'&&CARD_DB)?Object.values(CARD_DB):[]}catch(_e){return []}
+  }
+  function findDef(text){
+    text=norm(text);
+    if(!text)return null;
+    const defs=cardDefs().filter(c=>c&&c.name);
+    let best=null,bestLen=0;
+    for(const c of defs){
+      const n=norm(c.name);
+      if(n&&text.includes(n)&&n.length>bestLen){best=c;bestLen=n.length}
+    }
+    if(best)return best;
+    /* Some UI lines shorten the prefix before a dash. Match the longest useful name part. */
+    for(const c of defs){
+      const parts=norm(c.name).split(/[\-–—]/).map(x=>x.trim()).filter(x=>x.length>=4);
+      for(const part of parts){
+        if(text.includes(part)&&part.length>bestLen){best=c;bestLen=part.length}
+      }
+    }
+    return best;
+  }
+  function fresh(def){
+    try{if(typeof v071Fresh==='function'&&def&&def.no)return v071Fresh(def.no)}catch(_e){}
+    try{return Object.assign({uid:-759001},def||{})}catch(_e){return def}
+  }
+  function renderCard(def){
+    try{
+      if(typeof cardHTML==='function'){
+        const c=fresh(def);
+        const html=cardHTML(c,{select:false});
+        const tmp=document.createElement('div');tmp.innerHTML=html;
+        const card=tmp.querySelector('.card')||tmp.firstElementChild;
+        if(card){
+          card.removeAttribute('onclick');card.removeAttribute('onpointerup');card.removeAttribute('onpointerdown');
+          card.querySelectorAll('button,.infoBtn,.v0754AssignOnPal,.v0754AssignOnSource').forEach(x=>x.remove());
+          return card.outerHTML;
+        }
+        return html;
+      }
+    }catch(_e){}
+    return '';
+  }
+  function ensure(){
+    let el=document.getElementById('v0759DamageReveal');
+    if(el)return el;
+    el=document.createElement('div');el.id='v0759DamageReveal';el.className='v0759DamageReveal';el.hidden=true;
+    document.body.appendChild(el);return el;
+  }
+  function hide(){const el=document.getElementById('v0759DamageReveal');if(el)el.hidden=true}
+  function speedDuration(){
+    try{
+      const t=norm(document.getElementById('v0756CpuSpeedBtn')?.textContent||'');
+      if(t.includes('即時'))return 1050;
+      if(t.includes('×2'))return 1350;
+    }catch(_e){}
+    return 1750;
+  }
+  function isLucky(panelText){return /LUCKY|ラッキー|★\s*LUCKY/i.test(panelText)}
+  function show(def,panelText){
+    const html=renderCard(def);if(!html)return false;
+    /* Hide the failed v0.7.58 overlay if it ever appears at the same time. */
+    try{const old=document.getElementById('v0758DamageReveal');if(old)old.hidden=true}catch(_e){}
+    const el=ensure();
+    const who=/相手|OPPONENT|CPU/i.test(panelText)?'相手が受けたダメージ':'ダメージで公開されたカード';
+    const effect=isLucky(panelText)?'★ LUCKY!':'ダメージチェック結果';
+    el.innerHTML='<div class="v0759DamageRevealBox"><div class="v0759DamageRevealHead">DAMAGE CHECK</div><div class="v0759DamageRevealWho">'+esc(who)+'</div><div class="v0759DamageCardStage">'+html+'</div><div class="v0759DamageRevealName">'+esc(def.name||'公開カード')+'</div><div class="v0759DamageRevealEffect">'+esc(effect)+'</div></div>';
+    el.hidden=false;
+    clearTimeout(timer);timer=setTimeout(hide,speedDuration());
+    return true;
+  }
+  function scan(){
+    queued=false;
+    try{
+      const panel=getDamagePanel();
+      if(!panel){lastPanel=null;lastCardNo='';return}
+      const txt=norm(panel.textContent||'');
+      const def=findDef(txt);
+      /* Initial generic DAMAGE CHECK text has no card name. Wait for result text mutation. */
+      if(!def)return;
+      const no=String(def.no||def.name||'');
+      const now=Date.now();
+      const newPanel=panel!==lastPanel;
+      if(!newPanel&&no===lastCardNo&&now-lastShow<900)return;
+      if(show(def,txt)){
+        lastPanel=panel;lastCardNo=no;lastShow=now;
+      }
+    }catch(_e){}
+  }
+  function schedule(){if(queued)return;queued=true;requestAnimationFrame(scan)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true})}catch(_e){}
+  document.addEventListener('pointerup',schedule,{passive:true});
+  addEventListener('pageshow',()=>{hide();lastPanel=null;lastCardNo='';schedule()},{passive:true});
+  schedule();setTimeout(schedule,250);setTimeout(schedule,900);
+  console.info('Palworld OCG v0.7.59 DAMAGE CHECK CARD_DB reveal applied');
 })();
 </script>
 
@@ -2936,7 +3098,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.58-ux-polish-ability-guard-assign-persistent-cpu-speed");
+      h.set("x-palworld-bridge","v0.7.59-ux-polish-ability-guard-assign-persistent-cpu-speed");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -2961,8 +3123,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.58 — アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
-        m.start_url="/?pwa=1&v=0758";
+        m.description="Palworld OCG v0.7.59 — アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
+        m.start_url="/?pwa=1&v=0759";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -2975,7 +3137,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.58 UX polish + ability double-fire guard + persistent assignment + CPU speed control + official rule sync\n";
+        sw+="\n// v0.7.59 UX polish + ability double-fire guard + persistent assignment + CPU speed control + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
