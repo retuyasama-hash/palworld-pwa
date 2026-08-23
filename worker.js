@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.53";
+const V="0.7.54";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.53 カード詳細全画面＋配置選択＋建築物攻撃')
-        title.textContent='v0.7.53 カード詳細全画面＋配置選択＋建築物攻撃';
+      if(title&&title.textContent!=='v0.7.54 アサイン表示強化＋カード詳細全画面＋配置選択＋建築物攻撃')
+        title.textContent='v0.7.54 アサイン表示強化＋カード詳細全画面＋配置選択＋建築物攻撃';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.53';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.54';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.53 official probe',e);
+      console.error('BP01-084 v0.7.54 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.53公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.54公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.53デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.54デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.53 Fullscreen Detail + Placement + Structure Attack + Official Sync';
+        v072BpReport.version='0.7.54 Fullscreen Detail + Placement + Structure Attack + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.53 カード詳細全画面＋配置選択＋建築物攻撃＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.54 アサイン表示強化＋カード詳細全画面＋配置選択＋建築物攻撃＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,7 +840,7 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.53 placement + structure attack + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.54 placement + structure attack + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
@@ -1246,7 +1246,7 @@ const PATCH=`
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.53 combat UX stable applied');
+  console.info('Palworld OCG v0.7.54 combat UX stable applied');
 })();
 </script>
 
@@ -1505,7 +1505,7 @@ const PATCH=`
   sync();
   setTimeout(sync,250);
   setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.53 hand/summon presentation applied');
+  console.info('Palworld OCG v0.7.54 hand/summon presentation applied');
 })();
 </script>
 
@@ -1680,7 +1680,7 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});
   addEventListener('resize',schedule,{passive:true});
   sync(); setTimeout(sync,250); setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.53 hand/summon motion polish applied');
+  console.info('Palworld OCG v0.7.54 hand/summon motion polish applied');
 })();
 </script>
 
@@ -1875,12 +1875,12 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});
   document.addEventListener('pointerup',schedule,{passive:true});
   sync();setTimeout(sync,250);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.53 placement selection + Structure attack fix applied');
+  console.info('Palworld OCG v0.7.54 placement selection + Structure attack fix applied');
 })();
 </script>
 
-<style id="v0753FullscreenCardDetailStyle">
-/* v0.7.53 — tap the compact left-side detail panel to inspect the selected card full-screen. */
+<style id="v0754FullscreenCardDetailStyle">
+/* v0.7.54 — tap the compact left-side detail panel to inspect the selected card full-screen. */
 .app.v04.v0738CenterRifleFix .v04Detail{
   cursor:zoom-in!important;
   position:relative!important;
@@ -1902,7 +1902,7 @@ const PATCH=`
   line-height:1;
   pointer-events:none;
 }
-.v0753FullDetailOverlay{
+.v0754FullDetailOverlay{
   position:fixed!important;
   inset:0!important;
   z-index:2147483600!important;
@@ -1913,7 +1913,7 @@ const PATCH=`
   background:rgba(0,8,6,.94)!important;
   backdrop-filter:blur(5px)!important;
 }
-.v0753FullDetailPanel{
+.v0754FullDetailPanel{
   position:relative!important;
   width:min(1180px,96vw)!important;
   height:min(680px,94dvh)!important;
@@ -1925,7 +1925,7 @@ const PATCH=`
   box-shadow:0 18px 70px #000!important;
   padding:14px!important;
 }
-.v0753FullDetailClose{
+.v0754FullDetailClose{
   position:absolute!important;
   top:8px!important;
   right:8px!important;
@@ -1944,7 +1944,7 @@ const PATCH=`
   justify-content:center!important;
   padding:0!important;
 }
-.v0753FullDetailBody{
+.v0754FullDetailBody{
   width:100%!important;
   height:100%!important;
   min-height:0!important;
@@ -1954,12 +1954,12 @@ const PATCH=`
   gap:12px!important;
   padding:2px 52px 2px 2px!important;
 }
-.v0753FullDetailBody>div:first-child{
+.v0754FullDetailBody>div:first-child{
   grid-column:1 / -1!important;
   min-width:0!important;
   padding-right:4px!important;
 }
-.v0753FullDetailBody>.v04BigCard{
+.v0754FullDetailBody>.v04BigCard{
   grid-column:1!important;
   grid-row:2!important;
   width:100%!important;
@@ -1968,7 +1968,7 @@ const PATCH=`
   border-radius:14px!important;
   border-width:2px!important;
 }
-.v0753FullDetailBody>div:last-child{
+.v0754FullDetailBody>div:last-child{
   grid-column:2!important;
   grid-row:2!important;
   min-width:0!important;
@@ -1977,33 +1977,33 @@ const PATCH=`
   flex-direction:column!important;
   gap:8px!important;
 }
-.v0753FullDetailBody .v04DetailHead{
+.v0754FullDetailBody .v04DetailHead{
   font-size:clamp(16px,2.3vw,28px)!important;
   line-height:1.15!important;
   white-space:normal!important;
   overflow:visible!important;
 }
-.v0753FullDetailBody .v04DetailMeta{
+.v0754FullDetailBody .v04DetailMeta{
   font-size:clamp(10px,1.4vw,16px)!important;
   margin-top:4px!important;
 }
-.v0753FullDetailBody .v04BigOverlay{
+.v0754FullDetailBody .v04BigOverlay{
   padding:12px!important;
 }
-.v0753FullDetailBody .v04BigName{
+.v0754FullDetailBody .v04BigName{
   font-size:clamp(14px,2vw,24px)!important;
   max-height:none!important;
   overflow:visible!important;
   margin-bottom:8px!important;
 }
-.v0753FullDetailBody .v04Stats{
+.v0754FullDetailBody .v04Stats{
   gap:7px!important;
 }
-.v0753FullDetailBody .v04Stat{
+.v0754FullDetailBody .v04Stat{
   font-size:clamp(10px,1.35vw,16px)!important;
   padding:4px 7px!important;
 }
-.v0753FullDetailBody .v04Effect{
+.v0754FullDetailBody .v04Effect{
   display:block!important;
   flex:1 1 auto!important;
   max-height:none!important;
@@ -2016,28 +2016,28 @@ const PATCH=`
   border-color:#5c9b7e!important;
   background:#06130fee!important;
 }
-.v0753FullDetailBody .v04ImgNote{
+.v0754FullDetailBody .v04ImgNote{
   font-size:clamp(9px,1.1vw,13px)!important;
   opacity:.78!important;
 }
 @media(max-height:520px) and (orientation:landscape){
-  .v0753FullDetailOverlay{padding:4px!important}
-  .v0753FullDetailPanel{width:98vw!important;height:96dvh!important;padding:7px!important;border-radius:12px!important}
-  .v0753FullDetailClose{top:4px!important;right:4px!important;width:36px!important;height:36px!important;font-size:23px!important}
-  .v0753FullDetailBody{grid-template-columns:minmax(180px,39%) minmax(0,1fr)!important;gap:7px!important;padding-right:41px!important}
-  .v0753FullDetailBody .v04Effect{padding:8px!important;font-size:11px!important;line-height:1.4!important}
-  .v0753FullDetailBody .v04BigOverlay{padding:7px!important}
-  .v0753FullDetailBody .v04BigName{font-size:13px!important;margin-bottom:4px!important}
-  .v0753FullDetailBody .v04Stat{font-size:9px!important;padding:2px 4px!important}
+  .v0754FullDetailOverlay{padding:4px!important}
+  .v0754FullDetailPanel{width:98vw!important;height:96dvh!important;padding:7px!important;border-radius:12px!important}
+  .v0754FullDetailClose{top:4px!important;right:4px!important;width:36px!important;height:36px!important;font-size:23px!important}
+  .v0754FullDetailBody{grid-template-columns:minmax(180px,39%) minmax(0,1fr)!important;gap:7px!important;padding-right:41px!important}
+  .v0754FullDetailBody .v04Effect{padding:8px!important;font-size:11px!important;line-height:1.4!important}
+  .v0754FullDetailBody .v04BigOverlay{padding:7px!important}
+  .v0754FullDetailBody .v04BigName{font-size:13px!important;margin-bottom:4px!important}
+  .v0754FullDetailBody .v04Stat{font-size:9px!important;padding:2px 4px!important}
 }
 </style>
-<script id="v0753FullscreenCardDetailScript">
+<script id="v0754FullscreenCardDetailScript">
 (()=>{
-  if(globalThis.__v0753FullscreenCardDetailApplied)return;
-  globalThis.__v0753FullscreenCardDetailApplied=true;
+  if(globalThis.__v0754FullscreenCardDetailApplied)return;
+  globalThis.__v0754FullscreenCardDetailApplied=true;
 
   function closeFullDetail(){
-    const old=document.getElementById('v0753FullDetailOverlay');
+    const old=document.getElementById('v0754FullDetailOverlay');
     if(old)old.remove();
   }
 
@@ -2050,17 +2050,17 @@ const PATCH=`
     }
     closeFullDetail();
     const overlay=document.createElement('div');
-    overlay.id='v0753FullDetailOverlay';
-    overlay.className='v0753FullDetailOverlay';
+    overlay.id='v0754FullDetailOverlay';
+    overlay.className='v0754FullDetailOverlay';
     const panel=document.createElement('div');
-    panel.className='v0753FullDetailPanel';
+    panel.className='v0754FullDetailPanel';
     const close=document.createElement('button');
     close.type='button';
-    close.className='v0753FullDetailClose';
+    close.className='v0754FullDetailClose';
     close.setAttribute('aria-label','カード詳細を閉じる');
     close.textContent='×';
     const body=document.createElement('div');
-    body.className='v0753FullDetailBody';
+    body.className='v0754FullDetailBody';
     body.innerHTML=src.innerHTML;
     panel.appendChild(close);
     panel.appendChild(body);
@@ -2080,97 +2080,97 @@ const PATCH=`
 
   document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeFullDetail()});
   addEventListener('pageshow',closeFullDetail,{passive:true});
-  console.info('Palworld OCG v0.7.53 fullscreen card detail applied');
+  console.info('Palworld OCG v0.7.54 fullscreen card detail applied');
 })();
 </script>
 
 
-<style id="v0753CompactDecisionUXStyle">
-/* v0.7.53 — keep battle decisions readable without hiding most of the board. */
-.modal.v0753ChoiceSheet{
+<style id="v0754CompactDecisionUXStyle">
+/* v0.7.54 — keep battle decisions readable without hiding most of the board. */
+.modal.v0754ChoiceSheet{
   position:fixed!important;inset:0!important;z-index:2147482450!important;
   align-items:flex-end!important;justify-content:center!important;
   padding:4px!important;background:#0005!important;backdrop-filter:blur(1px)!important;
 }
-.modal.v0753ChoiceSheet>.modalCard{
+.modal.v0754ChoiceSheet>.modalCard{
   width:min(560px,80vw)!important;max-width:560px!important;
   max-height:34vh!important;min-height:0!important;overflow:auto!important;
   padding:6px!important;border-radius:14px 14px 8px 8px!important;
   border:1px solid #4f8b70!important;background:#071711f4!important;
   box-shadow:0 -8px 26px #000c!important;
 }
-.modal.v0753ChoiceSheet>.modalCard>h2{
+.modal.v0754ChoiceSheet>.modalCard>h2{
   margin:0 0 4px!important;font-size:10px!important;line-height:1.2!important;
   white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
 }
-.modal.v0753ChoiceSheet .choiceGrid{
+.modal.v0754ChoiceSheet .choiceGrid{
   display:flex!important;grid-template-columns:none!important;
   gap:5px!important;overflow-x:auto!important;overflow-y:hidden!important;
   align-items:flex-start!important;padding:1px 1px 4px!important;
   scroll-snap-type:x proximity;
 }
-.modal.v0753ChoiceSheet .choiceGrid>div{
+.modal.v0754ChoiceSheet .choiceGrid>div{
   flex:0 0 64px!important;min-width:64px!important;scroll-snap-align:start;
 }
-.modal.v0753ChoiceSheet .choiceGrid .card{
+.modal.v0754ChoiceSheet .choiceGrid .card{
   width:62px!important;min-width:62px!important;max-width:62px!important;
   height:78px!important;min-height:78px!important;max-height:78px!important;
   margin:0!important;
 }
-.modal.v0753ChoiceSheet .choiceGrid .card .name{font-size:5.5px!important;line-height:1.05!important}
-.modal.v0753ChoiceSheet .choiceGrid .card .stats,
-.modal.v0753ChoiceSheet .choiceGrid .card .no{font-size:5px!important;line-height:1!important}
-.modal.v0753ChoiceSheet .choices{
+.modal.v0754ChoiceSheet .choiceGrid .card .name{font-size:5.5px!important;line-height:1.05!important}
+.modal.v0754ChoiceSheet .choiceGrid .card .stats,
+.modal.v0754ChoiceSheet .choiceGrid .card .no{font-size:5px!important;line-height:1!important}
+.modal.v0754ChoiceSheet .choices{
   margin-top:4px!important;display:flex!important;gap:5px!important;justify-content:flex-end!important;
 }
-.modal.v0753ChoiceSheet .choices button{
+.modal.v0754ChoiceSheet .choices button{
   width:auto!important;min-width:74px!important;padding:4px 8px!important;
   font-size:7px!important;line-height:1.1!important;border-radius:8px!important;
 }
 
 /* DAMAGE CHECK remains visible, but only as a slim board strip. */
-.v0753DamageCheckPanel{
+.v0754DamageCheckPanel{
   min-height:0!important;max-height:58px!important;height:auto!important;
   overflow:auto!important;padding:3px 7px!important;margin:1px 0!important;
   border-radius:8px!important;
 }
-.v0753DamageCheckPanel h1,.v0753DamageCheckPanel h2,.v0753DamageCheckPanel h3,
-.v0753DamageCheckPanel strong,.v0753DamageCheckPanel b{
+.v0754DamageCheckPanel h1,.v0754DamageCheckPanel h2,.v0754DamageCheckPanel h3,
+.v0754DamageCheckPanel strong,.v0754DamageCheckPanel b{
   font-size:8px!important;line-height:1.05!important;margin:0!important;
 }
-.v0753DamageCheckPanel p,.v0753DamageCheckPanel div,.v0753DamageCheckPanel span{
+.v0754DamageCheckPanel p,.v0754DamageCheckPanel div,.v0754DamageCheckPanel span{
   line-height:1.08!important;
 }
-.v0753DamageCheckPanel .card{
+.v0754DamageCheckPanel .card{
   width:52px!important;min-width:52px!important;max-width:52px!important;
   height:42px!important;min-height:42px!important;max-height:42px!important;
 }
-.v0753DamageCheckPanel button{
+.v0754DamageCheckPanel button{
   padding:3px 7px!important;font-size:7px!important;line-height:1.05!important;
   min-height:0!important;border-radius:7px!important;
 }
 
 @media(max-height:520px) and (orientation:landscape){
-  .modal.v0753ChoiceSheet>.modalCard{width:min(520px,76vw)!important;max-height:30vh!important;padding:4px!important}
-  .modal.v0753ChoiceSheet .choiceGrid>div{flex-basis:58px!important;min-width:58px!important}
-  .modal.v0753ChoiceSheet .choiceGrid .card{width:56px!important;min-width:56px!important;max-width:56px!important;height:70px!important;min-height:70px!important;max-height:70px!important}
-  .v0753DamageCheckPanel{max-height:50px!important;padding:2px 5px!important}
+  .modal.v0754ChoiceSheet>.modalCard{width:min(520px,76vw)!important;max-height:30vh!important;padding:4px!important}
+  .modal.v0754ChoiceSheet .choiceGrid>div{flex-basis:58px!important;min-width:58px!important}
+  .modal.v0754ChoiceSheet .choiceGrid .card{width:56px!important;min-width:56px!important;max-width:56px!important;height:70px!important;min-height:70px!important;max-height:70px!important}
+  .v0754DamageCheckPanel{max-height:50px!important;padding:2px 5px!important}
 }
 </style>
-<script id="v0753CompactDecisionUXScript">
+<script id="v0754CompactDecisionUXScript">
 (()=>{
-  if(globalThis.__v0753CompactDecisionUXApplied)return;
-  globalThis.__v0753CompactDecisionUXApplied=true;
+  if(globalThis.__v0754CompactDecisionUXApplied)return;
+  globalThis.__v0754CompactDecisionUXApplied=true;
   let queued=false;
 
   function markChoiceSheets(){
     try{
       document.querySelectorAll('.modal:not(.v0745CombatModal)').forEach(function(m){
-        if(m.id==='v0753FullDetailOverlay'||m.classList.contains('v0753FullDetailOverlay'))return;
+        if(m.id==='v0754FullDetailOverlay'||m.classList.contains('v0754FullDetailOverlay'))return;
         var grid=m.querySelector('.choiceGrid');
         if(!grid)return;
         if(m.querySelector('.detailLayout')||m.classList.contains('v0748CardDetail'))return;
-        m.classList.add('v0753ChoiceSheet');
+        m.classList.add('v0754ChoiceSheet');
       });
     }catch(_e){}
   }
@@ -2179,8 +2179,8 @@ const PATCH=`
     try{
       var play=document.querySelector('.v04Play');
       if(!play)return;
-      play.querySelectorAll('.v0753DamageCheckPanel').forEach(function(x){
-        if(String(x.textContent||'').toUpperCase().indexOf('DAMAGE CHECK')<0)x.classList.remove('v0753DamageCheckPanel');
+      play.querySelectorAll('.v0754DamageCheckPanel').forEach(function(x){
+        if(String(x.textContent||'').toUpperCase().indexOf('DAMAGE CHECK')<0)x.classList.remove('v0754DamageCheckPanel');
       });
       var nodes=play.querySelectorAll('div,section,aside,main');
       for(var i=0;i<nodes.length;i++){
@@ -2199,7 +2199,7 @@ const PATCH=`
             if(cr.width>=play.getBoundingClientRect().width*.38&&cr.height>=32){childHas=true;break;}
           }
         }
-        if(!childHas){el.classList.add('v0753DamageCheckPanel');break;}
+        if(!childHas){el.classList.add('v0754DamageCheckPanel');break;}
       }
     }catch(_e){}
   }
@@ -2211,9 +2211,146 @@ const PATCH=`
   addEventListener('pageshow',sync,{passive:true});
   addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,250);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.53 compact DAMAGE CHECK + effect-choice UI applied');
+  console.info('Palworld OCG v0.7.54 compact DAMAGE CHECK + effect-choice UI applied');
 })();
 </script>
+
+<style id="v0754AssignClarityStyle">
+/* v0.7.54 — make Pal -> Structure assignment unmistakable on the board. */
+.board .card.v0754AssignedPal,
+.v04Play .card.v0754AssignedPal{
+  position:relative!important;
+  outline:3px solid #ffe66d!important;
+  box-shadow:0 0 0 2px #15251d,0 0 15px #ffe66dcc!important;
+  z-index:8!important;
+}
+.board .card.v0754AssignedStructure,
+.v04Play .card.v0754AssignedStructure{
+  position:relative!important;
+  outline:3px solid #ffe66d!important;
+  box-shadow:0 0 0 2px #15251d,0 0 15px #ffe66dcc!important;
+  z-index:8!important;
+}
+.v0754AssignBadge{
+  position:absolute!important;
+  left:50%!important;top:-9px!important;transform:translateX(-50%)!important;
+  max-width:96px!important;padding:2px 5px!important;border-radius:999px!important;
+  background:#ffe66d!important;color:#15170f!important;border:1px solid #fff7b5!important;
+  font-size:6px!important;line-height:1.05!important;font-weight:1000!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  pointer-events:none!important;z-index:40!important;box-shadow:0 2px 6px #000b!important;
+}
+.v0754AssignBadge.v0754OnStructure{top:auto!important;bottom:-9px!important}
+.v0754AssignToast{
+  position:fixed!important;left:50%!important;top:10%!important;transform:translateX(-50%)!important;
+  z-index:2147483000!important;max-width:min(680px,82vw)!important;
+  padding:6px 12px!important;border-radius:999px!important;
+  background:#171a12f2!important;color:#fff5a8!important;border:2px solid #ffe66d!important;
+  box-shadow:0 8px 26px #000d,0 0 22px #ffe66d55!important;
+  font-size:10px!important;line-height:1.2!important;font-weight:1000!important;
+  text-align:center!important;pointer-events:none!important;
+  animation:v0754AssignToastIn .18s ease-out both;
+}
+@keyframes v0754AssignToastIn{from{opacity:0;transform:translate(-50%,-6px) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@media(max-height:520px) and (orientation:landscape){
+  .v0754AssignBadge{font-size:5.5px!important;top:-8px!important;padding:2px 4px!important;max-width:84px!important}
+  .v0754AssignBadge.v0754OnStructure{top:auto!important;bottom:-8px!important}
+  .v0754AssignToast{top:7%!important;font-size:8px!important;padding:4px 9px!important}
+}
+</style>
+<script id="v0754AssignClarityScript">
+(()=>{
+  if(globalThis.__v0754AssignClarityApplied)return;
+  globalThis.__v0754AssignClarityApplied=true;
+  let queued=false,toastTimer=0;
+
+  function escText(v){return String(v==null?'':v).replace(/[&<>\"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]||m})}
+  function showAssignToast(palName,sourceName){
+    try{
+      document.querySelectorAll('.v0754AssignToast').forEach(function(x){x.remove()});
+      const t=document.createElement('div');t.className='v0754AssignToast';
+      t.textContent='ASSIGN  '+String(palName||'パル')+'  →  '+String(sourceName||'建築物');
+      document.body.appendChild(t);
+      clearTimeout(toastTimer);toastTimer=setTimeout(function(){try{t.remove()}catch(_e){}},1500);
+    }catch(_e){}
+  }
+
+  /* Track the exact Pal used to pay an Assign cost. The rules still use the
+     existing rest state; these fields are display-only and are cleared when
+     that player's next Stand phase begins. */
+  try{
+    if(typeof chooseAssign==='function'&&!chooseAssign.__v0754Wrapped){
+      chooseAssign=function(pl,source,cb){
+        const cand=assignCandidates(pl);if(!cand.length)return;
+        chooseTarget(pl,'アサインするスタンド状態のパル',wrappers(cand),function(x){return -aiCardScore(x.card)},function(x){
+          if(!x)return;
+          x.card.rest=true;
+          x.card._v0754AssignedToUid=source&&source.uid;
+          x.card._v0754AssignedToName=source&&source.name||'建築物';
+          if(source){source._v0754AssignedPalUid=x.card.uid;source._v0754AssignedPalName=x.card.name}
+          log(pl.name+': '+x.card.name+' を '+source.name+' にアサイン');
+          showAssignToast(x.card.name,source.name);
+          cb(x.card);
+          setTimeout(schedule,0);
+        })
+      };
+      chooseAssign.__v0754Wrapped=true;
+    }
+  }catch(_e){}
+
+  try{
+    if(typeof beginTurn==='function'&&!beginTurn.__v0754Wrapped){
+      const oldBeginTurn=beginTurn;
+      beginTurn=function(){
+        try{
+          if(G&&!G.over){
+            const pl=G[G.turn];
+            if(pl){
+              pl.pals.forEach(function(c){delete c._v0754AssignedToUid;delete c._v0754AssignedToName});
+              pl.supports.forEach(function(c){delete c._v0754AssignedPalUid;delete c._v0754AssignedPalName});
+            }
+          }
+        }catch(_e){}
+        return oldBeginTurn.apply(this,arguments)
+      };
+      beginTurn.__v0754Wrapped=true;
+    }
+  }catch(_e){}
+
+  function cardNodes(uid){
+    try{return Array.from(document.querySelectorAll('.board .card[data-uid="'+uid+'"],.v04Play .card[data-uid="'+uid+'"]'))}catch(_e){return []}
+  }
+  function addBadge(node,text,isStructure){
+    if(!node||node.querySelector(':scope > .v0754AssignBadge'))return;
+    const b=document.createElement('div');b.className='v0754AssignBadge'+(isStructure?' v0754OnStructure':'');b.textContent=text;node.appendChild(b)
+  }
+  function sync(){
+    queued=false;
+    try{
+      document.querySelectorAll('.v0754AssignedPal,.v0754AssignedStructure').forEach(function(n){n.classList.remove('v0754AssignedPal','v0754AssignedStructure')});
+      document.querySelectorAll('.v0754AssignBadge').forEach(function(n){n.remove()});
+      if(!G)return;
+      [G.p,G.a].forEach(function(pl){
+        if(!pl)return;
+        pl.pals.forEach(function(pal){
+          if(!pal||!pal._v0754AssignedToUid)return;
+          const source=pl.supports.find(function(s){return s.uid===pal._v0754AssignedToUid});
+          const sourceName=(source&&source.name)||pal._v0754AssignedToName||'建築物';
+          cardNodes(pal.uid).forEach(function(n){n.classList.add('v0754AssignedPal');addBadge(n,'作業中 → '+sourceName,false)});
+          if(source){cardNodes(source.uid).forEach(function(n){n.classList.add('v0754AssignedStructure');addBadge(n,'← '+pal.name,true)})}
+        })
+      })
+    }catch(_e){}
+  }
+  function schedule(){if(queued)return;queued=true;requestAnimationFrame(sync)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  document.addEventListener('pointerup',schedule,{passive:true});
+  addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
+  sync();setTimeout(sync,200);setTimeout(sync,800);
+  console.info('Palworld OCG v0.7.54 assignment clarity applied');
+})();
+</script>
+
 
 
 `;
@@ -2231,7 +2368,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.53-fullscreen-detail-placement-structure-attack");
+      h.set("x-palworld-bridge","v0.7.54-assign-clarity-fullscreen-detail-placement-structure-attack");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -2256,8 +2393,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.53 — カード詳細全画面・召喚場所選択・建築物攻撃修正・手札/召喚UI改善・公式ルール同期";
-        m.start_url="/?pwa=1&v=0753";
+        m.description="Palworld OCG v0.7.54 — アサイン表示強化・カード詳細全画面・召喚場所選択・建築物攻撃・手札/召喚UI改善・公式ルール同期";
+        m.start_url="/?pwa=1&v=0754";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -2270,7 +2407,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.53 fullscreen card detail + placement selection + structure attack + hand/summon UX + official rule sync\n";
+        sw+="\n// v0.7.54 fullscreen card detail + placement selection + structure attack + hand/summon UX + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
