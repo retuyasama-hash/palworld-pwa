@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.54";
+const V="0.7.55";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,8 +203,8 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.54 アサイン表示強化＋カード詳細全画面＋配置選択＋建築物攻撃')
-        title.textContent='v0.7.54 アサイン表示強化＋カード詳細全画面＋配置選択＋建築物攻撃';
+      if(title&&title.textContent!=='v0.7.55 能力確認＋消費表示＋アサイン強化＋カード詳細全画面＋配置選択＋建築物攻撃')
+        title.textContent='v0.7.55 能力確認＋消費表示＋アサイン強化＋カード詳細全画面＋配置選択＋建築物攻撃';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.54 アサイン表示強化＋カード詳細全画面＋配置選択＋建築物攻撃＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.55 能力確認＋消費表示＋アサイン強化＋カード詳細全画面＋配置選択＋建築物攻撃＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -2347,11 +2347,139 @@ const PATCH=`
   document.addEventListener('pointerup',schedule,{passive:true});
   addEventListener('pageshow',sync,{passive:true});addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,200);setTimeout(sync,800);
-  console.info('Palworld OCG v0.7.54 assignment clarity applied');
+  console.info('Palworld OCG v0.7.55 assignment clarity applied');
 })();
 </script>
 
 
+<style id="v0755AbilityConfirmStyle">
+.v0755AbilityConfirm{
+  position:fixed!important;inset:0!important;z-index:2147483645!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:12px!important;background:#03120de8!important;backdrop-filter:blur(3px)!important;
+}
+.v0755AbilityCard{
+  width:min(620px,82vw)!important;max-height:82vh!important;overflow:auto!important;
+  border:2px solid #7ee7b1!important;border-radius:16px!important;
+  background:linear-gradient(180deg,#0d2b20,#081b15)!important;color:#f7fff9!important;
+  box-shadow:0 18px 56px #000d,0 0 28px #70e8ae33!important;padding:12px!important;
+}
+.v0755AbilityTitle{font-size:15px!important;font-weight:1000!important;line-height:1.25!important;margin-bottom:5px!important}
+.v0755AbilitySub{font-size:9px!important;color:#bfe9d2!important;margin-bottom:8px!important;white-space:normal!important}
+.v0755AbilityEffect{font-size:10px!important;line-height:1.45!important;padding:8px 9px!important;border-radius:10px!important;background:#071812!important;border:1px solid #315e49!important;white-space:pre-wrap!important}
+.v0755AbilityCost{display:grid!important;gap:5px!important;margin:8px 0 10px!important}
+.v0755CostRow{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:6px 8px!important;border-radius:9px!important;background:#123629!important;border:1px solid #4f9a73!important;font-size:10px!important;font-weight:900!important}
+.v0755CostRow strong{font-size:13px!important;color:#ffe989!important;letter-spacing:.2px!important;white-space:nowrap!important}
+.v0755AbilityNote{font-size:8px!important;color:#b8d4c4!important;margin-top:5px!important}
+.v0755AbilityButtons{display:grid!important;grid-template-columns:1fr 1.15fr!important;gap:7px!important;margin-top:8px!important}
+.v0755AbilityButtons button{padding:8px 6px!important;border-radius:10px!important;font-size:10px!important;font-weight:1000!important;border:1px solid #4e8f6e!important}
+.v0755AbilityCancel{background:#26332d!important;color:#e8f2ec!important}
+.v0755AbilityUse{background:#27b56f!important;color:#06150e!important;border-color:#78f2b5!important}
+@media(max-height:520px) and (orientation:landscape){
+  .v0755AbilityConfirm{padding:5px!important}
+  .v0755AbilityCard{width:min(600px,76vw)!important;max-height:90vh!important;padding:8px!important}
+  .v0755AbilityTitle{font-size:12px!important;margin-bottom:3px!important}
+  .v0755AbilitySub,.v0755AbilityEffect,.v0755CostRow,.v0755AbilityButtons button{font-size:8px!important}
+  .v0755AbilityEffect{padding:5px 7px!important;line-height:1.3!important}
+  .v0755AbilityCost{margin:5px 0 6px!important;gap:3px!important}
+  .v0755CostRow{padding:4px 6px!important}.v0755CostRow strong{font-size:10px!important}
+  .v0755AbilityButtons button{padding:6px 5px!important}
+}
+</style>
+<script id="v0755AbilityConfirmScript">
+(()=>{
+  if(globalThis.__v0755AbilityConfirmApplied)return;
+  globalThis.__v0755AbilityConfirmApplied=true;
+  let armed=false;
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>\"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]||m})}
+  function num(v){v=Number(v||0);return isFinite(v)?v:0}
+  function findCard(pl,uid){try{return pl.pals.concat(pl.supports).find(function(x){return x.uid===uid})}catch(_e){return null}}
+  function actText(c){
+    try{if(typeof v050ActSegment==='function')return String(v050ActSegment(c)||'')}catch(_e){}
+    return String(c&&c.ability||'')
+  }
+  function add(rows,label,before,after){rows.push({label:label,before:String(before),after:String(after),arrow:true})}
+  function addText(rows,label,text){rows.push({label:label,text:String(text),arrow:false})}
+  function costRows(pl,c){
+    const rows=[];
+    const e=String(c&&c.effect||'');
+    if(e==='self_mat_buff')add(rows,'素材',num(pl.material),Math.max(0,num(pl.material)-2));
+    else if(e==='self_ing_buff')add(rows,'食材',num(pl.ingredient),Math.max(0,num(pl.ingredient)-2));
+    else if(e==='weaponbench'){
+      add(rows,'素材',num(pl.material),Math.max(0,num(pl.material)-1));
+      addText(rows,'アサイン','STANDのパル1体 → REST');
+    }else if(e==='campfire'){
+      add(rows,'食材',num(pl.ingredient),Math.max(0,num(pl.ingredient)-2));
+      addText(rows,'アサイン','STANDのパル1体 → REST');
+    }else if(['stonepit','berryfarm','primitivebench','hangingtrap'].includes(e)){
+      addText(rows,'アサイン','STANDのパル1体 → REST');
+    }else if(['rifle','launcher','spear','cawhat'].includes(e)){
+      addText(rows,'このカード','STAND → REST');
+    }else if(e==='blizzamoth'){
+      addText(rows,'手札コスト','建築物1枚を墓地へ');
+    }
+
+    if(c&&c.bpGeneric){
+      const t=actText(c);let m;
+      if((m=t.match(/Consume\s+(\d+)\s+Material/i)))add(rows,'素材',num(pl.material),Math.max(0,num(pl.material)-num(m[1])));
+      if((m=t.match(/Consume\s+(\d+)\s+Ingredient/i)))add(rows,'食材',num(pl.ingredient),Math.max(0,num(pl.ingredient)-num(m[1])));
+      if(/Assign\s+1\s+Pal/i.test(t))addText(rows,'アサイン','STANDのパル1体 → REST');
+      if(/Rest\s+this\s+card/i.test(t))addText(rows,'このカード','STAND → REST');
+      try{
+        const sc=typeof v050CircledCost==='function'?num(v050CircledCost(t)):0;
+        if(sc){
+          const now=typeof standingSouls==='function'?num(standingSouls(pl)):0;
+          add(rows,'ソウル',now,Math.max(0,now-sc));
+        }
+      }catch(_e){}
+      if((m=t.match(/Discard\s+(\d+)\s+cards?\s+from\s+hand/i)))addText(rows,'手札',num(m[1])+'枚を捨てる');
+      if(/Butcher\s+1\s+other\s+Pal/i.test(t))addText(rows,'コスト','他のパル1体をButcher');
+    }
+
+    /* Remove exact duplicate descriptions when a generic card also maps to a built-in effect. */
+    const seen=new Set();
+    return rows.filter(function(r){const k=r.label+'|'+(r.arrow?r.before+'>'+r.after:r.text);if(seen.has(k))return false;seen.add(k);return true})
+  }
+  function close(){try{document.querySelectorAll('.v0755AbilityConfirm').forEach(function(n){n.remove()})}catch(_e){}}
+  function show(pl,c,uid,oldActivate){
+    close();
+    const rows=costRows(pl,c);
+    const costs=rows.length?rows.map(function(r){
+      return '<div class="v0755CostRow"><span>'+esc(r.label)+'</span><strong>'+(r.arrow?esc(r.before)+' → '+esc(r.after):esc(r.text))+'</strong></div>'
+    }).join(''):'<div class="v0755CostRow"><span>消費</span><strong>なし</strong></div>';
+    const modal=document.createElement('div');modal.className='v0755AbilityConfirm';
+    modal.innerHTML='<div class="v0755AbilityCard" role="dialog" aria-modal="true">'+
+      '<div class="v0755AbilityTitle">'+esc(c.name)+' の能力を使いますか？</div>'+
+      '<div class="v0755AbilitySub">'+esc(c.no||'')+' / 現在の消費量を確認してから実行します</div>'+
+      '<div class="v0755AbilityEffect">'+esc(c.ability||'能力テキストなし')+'</div>'+
+      '<div class="v0755AbilityCost">'+costs+'</div>'+
+      '<div class="v0755AbilityNote">※「能力を使う」を押すまで素材・食材・ソウル・カード状態は変更されません。</div>'+
+      '<div class="v0755AbilityButtons"><button class="v0755AbilityCancel" type="button">キャンセル</button><button class="v0755AbilityUse" type="button">能力を使う</button></div>'+
+      '</div>';
+    document.body.appendChild(modal);
+    modal.addEventListener('pointerdown',function(ev){if(ev.target===modal)close()});
+    modal.querySelector('.v0755AbilityCancel').onclick=function(){close()};
+    modal.querySelector('.v0755AbilityUse').onclick=function(){
+      close();armed=true;try{oldActivate.call(globalThis,pl,uid)}finally{armed=false}
+    };
+  }
+
+  try{
+    if(typeof activateAbility==='function'&&!activateAbility.__v0755Wrapped){
+      const oldActivate=activateAbility;
+      const wrapped=function(pl,uid){
+        const c=findCard(pl,uid);
+        if(armed||!c||!pl||pl.isAI||pl!==G?.p)return oldActivate.apply(this,arguments);
+        try{if(typeof canActivate==='function'&&!canActivate(pl,c))return}catch(_e){}
+        show(pl,c,uid,oldActivate);
+      };
+      wrapped.__v0755Wrapped=true;wrapped.__v0755Old=oldActivate;activateAbility=wrapped;
+    }
+  }catch(_e){console.warn('v0.7.55 ability confirm wrap failed',_e)}
+  console.info('Palworld OCG v0.7.55 ability confirmation applied');
+})();
+</script>
 
 `;
 
@@ -2368,7 +2496,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.54-assign-clarity-fullscreen-detail-placement-structure-attack");
+      h.set("x-palworld-bridge","v0.7.55-ability-confirm-assign-clarity-fullscreen-detail-placement-structure-attack");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -2393,8 +2521,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.54 — アサイン表示強化・カード詳細全画面・召喚場所選択・建築物攻撃・手札/召喚UI改善・公式ルール同期";
-        m.start_url="/?pwa=1&v=0754";
+        m.description="Palworld OCG v0.7.55 — 能力使用確認・消費前後表示・アサイン表示強化・カード詳細全画面・召喚場所選択・建築物攻撃・公式ルール同期";
+        m.start_url="/?pwa=1&v=0755";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -2407,7 +2535,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.54 fullscreen card detail + placement selection + structure attack + hand/summon UX + official rule sync\n";
+        sw+="\n// v0.7.55 ability confirmation + resource before/after + fullscreen card detail + placement selection + structure attack + official rule sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
