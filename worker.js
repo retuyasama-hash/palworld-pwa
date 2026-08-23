@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.48";
+const V="0.7.49";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -203,12 +203,12 @@ const PATCH=`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title&&title.textContent!=='v0.7.48 カード詳細UI改善＋戦闘安定化')
-        title.textContent='v0.7.48 カード詳細UI改善＋戦闘安定化';
+      if(title&&title.textContent!=='v0.7.49 手札・召喚UI改善＋戦闘安定化')
+        title.textContent='v0.7.49 手札・召喚UI改善＋戦闘安定化';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.48';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.49';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -451,7 +451,7 @@ const PATCH=`
 
       return p.hand.some(x=>eligible.has(x.uid));
     }catch(e){
-      console.error('BP01-084 v0.7.48 official probe',e);
+      console.error('BP01-084 v0.7.49 official probe',e);
       return false;
     }finally{
       v071ForceRunning=false;
@@ -471,10 +471,10 @@ const PATCH=`
       const ok=v0740ProbeMenasting(c);
       if(ok){
         r.status='ok';
-        r.reasons=['v0.7.48公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
+        r.reasons=['v0.7.49公式処理ルートを実行（墓地AUTO解決後にNormal Pal回収を確認）'];
       }else{
         r.status='mismatch';
-        r.reasons=['v0.7.48デスティング墓地AUTO確認に失敗'];
+        r.reasons=['v0.7.49デスティング墓地AUTO確認に失敗'];
       }
       return r;
     };
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.48 Battle UX + Official Sync';
+        v072BpReport.version='0.7.49 Hand/Summon UX + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.48 カード詳細UI改善＋公式ルール同期';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.49 手札・召喚UI改善＋公式ルール同期';
       }catch(_e){}
       return r;
     };
@@ -840,7 +840,7 @@ const PATCH=`
     };
   }
 
-  console.info('Palworld OCG v0.7.48 battle UX3 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
+  console.info('Palworld OCG v0.7.49 hand/summon UX + battle UX3 + official rule sync applied: BP01-084 / Q74 / Q93 / mulligan order');
 })();
 </script>
 
@@ -1246,7 +1246,7 @@ const PATCH=`
   addEventListener('pageshow',applyCombatUX,{passive:true});
   addEventListener('resize',scheduleCombatUX,{passive:true});
   applyCombatUX();setTimeout(applyCombatUX,300);setTimeout(applyCombatUX,1100);
-  console.info('Palworld OCG v0.7.48 combat UX stable applied');
+  console.info('Palworld OCG v0.7.49 combat UX stable applied');
 })();
 </script>
 
@@ -1307,6 +1307,208 @@ const PATCH=`
 }
 </style>
 
+<style id="v0749HandSummonUX">
+/* v0.7.49 — hand / summon presentation. Rules and card-resolution logic are untouched. */
+
+/* The small version pill beside the start-screen title was hard to read on a phone. */
+.modalCard h2 .badge.official,
+.modalCard h3 .badge.official{
+  font-size:10px!important;
+  line-height:1.15!important;
+  padding:2px 6px!important;
+  margin-left:4px!important;
+  border-radius:6px!important;
+  vertical-align:middle!important;
+  letter-spacing:.1px!important;
+}
+
+/* Keep the hand compact, but make each card easier to distinguish and touch. */
+.app.v04.v0738CenterRifleFix .v04HandBar{
+  height:98px!important;
+  min-height:98px!important;
+  padding:1px 4px 3px!important;
+}
+.app.v04.v0738CenterRifleFix .v04Hand{
+  gap:4px!important;
+  padding:7px 7px 2px!important;
+  scroll-snap-type:x proximity;
+  overscroll-behavior-x:contain;
+}
+.app.v04.v0738CenterRifleFix .v04Hand>.card{
+  height:89px!important;
+  width:67px!important;
+  flex:0 0 67px!important;
+  scroll-snap-align:center;
+  transform-origin:center bottom;
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease,outline-color .14s ease!important;
+}
+
+/* Playable cards are subtly lifted, Master-Duel-like, without hiding neighbouring cards. */
+.app.v04.v0738CenterRifleFix .v04Hand>.card.selectable{
+  transform:translateY(-2px)!important;
+  box-shadow:0 2px 7px #0009,0 0 0 1px #76d2a777 inset!important;
+}
+.app.v04.v0738CenterRifleFix .v04Hand>.card.v0749HandSelected{
+  transform:translateY(-7px) scale(1.035)!important;
+  outline:2px solid #ffe078!important;
+  box-shadow:0 5px 12px #000c,0 0 15px #ffd85c99!important;
+  filter:brightness(1.08) saturate(1.05)!important;
+  z-index:16!important;
+}
+
+/* Newly drawn cards get a short, non-blocking visual cue. */
+.app.v04.v0738CenterRifleFix .v04Hand>.card.v0749HandEnter{
+  animation:v0749HandEnter .34s ease-out both!important;
+}
+@keyframes v0749HandEnter{
+  0%{opacity:.28;filter:brightness(1.55) saturate(1.15)}
+  55%{opacity:1;filter:brightness(1.18) saturate(1.08)}
+  100%{opacity:1;filter:none}
+}
+
+/* Placement is the important step after selecting a summon: make valid zones unmistakable. */
+.app.v04.v0738CenterRifleFix .zone.placementTarget{
+  border:2px solid #ffde62!important;
+  background:linear-gradient(180deg,#4b3d18cc,#80681a88)!important;
+  box-shadow:0 0 0 2px #fff4 inset,0 0 20px #ffd84ebb!important;
+  animation:v0749PlacementPulse .62s ease-in-out infinite alternate!important;
+}
+.app.v04.v0738CenterRifleFix .zone.placementTarget:after{
+  content:"ここに登場"!important;
+  font-size:9px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  color:#fff8d5!important;
+  text-shadow:0 1px 3px #000,0 0 5px #9a6300!important;
+}
+@keyframes v0749PlacementPulse{
+  from{filter:brightness(.94)}
+  to{filter:brightness(1.2)}
+}
+
+/* Keep the placement instruction near the field, readable but not obstructive. */
+.app.v04.v0738CenterRifleFix .v044PlacementBanner{
+  top:4px!important;
+  min-width:min(350px,62%)!important;
+  max-width:72%!important;
+  padding:5px 11px!important;
+  border-width:1px!important;
+  font-size:9px!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+/* Summoned / deployed card flashes once after it appears on the field. */
+.app.v04.v0738CenterRifleFix .v04Play .card.v0749SummonEnter{
+  animation:v0749SummonEnter .48s ease-out both!important;
+}
+@keyframes v0749SummonEnter{
+  0%{opacity:.3;filter:brightness(1.8) saturate(1.2);box-shadow:0 0 24px #ffe77dcc}
+  45%{opacity:1;filter:brightness(1.25) saturate(1.1);box-shadow:0 0 18px #ffe77daa}
+  100%{opacity:1;filter:none}
+}
+
+/* The use-confirmation sheet stays visible without swallowing the battlefield. */
+.v044UseCard{
+  width:min(390px,72vw)!important;
+  max-height:62vh!important;
+  padding:7px!important;
+  border-radius:13px!important;
+}
+.v044UseGrid{
+  grid-template-columns:minmax(88px,30%) minmax(0,1fr)!important;
+  gap:8px!important;
+}
+.v044UseArt{height:min(36vh,220px)!important}
+.v044UseTitle{font-size:14px!important;margin-bottom:3px!important}
+.v044UseMeta{font-size:8px!important;margin-bottom:4px!important}
+.v044UseQuestion{font-size:12px!important;margin:5px 0!important}
+.v044UseEffect{font-size:7px!important;line-height:1.35!important;max-height:72px!important;padding:5px!important}
+.v044UseButtons{gap:5px!important;margin-top:6px!important}
+.v044UseButtons button{font-size:9px!important;padding:6px!important}
+
+@media(max-height:520px) and (orientation:landscape){
+  .modalCard h2 .badge.official,.modalCard h3 .badge.official{font-size:9px!important;padding:2px 5px!important}
+  .app.v04.v0738CenterRifleFix .v04HandBar{height:94px!important;min-height:94px!important}
+  .app.v04.v0738CenterRifleFix .v04Hand>.card{height:85px!important;width:64px!important;flex-basis:64px!important}
+  .app.v04.v0738CenterRifleFix .v044PlacementBanner{font-size:8px!important;padding:4px 9px!important}
+  .v044UseCard{width:min(350px,68vw)!important;max-height:58vh!important}
+  .v044UseArt{height:min(32vh,180px)!important}
+}
+</style>
+
+<script id="v0749HandSummonUXScript">
+(()=>{
+  if(globalThis.__v0749HandSummonUXApplied)return;
+  globalThis.__v0749HandSummonUXApplied=true;
+
+  let scheduled=false;
+  let knownHand=null;
+  let knownField=null;
+
+  const uidSet=els=>new Set(els.map(el=>String(el.dataset.uid||'' )).filter(Boolean));
+
+  function clearTransient(el,cls,ms){
+    try{el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),ms)}catch(_e){}
+  }
+
+  function sync(){
+    scheduled=false;
+    try{
+      const app=document.querySelector('.app.v04');
+      if(!app){knownHand=null;knownField=null;return}
+      app.classList.add('v0749HandSummonUX');
+
+      const handEls=[...document.querySelectorAll('.v04Hand>.card[data-uid]')];
+      const handNow=uidSet(handEls);
+
+      /* Visualise the selected hand card when the current upstream exposes its selection uid. */
+      let selected=null;
+      try{if(typeof v0725SelectedHandUid!=='undefined'&&v0725SelectedHandUid!=null)selected=String(v0725SelectedHandUid)}catch(_e){}
+      handEls.forEach(el=>el.classList.toggle('v0749HandSelected',selected!=null&&String(el.dataset.uid)===selected));
+
+      if(knownHand!==null){
+        handEls.forEach(el=>{
+          const id=String(el.dataset.uid||'');
+          if(id&&!knownHand.has(id))clearTransient(el,'v0749HandEnter',380);
+        });
+      }
+      knownHand=handNow;
+
+      /* Track board UIDs, not DOM nodes, because the upstream render replaces the board each render. */
+      const fieldEls=[...document.querySelectorAll(
+        '.v04Play .palrow .card[data-uid],.v04Play .supportrow .card[data-uid]'
+      )];
+      const fieldNow=uidSet(fieldEls);
+      if(knownField!==null){
+        fieldEls.forEach(el=>{
+          const id=String(el.dataset.uid||'');
+          if(id&&!knownField.has(id))clearTransient(el,'v0749SummonEnter',520);
+        });
+      }
+      knownField=fieldNow;
+    }catch(_e){}
+  }
+
+  function schedule(){
+    if(scheduled)return;
+    scheduled=true;
+    requestAnimationFrame(sync);
+  }
+
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  addEventListener('pageshow',sync,{passive:true});
+  addEventListener('resize',schedule,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync()});
+  sync();
+  setTimeout(sync,250);
+  setTimeout(sync,900);
+  console.info('Palworld OCG v0.7.49 hand/summon presentation applied');
+})();
+</script>
+
 `;
 
 function noCache(h){
@@ -1322,7 +1524,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.48-battle-ux-stable-official-rule-sync");
+      h.set("x-palworld-bridge","v0.7.49-hand-summon-ux-battle-stable-official-rule-sync");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -1347,8 +1549,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.48 — カード詳細UI改善・戦闘安定化・公式ルール同期";
-        m.start_url="/?pwa=1&v=0748";
+        m.description="Palworld OCG v0.7.49 — 手札・召喚UI改善・カード詳細UI改善・戦闘安定化・公式ルール同期";
+        m.start_url="/?pwa=1&v=0749";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -1361,7 +1563,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.48 battle UX stable + official rule sync + center + rotated hand swipe fix\n";
+        sw+="\n// v0.7.49 hand/summon UX + battle UX stable + official rule sync + center + rotated hand swipe fix\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
