@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.64";
+const V="0.7.65";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.64';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.65';
       }catch(_e){}
       return r;
     };
@@ -3701,7 +3701,7 @@ const PATCH=`
   addEventListener('pageshow',boot,{passive:true});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
   boot();setTimeout(boot,500);setTimeout(boot,1600);
-  console.info('Palworld OCG v0.7.64 rule audit + diagnostics applied');
+  console.info('Palworld OCG v0.7.65 rule audit + diagnostics applied');
 })();
 </script>
 
@@ -3935,7 +3935,7 @@ const PATCH=`
   globalThis.palRunFullSuite=runAll;
   globalThis.palCopyFullSuiteReport=copyReport;
   sync();setTimeout(sync,600);setTimeout(sync,1800);
-  console.info('Palworld OCG v0.7.64 full test suite applied');
+  console.info('Palworld OCG v0.7.65 full test suite applied');
 })();
 </script>
 
@@ -4084,7 +4084,7 @@ const PATCH=`
       if(rr.ok&&rr.changed&&commit(ref,rr.counts)){
         const afterFp=fingerprint(rr.counts);tierFingerprints.add(beforeFp);tierFingerprints.add(afterFp);
         addLog('repaired',{label:label,key:String(key||''),context:String(context||''),beforeLucky:st.lucky,afterLucky:rr.after.lucky,removed:rr.removed,added:rr.added});
-        console.warn('[v0.7.64] Tier deck auto-repaired',label,'Lucky',st.lucky,'->',rr.after.lucky,rr.removed,rr.added);
+        console.warn('[v0.7.65] Tier deck auto-repaired',label,'Lucky',st.lucky,'->',rr.after.lucky,rr.removed,rr.added);
         toast('Tier候補を自動調整: Lucky '+st.lucky+'→'+rr.after.lucky+'枚',false);
         return {ok:true,changed:true,stats:rr.after,label:label,removed:rr.removed,added:rr.added};
       }
@@ -4202,7 +4202,102 @@ const PATCH=`
   globalThis.palAuditTierDecks=()=>auditAll('manualApi');
   globalThis.palTierDeckGuardStatus=()=>loadLog();
   install();setTimeout(install,700);setTimeout(()=>{wrapTierFunctions();auditAll('lateBoot')},2200);
-  console.info('Palworld OCG v0.7.64 Tier legal-deck guard applied');
+  console.info('Palworld OCG v0.7.65 Tier legal-deck guard applied');
+})();
+</script>
+
+
+<style id="v0765DamageImageDirectStyle">
+/* v0.7.65 — exact Damage Check image: hook putGrave(reason='Damage Check') and reuse a loaded real card image. */
+.v0765DamageReveal{position:fixed!important;inset:0!important;z-index:2147483600!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:10px!important;pointer-events:none!important;background:rgba(0,0,0,.24)!important}
+.v0765DamageReveal[hidden]{display:none!important}
+.v0765DamageBox{width:min(430px,80vw)!important;max-width:430px!important;background:linear-gradient(180deg,rgba(13,18,23,.99),rgba(5,8,11,.985))!important;border:2px solid rgba(246,211,86,.98)!important;border-radius:18px!important;box-shadow:0 18px 52px rgba(0,0,0,.66),0 0 30px rgba(246,211,86,.18)!important;padding:11px 15px 13px!important;text-align:center!important;color:#fff!important}
+.v0765DamageHead{font-size:15px!important;font-weight:950!important;letter-spacing:.08em!important}
+.v0765DamageSide{margin-top:3px!important;font-size:9px!important;color:#d7dde7!important}
+.v0765DamageCount{margin-top:2px!important;font-size:8px!important;color:#aeb8c6!important}
+.v0765DamageStage{height:190px!important;margin:7px auto!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.v0765DamageStage img{display:block!important;width:136px!important;max-width:136px!important;max-height:190px!important;height:auto!important;object-fit:contain!important;border-radius:8px!important;box-shadow:0 12px 30px rgba(0,0,0,.55)!important}
+.v0765DamageFallback{width:136px!important;height:181px!important;border:1px solid #987f35!important;border-radius:8px!important;background:#111720!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:9px!important;font-size:10px!important;font-weight:800!important;line-height:1.35!important}
+.v0765DamageName{font-size:12px!important;line-height:1.25!important;font-weight:950!important}
+.v0765DamageLucky{margin-top:4px!important;font-size:13px!important;font-weight:950!important;color:#f5d85d!important;text-shadow:0 0 12px rgba(245,216,93,.4)!important}
+.v0765DamageNormal{margin-top:4px!important;font-size:9px!important;font-weight:850!important;color:#d8dde7!important}
+@media(max-height:520px) and (orientation:landscape){.v0765DamageBox{width:min(365px,72vw)!important;padding:7px 11px 9px!important}.v0765DamageStage{height:128px!important;margin:4px auto!important}.v0765DamageStage img{width:95px!important;max-width:95px!important;max-height:128px!important}.v0765DamageFallback{width:95px!important;height:126px!important;font-size:8px!important}.v0765DamageHead{font-size:12px!important}.v0765DamageName{font-size:10px!important}.v0765DamageLucky{font-size:10px!important}}
+</style>
+<script id="v0765DamageImageDirectScript">
+(()=>{
+  if(globalThis.__v0765DamageImageDirectApplied)return;
+  globalThis.__v0765DamageImageDirectApplied=true;
+  let q=[],showing=false,timer=0,lastKey='',lastAt=0,installed=false;
+  const norm=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+  const esc=v=>String(v==null?'':v).replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  function host(){let el=document.getElementById('v0765DamageReveal');if(!el){el=document.createElement('div');el.id='v0765DamageReveal';el.className='v0765DamageReveal';el.hidden=true;document.body.appendChild(el)}return el}
+  function hideOld(){try{['v0758DamageReveal','v0759DamageReveal','v0760DamageReveal','v0761DamageReveal'].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true})}catch(_e){}}
+  function speed(){try{const t=norm(document.getElementById('v0756CpuSpeedBtn')?.textContent||'');if(t.includes('即時'))return 780;if(t.includes('×2'))return 1050}catch(_e){}return 1450}
+  function loadedDomSrc(c){
+    try{
+      const no=norm(c?.no),name=norm(c?.name);
+      const imgs=[...document.querySelectorAll('img')];
+      for(const img of imgs){
+        const ino=norm(img.dataset?.no||'');const alt=norm(img.alt||'');
+        if(!((no&&ino===no)||(name&&alt===name)||(name&&alt.includes(name))))continue;
+        const src=img.currentSrc||img.src||'';
+        if(src && img.naturalWidth>20 && img.naturalHeight>20 && getComputedStyle(img).display!=='none')return src;
+      }
+    }catch(_e){}
+    return '';
+  }
+  function knownSources(c){
+    const out=[];const add=x=>{x=String(x||'').trim();if(x&&!out.includes(x))out.push(x)};
+    add(loadedDomSrc(c));
+    try{if(typeof v050ImageUrls!=='undefined'&&c?.no)add(v050ImageUrls[c.no])}catch(_e){}
+    add(c?.imageUrl);add(c?.imageFallbackUrl);
+    try{if(typeof imageCandidates==='function'&&c?.no){for(const x of imageCandidates(c.no)||[])add(x)}}catch(_e){}
+    return out;
+  }
+  function imageHtml(c){
+    const srcs=knownSources(c);
+    if(srcs.length){
+      const data=esc(JSON.stringify(srcs));
+      return '<img class="v0765DamageImg" alt="'+esc(c?.name||'')+'" src="'+esc(srcs[0])+'" data-v0765-srcs="'+data+'" data-v0765-i="0" onerror="v0765DamageImgError(this)">';
+    }
+    return '<div class="v0765DamageFallback">'+esc(c?.name||c?.no||'公開カード')+'</div>';
+  }
+  globalThis.v0765DamageImgError=function(img){
+    try{const a=JSON.parse(img.getAttribute('data-v0765-srcs')||'[]');let i=(Number(img.getAttribute('data-v0765-i'))||0)+1;if(i<a.length){img.setAttribute('data-v0765-i',String(i));img.src=a[i];return}}catch(_e){}
+    try{const fb=document.createElement('div');fb.className='v0765DamageFallback';fb.textContent=img.alt||'公開カード';img.replaceWith(fb)}catch(_e){img.style.display='none'}
+  };
+  function render(item){
+    hideOld();const el=host(),c=item.card||{};
+    el.innerHTML='<div class="v0765DamageBox"><div class="v0765DamageHead">DAMAGE CHECK</div><div class="v0765DamageSide">'+esc(item.defName?item.defName+' のダメージチェック':'ダメージチェック')+'</div>'+(item.total>1?'<div class="v0765DamageCount">'+item.index+' / '+item.total+'枚目</div>':'')+'<div class="v0765DamageStage">'+imageHtml(c)+'</div><div class="v0765DamageName">'+esc(c.name||c.no||'公開カード')+'</div>'+(c.lucky?'<div class="v0765DamageLucky">★ LUCKY!</div>':'<div class="v0765DamageNormal">公開</div>')+'</div>';
+    el.hidden=false;
+    /* If the detail pane finishes loading the real image a moment later, swap to that exact loaded src. */
+    setTimeout(()=>{try{const src=loadedDomSrc(c),img=el.querySelector('img');if(src&&img&&img.src!==src)img.src=src}catch(_e){}},80);
+    setTimeout(()=>{try{const src=loadedDomSrc(c),img=el.querySelector('img');if(src&&img&&img.src!==src)img.src=src}catch(_e){}},260);
+  }
+  function pump(){if(showing||!q.length)return;showing=true;const it=q.shift();render(it);clearTimeout(timer);timer=setTimeout(()=>{const el=document.getElementById('v0765DamageReveal');if(el)el.hidden=true;showing=false;pump()},speed())}
+  function enqueue(c,def){
+    if(!c)return;const key=String(c.uid||c.no||c.name||'')+'|'+String(def?.name||'');const now=Date.now();if(key===lastKey&&now-lastAt<250)return;lastKey=key;lastAt=now;
+    q.push({card:c,defName:def?.name||'',index:1,total:1});if(q.length>12)q=q.slice(-12);pump();
+  }
+  function install(){
+    if(installed)return true;
+    try{
+      const old=(typeof putGrave==='function')?putGrave:globalThis.putGrave;
+      if(typeof old!=='function')return false;
+      if(old.__v0765DamagePutGraveWrapped){installed=true;return true}
+      const wrapped=function(pl,c,reason){
+        const isDamage=/damage\s*check|ダメージチェック/i.test(String(reason||''));
+        const r=old.apply(this,arguments);
+        if(isDamage){try{enqueue(c,pl)}catch(e){console.warn('v0.7.65 damage image enqueue failed',e)}}
+        return r;
+      };
+      wrapped.__v0765DamagePutGraveWrapped=true;wrapped.__v0765DamagePutGraveOld=old;
+      try{putGrave=wrapped}catch(_e){globalThis.putGrave=wrapped}
+      installed=true;console.info('Palworld OCG v0.7.65 putGrave Damage Check image hook installed');return true;
+    }catch(e){console.warn('v0.7.65 putGrave hook install failed',e);return false}
+  }
+  install();let tries=0;const iv=setInterval(()=>{tries++;if(install()||tries>30)clearInterval(iv)},100);
+  addEventListener('pageshow',()=>{q.length=0;showing=false;clearTimeout(timer);const el=document.getElementById('v0765DamageReveal');if(el)el.hidden=true;installed=false;setTimeout(install,0)},{passive:true});
 })();
 </script>
 
@@ -4221,7 +4316,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.64-tier-legal-guard-full-test");
+      h.set("x-palworld-bridge","v0.7.65-tier-legal-guard-full-test");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -4246,8 +4341,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.64 — Tier候補合法性ガード・Lucky8枚自動修復・全検査・ルール監査・診断・アサイン常時表示・CPU速度切替・能力二重発動防止・カード詳細全画面・公式ルール同期";
-        m.start_url="/?pwa=1&v=0764";
+        m.description="Palworld OCG v0.7.65 — Tier候補合法性ガード・Lucky8枚自動修復・全検査・ルール監査・診断・アサイン常時表示・CPU速度切替・能力二重発動防止・カード詳細全画面・公式ルール同期";
+        m.start_url="/?pwa=1&v=0765";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -4260,7 +4355,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.64 tier deck legal guard + full test suite + diagnostics + official sync\n";
+        sw+="\n// v0.7.65 tier deck legal guard + full test suite + diagnostics + official sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
