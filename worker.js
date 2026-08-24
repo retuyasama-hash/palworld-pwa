@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.65";
+const V="0.7.66";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -204,11 +204,11 @@ const PATCH=`
 
       const title=document.querySelector('.v04Title');
       if(title&&title.textContent!=='v0.7.61')
-        title.textContent='v0.7.62';
+        title.textContent='v0.7.66';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.62';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.66';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.65';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.66';
       }catch(_e){}
       return r;
     };
@@ -2580,8 +2580,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.61')title.textContent='v0.7.62';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.62'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.61')title.textContent='v0.7.66';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.66'});
       syncButton();
     }catch(_e){}
   }
@@ -3701,7 +3701,7 @@ const PATCH=`
   addEventListener('pageshow',boot,{passive:true});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
   boot();setTimeout(boot,500);setTimeout(boot,1600);
-  console.info('Palworld OCG v0.7.65 rule audit + diagnostics applied');
+  console.info('Palworld OCG v0.7.66 rule audit + diagnostics applied');
 })();
 </script>
 
@@ -3935,7 +3935,7 @@ const PATCH=`
   globalThis.palRunFullSuite=runAll;
   globalThis.palCopyFullSuiteReport=copyReport;
   sync();setTimeout(sync,600);setTimeout(sync,1800);
-  console.info('Palworld OCG v0.7.65 full test suite applied');
+  console.info('Palworld OCG v0.7.66 full test suite applied');
 })();
 </script>
 
@@ -4084,7 +4084,7 @@ const PATCH=`
       if(rr.ok&&rr.changed&&commit(ref,rr.counts)){
         const afterFp=fingerprint(rr.counts);tierFingerprints.add(beforeFp);tierFingerprints.add(afterFp);
         addLog('repaired',{label:label,key:String(key||''),context:String(context||''),beforeLucky:st.lucky,afterLucky:rr.after.lucky,removed:rr.removed,added:rr.added});
-        console.warn('[v0.7.65] Tier deck auto-repaired',label,'Lucky',st.lucky,'->',rr.after.lucky,rr.removed,rr.added);
+        console.warn('[v0.7.66] Tier deck auto-repaired',label,'Lucky',st.lucky,'->',rr.after.lucky,rr.removed,rr.added);
         toast('Tier候補を自動調整: Lucky '+st.lucky+'→'+rr.after.lucky+'枚',false);
         return {ok:true,changed:true,stats:rr.after,label:label,removed:rr.removed,added:rr.added};
       }
@@ -4202,13 +4202,13 @@ const PATCH=`
   globalThis.palAuditTierDecks=()=>auditAll('manualApi');
   globalThis.palTierDeckGuardStatus=()=>loadLog();
   install();setTimeout(install,700);setTimeout(()=>{wrapTierFunctions();auditAll('lateBoot')},2200);
-  console.info('Palworld OCG v0.7.65 Tier legal-deck guard applied');
+  console.info('Palworld OCG v0.7.66 Tier legal-deck guard applied');
 })();
 </script>
 
 
 <style id="v0765DamageImageDirectStyle">
-/* v0.7.65 — exact Damage Check image: hook putGrave(reason='Damage Check') and reuse a loaded real card image. */
+/* v0.7.66 — exact Damage Check image: hook putGrave(reason='Damage Check') and reuse a loaded real card image. */
 .v0765DamageReveal{position:fixed!important;inset:0!important;z-index:2147483600!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:10px!important;pointer-events:none!important;background:rgba(0,0,0,.24)!important}
 .v0765DamageReveal[hidden]{display:none!important}
 .v0765DamageBox{width:min(430px,80vw)!important;max-width:430px!important;background:linear-gradient(180deg,rgba(13,18,23,.99),rgba(5,8,11,.985))!important;border:2px solid rgba(246,211,86,.98)!important;border-radius:18px!important;box-shadow:0 18px 52px rgba(0,0,0,.66),0 0 30px rgba(246,211,86,.18)!important;padding:11px 15px 13px!important;text-align:center!important;color:#fff!important}
@@ -4288,16 +4288,124 @@ const PATCH=`
       const wrapped=function(pl,c,reason){
         const isDamage=/damage\s*check|ダメージチェック/i.test(String(reason||''));
         const r=old.apply(this,arguments);
-        if(isDamage){try{enqueue(c,pl)}catch(e){console.warn('v0.7.65 damage image enqueue failed',e)}}
+        if(isDamage){try{enqueue(c,pl)}catch(e){console.warn('v0.7.66 damage image enqueue failed',e)}}
         return r;
       };
       wrapped.__v0765DamagePutGraveWrapped=true;wrapped.__v0765DamagePutGraveOld=old;
       try{putGrave=wrapped}catch(_e){globalThis.putGrave=wrapped}
-      installed=true;console.info('Palworld OCG v0.7.65 putGrave Damage Check image hook installed');return true;
-    }catch(e){console.warn('v0.7.65 putGrave hook install failed',e);return false}
+      installed=true;console.info('Palworld OCG v0.7.66 putGrave Damage Check image hook installed');return true;
+    }catch(e){console.warn('v0.7.66 putGrave hook install failed',e);return false}
   }
   install();let tries=0;const iv=setInterval(()=>{tries++;if(install()||tries>30)clearInterval(iv)},100);
   addEventListener('pageshow',()=>{q.length=0;showing=false;clearTimeout(timer);const el=document.getElementById('v0765DamageReveal');if(el)el.hidden=true;installed=false;setTimeout(install,0)},{passive:true});
+})();
+</script>
+
+
+<style id="v0766DamageDomRevealStyle">
+/* v0.7.66 — DOM-result driven DAMAGE CHECK reveal. This is intentionally independent of playerDamage/putGrave hooks. */
+.v0766DamageReveal{position:fixed!important;inset:0!important;z-index:2147483646!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:10px!important;pointer-events:none!important;background:rgba(0,0,0,.28)!important}
+.v0766DamageReveal[hidden]{display:none!important}
+.v0766DamageBox{width:min(420px,80vw)!important;max-width:420px!important;background:linear-gradient(180deg,rgba(11,18,20,.995),rgba(5,8,10,.995))!important;border:2px solid rgba(245,210,82,.98)!important;border-radius:18px!important;box-shadow:0 18px 52px rgba(0,0,0,.72),0 0 28px rgba(245,210,82,.20)!important;padding:10px 14px 12px!important;text-align:center!important;color:#fff!important}
+.v0766DamageHead{font-size:15px!important;font-weight:950!important;letter-spacing:.09em!important}
+.v0766DamageCount{margin-top:3px!important;font-size:8px!important;color:#b9c3d0!important}
+.v0766DamageStage{height:190px!important;margin:7px auto 6px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
+.v0766DamageStage img{display:block!important;width:138px!important;max-width:138px!important;max-height:190px!important;height:auto!important;object-fit:contain!important;border-radius:8px!important;box-shadow:0 12px 30px rgba(0,0,0,.58)!important}
+.v0766DamageStage .card{width:128px!important;min-width:128px!important;max-width:128px!important;height:auto!important;min-height:170px!important;max-height:190px!important;transform:none!important;margin:0!important;pointer-events:none!important}
+.v0766DamageStage .card button,.v0766DamageStage .card .infoBtn{display:none!important}
+.v0766DamageFallback{width:136px!important;height:181px!important;border:1px solid #9c8537!important;border-radius:8px!important;background:#101821!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:9px!important;font-size:10px!important;font-weight:900!important;line-height:1.35!important}
+.v0766DamageName{font-size:12px!important;line-height:1.25!important;font-weight:950!important}
+.v0766DamageLucky{margin-top:4px!important;font-size:13px!important;font-weight:950!important;color:#f5d85d!important;text-shadow:0 0 12px rgba(245,216,93,.45)!important}
+.v0766DamageNormal{margin-top:4px!important;font-size:9px!important;font-weight:850!important;color:#dce2ea!important}
+@media(max-height:520px) and (orientation:landscape){.v0766DamageBox{width:min(355px,70vw)!important;padding:7px 10px 8px!important}.v0766DamageStage{height:128px!important;margin:4px auto!important}.v0766DamageStage img{width:96px!important;max-width:96px!important;max-height:128px!important}.v0766DamageStage .card{width:92px!important;min-width:92px!important;max-width:92px!important;min-height:120px!important;max-height:128px!important}.v0766DamageFallback{width:96px!important;height:126px!important;font-size:8px!important}.v0766DamageHead{font-size:12px!important}.v0766DamageName{font-size:10px!important}.v0766DamageLucky{font-size:10px!important}}
+</style>
+<script id="v0766DamageDomRevealScript">
+(()=>{
+  if(globalThis.__v0766DamageDomRevealApplied)return;
+  globalThis.__v0766DamageDomRevealApplied=true;
+  let scheduled=false,lastSig='',lastAt=0,timer=0,failedSig='';
+  const esc=v=>String(v==null?'':v).replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  const flat=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+  const key=v=>flat(v).normalize('NFKC').replace(/[\s\-‐‑‒–—―−ー－・:：!！★☆]/g,'').toLowerCase();
+  function defs(){try{return (typeof CARD_DB!=='undefined'&&CARD_DB)?Object.values(CARD_DB):[]}catch(_e){return []}}
+  function findDef(text){
+    const tk=key(text);if(!tk)return null;let best=null,bestLen=0;
+    for(const c of defs()){
+      if(!c||!c.name)continue;const nk=key(c.name);if(nk.length<3)continue;
+      if(tk.includes(nk)&&nk.length>bestLen){best=c;bestLen=nk.length}
+    }
+    return best;
+  }
+  function visible(el){try{const r=el.getBoundingClientRect();const s=getComputedStyle(el);return r.width>20&&r.height>20&&s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity||1)>0}catch(_e){return false}}
+  function findResult(){
+    try{
+      const root=document.querySelector('.v04Play')||document;
+      const seen=new Set(),arr=[];
+      root.querySelectorAll('.v0754DamageCheckPanel,div,section,aside,main').forEach(el=>{if(seen.has(el))return;seen.add(el);const txt=flat(el.textContent||'');if(!/DAMAGE\s*CHECK/i.test(txt)||txt.length>650||!visible(el))return;const def=findDef(txt);if(!def)return;const r=el.getBoundingClientRect();arr.push({el,txt,def,area:r.width*r.height})});
+      arr.sort((a,b)=>a.area-b.area);
+      return arr[0]||null;
+    }catch(_e){return null}
+  }
+  function add(a,x){x=String(x||'').trim();if(x&&!a.includes(x))a.push(x)}
+  function sources(c){
+    const a=[];
+    try{if(typeof v050ImageUrls!=='undefined'&&c?.no)add(a,v050ImageUrls[c.no])}catch(_e){}
+    try{if(typeof imageCandidates==='function'&&c?.no)for(const x of imageCandidates(c.no)||[])add(a,x)}catch(_e){}
+    try{if(typeof EMBEDDED_CARD_IMAGES!=='undefined'&&c?.no)add(a,EMBEDDED_CARD_IMAGES[c.no])}catch(_e){}
+    add(a,c?.imageUrl);add(a,c?.imageFallbackUrl);
+    if(c?.no){for(const ext of ['webp','png','jpg','jpeg','svg']){try{add(a,new URL('assets/cards/'+c.no+'.'+ext,location.href).href)}catch(_e){}}}
+    try{
+      if(typeof imageTag==='function'){
+        const t=document.createElement('div');t.innerHTML=imageTag(c,'v0766Probe')||'';const im=t.querySelector('img');if(im){add(a,im.getAttribute('src'));add(a,im.src);const raw=im.getAttribute('data-candidates')||im.getAttribute('data-srcs');if(raw){try{for(const x of JSON.parse(raw.replace(/&quot;/g,'"')))add(a,x)}catch(_e){}}}
+      }
+    }catch(_e){}
+    return a;
+  }
+  function cardFallback(c){
+    try{
+      if(typeof cardHTML==='function'){
+        const obj=Object.assign({uid:-766001,rest:false,damage:0,tempPower:0,tempStrike:0},c||{});
+        const t=document.createElement('div');t.innerHTML=cardHTML(obj,{select:false})||'';const card=t.querySelector('.card');
+        if(card){card.removeAttribute('onclick');card.removeAttribute('onpointerup');card.removeAttribute('onpointerdown');card.querySelectorAll('button,.infoBtn').forEach(x=>x.remove());return card.outerHTML}
+      }
+    }catch(_e){}
+    return '<div class="v0766DamageFallback">'+esc(c?.name||c?.no||'公開カード')+'</div>';
+  }
+  globalThis.v0766DamageImgError=function(img){
+    try{
+      const a=JSON.parse(img.getAttribute('data-v0766-srcs')||'[]');let i=(Number(img.getAttribute('data-v0766-i'))||0)+1;
+      if(i<a.length){img.setAttribute('data-v0766-i',String(i));img.src=a[i];return}
+      const name=img.alt||'公開カード';const no=img.getAttribute('data-no')||'';
+      if(typeof palDiagRecord==='function')palDiagRecord('ERR-DMG-0105','Damage Check card image failed to load',{op:'damageRevealImage',no,name,sources:a.length},null,true);
+      const fb=document.createElement('div');fb.className='v0766DamageFallback';fb.textContent=name;img.replaceWith(fb);
+    }catch(_e){try{img.style.display='none'}catch(__){}}
+  };
+  function imageHtml(c){
+    const a=sources(c);
+    if(!a.length)return cardFallback(c);
+    return '<img alt="'+esc(c?.name||'')+'" data-no="'+esc(c?.no||'')+'" src="'+esc(a[0])+'" data-v0766-srcs="'+esc(JSON.stringify(a))+'" data-v0766-i="0" onerror="v0766DamageImgError(this)">';
+  }
+  function host(){let el=document.getElementById('v0766DamageReveal');if(!el){el=document.createElement('div');el.id='v0766DamageReveal';el.className='v0766DamageReveal';el.hidden=true;document.body.appendChild(el)}return el}
+  function hideOld(){try{['v0758DamageReveal','v0759DamageReveal','v0760DamageReveal','v0761DamageReveal','v0765DamageReveal'].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true})}catch(_e){}}
+  function duration(){try{const t=flat(document.getElementById('v0756CpuSpeedBtn')?.textContent||'');if(t.includes('即時'))return 1050;if(t.includes('×2'))return 1350}catch(_e){}return 1800}
+  function show(hit){
+    const c=hit.def,txt=hit.txt,el=host();hideOld();
+    const m=txt.match(/(\d+)\s*\/\s*(\d+)\s*枚目/);const count=m?'<div class="v0766DamageCount">'+esc(m[1])+' / '+esc(m[2])+'枚目</div>':'';
+    const lucky=/LUCKY|ラッキー/i.test(txt)||!!c.lucky;
+    el.innerHTML='<div class="v0766DamageBox"><div class="v0766DamageHead">DAMAGE CHECK</div>'+count+'<div class="v0766DamageStage">'+imageHtml(c)+'</div><div class="v0766DamageName">'+esc(c.name||c.no||'公開カード')+'</div>'+(lucky?'<div class="v0766DamageLucky">★ LUCKY!</div>':'<div class="v0766DamageNormal">公開</div>')+'</div>';
+    el.hidden=false;clearTimeout(timer);timer=setTimeout(()=>{el.hidden=true},duration());
+  }
+  function scan(){
+    scheduled=false;const h=findResult();
+    if(!h)return;
+    const sig=String(h.def?.no||h.def?.name||'')+'|'+flat(h.txt).slice(0,240);const now=Date.now();
+    if(sig===lastSig&&now-lastAt<1100)return;lastSig=sig;lastAt=now;show(h);
+  }
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(scan)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class','hidden','style']})}catch(_e){}
+  document.addEventListener('pointerup',schedule,{passive:true});addEventListener('pageshow',()=>{lastSig='';lastAt=0;const x=document.getElementById('v0766DamageReveal');if(x)x.hidden=true;setTimeout(schedule,60)},{passive:true});
+  setInterval(schedule,240);schedule();setTimeout(schedule,400);
+  console.info('Palworld OCG v0.7.66 DOM-driven DAMAGE CHECK image reveal applied');
 })();
 </script>
 
@@ -4316,7 +4424,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.65-tier-legal-guard-full-test");
+      h.set("x-palworld-bridge","v0.7.66-tier-legal-guard-full-test");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -4341,8 +4449,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.65 — Tier候補合法性ガード・Lucky8枚自動修復・全検査・ルール監査・診断・アサイン常時表示・CPU速度切替・能力二重発動防止・カード詳細全画面・公式ルール同期";
-        m.start_url="/?pwa=1&v=0765";
+        m.description="Palworld OCG v0.7.66 — Tier候補合法性ガード・Lucky8枚自動修復・全検査・ルール監査・診断・アサイン常時表示・CPU速度切替・能力二重発動防止・カード詳細全画面・公式ルール同期";
+        m.start_url="/?pwa=1&v=0766";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -4355,7 +4463,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.65 tier deck legal guard + full test suite + diagnostics + official sync\n";
+        sw+="\n// v0.7.66 tier deck legal guard + full test suite + diagnostics + official sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
