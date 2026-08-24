@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.67";
+const V="0.7.69";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -208,7 +208,7 @@ const PATCH=`
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.67';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.69';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -2511,10 +2511,10 @@ const PATCH=`
 (()=>{
   if(globalThis.__v0756PolishApplied)return;
   globalThis.__v0756PolishApplied=true;
-  const KEY='palworld_cpu_speed_v0756';
-  const MODES=['normal','fast','instant'];
-  const LABELS={normal:'CPU ×1',fast:'CPU ×2',instant:'CPU 即時'};
-  let mode='normal',cpuQueue=[],cpuShowing=false,cpuTimer=0,queued=false;
+  const KEY='palworld_cpu_speed_v0769';
+  const MODES=['slow','normal','fast','instant'];
+  const LABELS={slow:'CPU ゆっくり',normal:'CPU 普通',fast:'CPU 速い',instant:'CPU 即時'};
+  let mode='slow',cpuQueue=[],cpuShowing=false,cpuTimer=0,queued=false;
   try{const v=localStorage.getItem(KEY);if(MODES.includes(v))mode=v}catch(_e){}
 
   function cpuTurn(){
@@ -2523,9 +2523,11 @@ const PATCH=`
   function delayFor(ms){
     let d=Math.max(0,Number(ms)||0);
     if(!cpuTurn())return d;
-    if(mode==='instant')return Math.min(d,24);
-    if(mode==='fast')return Math.max(d,280);
-    return Math.max(d,620);
+    try{if(typeof v077Stress!=='undefined'&&v077Stress?.active)return Math.min(d,12)}catch(_e){}
+    if(mode==='instant')return Math.min(d,30);
+    if(mode==='fast')return Math.max(d,600);
+    if(mode==='normal')return Math.max(d,1050);
+    return Math.max(d,1550);
   }
   function saveMode(v){mode=v;try{localStorage.setItem(KEY,v)}catch(_e){}syncButton()}
   function cycleMode(){saveMode(MODES[(MODES.indexOf(mode)+1)%MODES.length])}
@@ -2554,7 +2556,7 @@ const PATCH=`
     if(!el){el=document.createElement('div');el.className='v0756CpuAction';document.body.appendChild(el)}
     el.textContent='CPU：'+msg;
     clearTimeout(cpuTimer);
-    cpuTimer=setTimeout(function(){try{el.remove()}catch(_e){}cpuShowing=false;pumpCpu()},mode==='fast'?420:760);
+    cpuTimer=setTimeout(function(){try{el.remove()}catch(_e){}cpuShowing=false;pumpCpu()},mode==='instant'?220:(mode==='fast'?650:(mode==='normal'?1050:1500)));
   }
 
   /* AI scheduling helper used by the current app. Rules/state are untouched; only presentation delay changes. */
@@ -2580,7 +2582,7 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.61')title.textContent='v0.7.67';
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.69')title.textContent='v0.7.69';
       document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.67'});
       syncButton();
     }catch(_e){}
@@ -4483,6 +4485,239 @@ const PATCH=`
 })();
 </script>
 
+
+<style id="v0768DamageGlobalRevealStyle">
+.v0768DamageReveal{position:fixed!important;inset:0!important;z-index:2147483647!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:10px!important;pointer-events:none!important;background:rgba(0,0,0,.34)!important}
+.v0768DamageReveal[hidden]{display:none!important}
+.v0768DamageBox{width:min(430px,80vw)!important;background:linear-gradient(180deg,rgba(7,17,18,.995),rgba(3,7,9,.995))!important;border:2px solid rgba(244,209,78,.98)!important;border-radius:18px!important;box-shadow:0 18px 58px rgba(0,0,0,.78),0 0 28px rgba(244,209,78,.20)!important;padding:10px 14px 12px!important;text-align:center!important;color:#fff!important}
+.v0768DamageHead{font-size:15px!important;font-weight:950!important;letter-spacing:.09em!important}
+.v0768DamageCount{margin-top:2px!important;font-size:8px!important;color:#c9d0d9!important}
+.v0768DamageStage{height:190px!important;margin:7px auto 6px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.v0768DamageStage img{display:block!important;width:140px!important;max-width:140px!important;max-height:190px!important;height:auto!important;object-fit:contain!important;border-radius:8px!important;box-shadow:0 12px 30px rgba(0,0,0,.62)!important}
+.v0768DamageStage .card{width:130px!important;min-width:130px!important;max-width:130px!important;min-height:170px!important;max-height:190px!important;transform:none!important;margin:0!important;pointer-events:none!important}
+.v0768DamageStage .card button,.v0768DamageStage .card .infoBtn{display:none!important}
+.v0768DamageFallback{width:138px!important;height:182px!important;border:1px solid #a68d3d!important;border-radius:8px!important;background:#101820!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:9px!important;font-size:10px!important;font-weight:900!important;line-height:1.35!important}
+.v0768DamageName{font-size:12px!important;line-height:1.25!important;font-weight:950!important}
+.v0768DamageLucky{margin-top:4px!important;font-size:13px!important;font-weight:950!important;color:#f5d85d!important;text-shadow:0 0 12px rgba(245,216,93,.45)!important}
+.v0768DamageNormal{margin-top:4px!important;font-size:9px!important;font-weight:850!important;color:#dce2ea!important}
+@media(max-height:520px) and (orientation:landscape){.v0768DamageBox{width:min(360px,70vw)!important;padding:7px 10px 8px!important}.v0768DamageStage{height:132px!important;margin:4px auto!important}.v0768DamageStage img{width:100px!important;max-width:100px!important;max-height:132px!important}.v0768DamageStage .card{width:96px!important;min-width:96px!important;max-width:96px!important;min-height:124px!important;max-height:132px!important}.v0768DamageFallback{width:100px!important;height:130px!important;font-size:8px!important}.v0768DamageHead{font-size:12px!important}.v0768DamageName{font-size:10px!important}.v0768DamageLucky{font-size:10px!important}}
+</style>
+<script id="v0768DamageGlobalRevealScript">
+(()=>{
+  if(globalThis.__v0768DamageGlobalRevealApplied)return;
+  globalThis.__v0768DamageGlobalRevealApplied=true;
+  let scheduled=false,lastSig='',lastAt=0,timer=0,lastMiss='';
+  const esc=v=>String(v==null?'':v).replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  const flat=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+  const key=v=>flat(v).normalize('NFKC').replace(/[\s\-‐‑‒–—―−ー－・:：!！★☆]/g,'').toLowerCase();
+  function visible(el){try{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return r.width>30&&r.height>20&&s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity||1)>0}catch(_e){return false}}
+  function isOwn(el){try{return !!el.closest('#v0758DamageReveal,#v0759DamageReveal,#v0760DamageReveal,#v0761DamageReveal,#v0765DamageReveal,#v0766DamageReveal,#v0767DamageReveal,#v0768DamageReveal')}catch(_e){return false}}
+  function damagePanel(){
+    const out=[];
+    try{
+      document.querySelectorAll('div,section,aside,main').forEach(el=>{
+        if(isOwn(el)||!visible(el))return;
+        const txt=flat(el.textContent||'');
+        if(!/DAMAGE\s*CHECK/i.test(txt)||txt.length>500)return;
+        const r=el.getBoundingClientRect();
+        if(r.width<220||r.height<45)return;
+        out.push({el,txt,area:r.width*r.height});
+      });
+      out.sort((a,b)=>a.area-b.area);
+    }catch(_e){}
+    return out[0]||null;
+  }
+  function allDefs(){
+    const a=[],seen=new Set();
+    const add=c=>{if(!c||typeof c!=='object')return;const id=String(c.no||'')+'|'+String(c.name||'');if(seen.has(id))return;seen.add(id);a.push(c)};
+    try{Object.values(CARD_DB||{}).forEach(add)}catch(_e){}
+    try{Object.values(BP01_BY_NO||{}).forEach(add)}catch(_e){}
+    try{if(Array.isArray(BP01_CATALOG))BP01_CATALOG.forEach(add)}catch(_e){}
+    try{for(const side of ['p','a']){const pl=G?.[side];if(!pl)continue;for(const z of ['grave','hand','deck','pals','supports','buildings','gears','exile']){const x=pl?.[z];if(Array.isArray(x))x.forEach(add)}}}catch(_e){}
+    return a;
+  }
+  function resolve(txt){
+    const tk=key(txt);let best=null,score=-1;
+    for(const c of allDefs()){
+      const nk=key(c?.name||'');if(nk.length<2||!tk.includes(nk))continue;
+      const sc=nk.length*100+(c.no?1000:0);if(sc>score){score=sc;best=c}
+    }
+    return best;
+  }
+  function fallbackCard(c){
+    try{if(typeof cardHTML==='function'){const obj=Object.assign({uid:-768001,rest:false,damage:0,tempPower:0,tempStrike:0},c||{});const t=document.createElement('div');t.innerHTML=cardHTML(obj,{select:false})||'';const card=t.querySelector('.card');if(card){card.removeAttribute('onclick');card.removeAttribute('onpointerup');card.removeAttribute('onpointerdown');card.querySelectorAll('button,.infoBtn').forEach(x=>x.remove());return card.outerHTML}}}catch(_e){}
+    return '<div class="v0768DamageFallback">'+esc(c?.name||c?.no||'公開カード')+'</div>';
+  }
+  function imageMarkup(c){
+    try{if(typeof imageTag==='function'){const h=imageTag(c,'v0768DamageImg');if(h)return h}}catch(_e){}
+    return fallbackCard(c);
+  }
+  globalThis.v0768DamageImgError=function(img){
+    try{
+      let list=[];try{list=JSON.parse(img.dataset.srcs||'[]')}catch(_e){}
+      let i=(Number(img.dataset.i)||0)+1;
+      if(i<list.length){img.dataset.i=String(i);img.src=list[i];return}
+      const name=img.alt||'公開カード';const c=resolve(name)||{name};const t=document.createElement('div');t.innerHTML=fallbackCard(c);img.replaceWith(t.firstElementChild||t);
+      if(typeof palDiagRecord==='function')palDiagRecord('ERR-DMG-0109','Damage Check image candidates exhausted',{op:'v0768Image',name,count:list.length},null,true);
+    }catch(_e){}
+  };
+  function host(){let el=document.getElementById('v0768DamageReveal');if(!el){el=document.createElement('div');el.id='v0768DamageReveal';el.className='v0768DamageReveal';el.hidden=true;document.body.appendChild(el)}return el}
+  function hideOld(){try{['v0758DamageReveal','v0759DamageReveal','v0760DamageReveal','v0761DamageReveal','v0765DamageReveal','v0766DamageReveal','v0767DamageReveal'].forEach(id=>{const x=document.getElementById(id);if(x)x.hidden=true})}catch(_e){}}
+  function duration(){try{const t=flat(document.getElementById('v0756CpuSpeedBtn')?.textContent||'');if(t.includes('即時'))return 1200;if(t.includes('×2'))return 1500}catch(_e){}return 2000}
+  function show(hit,c){
+    const el=host();hideOld();const txt=hit.txt;const m=txt.match(/(\d+)\s*\/\s*(\d+)\s*枚目/);const count=m?'<div class="v0768DamageCount">'+esc(m[1])+' / '+esc(m[2])+'枚目</div>':'';const lucky=/LUCKY|ラッキー/i.test(txt)||!!c?.lucky;
+    let art=imageMarkup(c).replace(/onerror="v04ImgError\(this\)"/g,'onerror="v0768DamageImgError(this)"');
+    el.innerHTML='<div class="v0768DamageBox"><div class="v0768DamageHead">DAMAGE CHECK</div>'+count+'<div class="v0768DamageStage">'+art+'</div><div class="v0768DamageName">'+esc(c?.name||c?.no||'公開カード')+'</div>'+(lucky?'<div class="v0768DamageLucky">★ LUCKY!</div>':'<div class="v0768DamageNormal">公開</div>')+'</div>';
+    el.hidden=false;clearTimeout(timer);timer=setTimeout(()=>{el.hidden=true},duration());
+  }
+  function scan(){
+    scheduled=false;if(globalThis.__v0769DamageInlineApplied)return;const hit=damagePanel();if(!hit)return;
+    const c=resolve(hit.txt);
+    if(!c){const miss=hit.txt.slice(0,220);if(miss!==lastMiss){lastMiss=miss;try{if(typeof palDiagRecord==='function')palDiagRecord('ERR-DMG-0108','Global Damage Check panel found but card definition could not be resolved',{op:'v0768Resolve',text:miss},null,true)}catch(_e){}}return}
+    const sig=String(c.no||c.name)+'|'+hit.txt.slice(0,240),now=Date.now();if(sig===lastSig&&now-lastAt<1400)return;lastSig=sig;lastAt=now;show(hit,c);
+  }
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(scan)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class','hidden','style']})}catch(_e){}
+  document.addEventListener('pointerup',schedule,{passive:true});setInterval(schedule,120);
+  addEventListener('pageshow',()=>{lastSig='';lastAt=0;lastMiss='';const x=document.getElementById('v0768DamageReveal');if(x)x.hidden=true;setTimeout(schedule,50)},{passive:true});
+  try{if(typeof render==='function'){const base=render;render=function(){const r=base.apply(this,arguments);try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.69'}catch(_e){}return r}}}catch(_e){}
+  try{if(typeof showStart==='function'){const base=showStart;showStart=function(){const r=base.apply(this,arguments);setTimeout(()=>{try{const b=document.querySelector('h2 .badge.official');if(b)b.textContent='v0.7.69'}catch(_e){}},0);return r}}}catch(_e){}
+  schedule();setTimeout(schedule,250);
+  console.info('Palworld OCG v0.7.68 global DAMAGE CHECK detector applied');
+})();
+</script>
+
+<style id="v0769BattleClarityStyle">
+/* v0.7.69 — make DAMAGE CHECK, attack target and CPU pacing readable on a phone. */
+#v0758DamageReveal,#v0759DamageReveal,#v0760DamageReveal,#v0761DamageReveal,#v0765DamageReveal,#v0766DamageReveal,#v0767DamageReveal,#v0768DamageReveal{display:none!important}
+.v0754DamageCheckPanel.v0769DamageEnhanced{
+  max-height:none!important;min-height:132px!important;height:auto!important;overflow:visible!important;
+  display:grid!important;grid-template-columns:110px minmax(0,1fr)!important;grid-template-rows:auto 1fr!important;
+  gap:4px 10px!important;align-items:center!important;padding:7px 10px!important;
+  border:2px solid #e7c952!important;background:linear-gradient(180deg,#071714fa,#06100dfa)!important;
+  box-shadow:0 10px 26px #0009!important;
+}
+.v0754DamageCheckPanel.v0769DamageEnhanced>:not(.v0769DamageArt):not(.v0769DamageInfo){display:none!important}
+.v0754DamageCheckPanel.v0769DamageEnhanced>.v0769DamageArt{grid-row:1 / span 2;grid-column:1;display:flex;align-items:center;justify-content:center;min-height:118px!important}
+.v0769DamageArt img{display:block!important;width:88px!important;max-width:88px!important;max-height:118px!important;height:auto!important;object-fit:contain!important;border-radius:7px!important;box-shadow:0 8px 22px #000b!important}
+.v0769DamageArt .card{width:88px!important;min-width:88px!important;max-width:88px!important;height:118px!important;min-height:118px!important;max-height:118px!important;margin:0!important;transform:none!important;pointer-events:none!important}
+.v0769DamageArt .card button,.v0769DamageArt .card .infoBtn{display:none!important}
+.v0769DamageArtFallback{width:88px;height:118px;border-radius:7px;border:1px solid #c7aa46;background:#15221d;display:flex;align-items:center;justify-content:center;padding:7px;text-align:center;font-size:8px;font-weight:900;line-height:1.25;color:#fff}
+.v0769DamageInfo{grid-column:2;min-width:0!important;align-self:center!important}
+.v0769DamageLabel{font-size:10px!important;font-weight:950!important;letter-spacing:.1em!important;color:#f7e082!important;margin-bottom:3px!important}
+.v0769DamageName{font-size:12px!important;line-height:1.25!important;font-weight:950!important;color:#fff!important}
+.v0769DamageLucky{margin-top:4px!important;font-size:12px!important;font-weight:950!important;color:#ffd95d!important;text-shadow:0 0 10px #ffd95d66!important}
+.v0769DamageCount{margin-top:3px!important;font-size:8px!important;color:#d4ddd8!important}
+
+#v0769AttackLayer{position:fixed!important;inset:0!important;z-index:2147483200!important;pointer-events:none!important;overflow:hidden!important}
+#v0769AttackLayer svg{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:visible!important}
+.v0769AttackPath{fill:none!important;stroke:#ffd84f!important;stroke-width:8!important;stroke-linecap:round!important;filter:drop-shadow(0 0 4px #ff3d28) drop-shadow(0 0 10px #000)!important;stroke-dasharray:18 10!important;animation:v0769Dash .5s linear infinite!important}
+@keyframes v0769Dash{to{stroke-dashoffset:-56}}
+.v0769AttackRing{position:fixed!important;border-radius:12px!important;border:4px solid #ffcf45!important;box-shadow:0 0 0 3px #ef3f2fbb,0 0 22px #ff553dcc!important;animation:v0769Ring .55s ease-in-out infinite alternate!important}
+.v0769AttackRing.target{border-color:#fff27c!important;box-shadow:0 0 0 3px #e52c2cdd,0 0 26px #ff3f36!important}
+@keyframes v0769Ring{from{filter:brightness(.9)}to{filter:brightness(1.35)}}
+.v0769AttackBadge{position:fixed!important;left:50%!important;top:12%!important;transform:translateX(-50%)!important;padding:7px 14px!important;border-radius:999px!important;background:#180b08f2!important;border:2px solid #ffcf45!important;color:#fff!important;font-size:11px!important;font-weight:950!important;box-shadow:0 7px 24px #000c!important;white-space:nowrap!important;max-width:82vw!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.v0769AttackBadge b{color:#ffd84f!important}
+
+@media(max-height:520px) and (orientation:landscape){
+  .v0754DamageCheckPanel.v0769DamageEnhanced{grid-template-columns:86px minmax(0,1fr)!important;min-height:106px!important;padding:5px 8px!important;gap:3px 8px!important}
+  .v0754DamageCheckPanel.v0769DamageEnhanced>.v0769DamageArt{min-height:94px!important}
+  .v0769DamageArt img{width:70px!important;max-width:70px!important;max-height:94px!important}
+  .v0769DamageArt .card{width:70px!important;min-width:70px!important;max-width:70px!important;height:94px!important;min-height:94px!important;max-height:94px!important}
+  .v0769DamageArtFallback{width:70px;height:94px;font-size:7px!important}
+  .v0769DamageLabel{font-size:8px!important}.v0769DamageName{font-size:10px!important}.v0769DamageLucky{font-size:10px!important}
+  .v0769AttackBadge{top:8%!important;font-size:9px!important;padding:5px 10px!important}
+  .v0769AttackPath{stroke-width:6!important}
+}
+</style>
+<script id="v0769BattleClarityScript">
+(()=>{
+  if(globalThis.__v0769BattleClarityApplied)return;
+  globalThis.__v0769BattleClarityApplied=true;
+  globalThis.__v0769DamageInlineApplied=true;
+  let scheduled=false,lastDamageSig='',lastDamageAt=0,lastAttackSig='',lastAttackAt=0;
+  let graveSeen=new Set(),recentGrave=[];
+  const flat=v=>String(v==null?'':v).replace(/\s+/g,' ').trim();
+  const norm=v=>flat(v).normalize('NFKC').replace(/[\s\-‐‑‒–—―−ー－・:：!！★☆]/g,'').toLowerCase();
+  const esc=v=>String(v==null?'':v).replace(/[&<>\"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]));
+  function visible(el){try{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return r.width>20&&r.height>14&&s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity||1)>0}catch(_e){return false}}
+  function allDefs(){
+    const out=[],seen=new Set();const add=c=>{if(!c||typeof c!=='object')return;const k=String(c.no||'')+'|'+String(c.name||'');if(seen.has(k))return;seen.add(k);out.push(c)};
+    try{Object.values(CARD_DB||{}).forEach(add)}catch(_e){}try{Object.values(BP01_BY_NO||{}).forEach(add)}catch(_e){}try{if(Array.isArray(BP01_CATALOG))BP01_CATALOG.forEach(add)}catch(_e){}
+    try{for(const side of ['p','a']){const pl=G?.[side];if(!pl)continue;for(const z of ['grave','hand','deck','pals','supports','buildings','gears','exile']){const a=pl?.[z];if(Array.isArray(a))a.forEach(add)}}}catch(_e){}
+    return out;
+  }
+  function updateGraves(){
+    try{for(const side of ['p','a']){const g=G?.[side]?.grave;if(!Array.isArray(g))continue;for(const c of g){const id=String(c?.uid??(c?.no+'|'+c?.name));if(!graveSeen.has(id)){graveSeen.add(id);recentGrave.push({c,at:Date.now()});}}}recentGrave=recentGrave.filter(x=>Date.now()-x.at<3500).slice(-8)}catch(_e){}
+  }
+  function panelText(el){try{const clone=el.cloneNode(true);clone.querySelectorAll('.v0769DamageArt,.v0769DamageInfo').forEach(x=>x.remove());return flat(clone.textContent||'')}catch(_e){return flat(el?.textContent||'')}}
+  function damagePanel(){
+    try{
+      const marked=[...document.querySelectorAll('.v0754DamageCheckPanel')].filter(visible);if(marked.length)return marked[0];
+      const walker=document.createTreeWalker(document.body||document.documentElement,NodeFilter.SHOW_TEXT);
+      let n;while((n=walker.nextNode())){if(!/DAMAGE\s*CHECK/i.test(String(n.nodeValue||'')))continue;let el=n.parentElement;for(let i=0;i<6&&el;i++,el=el.parentElement){if(!visible(el))continue;const t=flat(el.textContent||'');if(/DAMAGE\s*CHECK/i.test(t)&&t.length<900){el.classList.add('v0754DamageCheckPanel');return el}}}
+    }catch(_e){}return null;
+  }
+  function resolveCard(txt){
+    const nk=norm(txt);let best=null,score=-1;
+    for(const c of allDefs()){const k=norm(c?.name||'');if(k.length<2||!nk.includes(k))continue;const sc=k.length*100+(c?.no?1000:0);if(sc>score){score=sc;best=c}}
+    if(best)return best;
+    updateGraves();
+    for(let i=recentGrave.length-1;i>=0;i--){const c=recentGrave[i].c;if(c&&Date.now()-recentGrave[i].at<2200)return c}
+    return null;
+  }
+  function art(c){
+    try{if(typeof imageTag==='function'){const h=imageTag(c,'v0769DamageImage');if(h)return h}}catch(_e){}
+    try{if(typeof cardHTML==='function'){const obj=Object.assign({uid:-769001,rest:false,damage:0,tempPower:0,tempStrike:0},c||{});const t=document.createElement('div');t.innerHTML=cardHTML(obj,{select:false})||'';const card=t.querySelector('.card');if(card){card.querySelectorAll('button,.infoBtn').forEach(x=>x.remove());card.removeAttribute('onclick');card.removeAttribute('onpointerup');card.removeAttribute('onpointerdown');return card.outerHTML}}}catch(_e){}
+    return '<div class="v0769DamageArtFallback">'+esc(c?.name||'公開カード')+'</div>';
+  }
+  function enhanceDamage(){
+    updateGraves();const p=damagePanel();if(!p)return;
+    const txt=panelText(p);if(!/DAMAGE\s*CHECK/i.test(txt))return;
+    const c=resolveCard(txt);if(!c)return;
+    const m=txt.match(/(\d+)\s*\/\s*(\d+)\s*枚目/);const lucky=/LUCKY|ラッキー/i.test(txt)||!!c?.lucky;
+    const sig=String(c?.uid??c?.no??c?.name)+'|'+(m?m[1]+'/'+m[2]:'1');const now=Date.now();
+    if(sig===lastDamageSig&&now-lastDamageAt<900&&p.classList.contains('v0769DamageEnhanced'))return;
+    lastDamageSig=sig;lastDamageAt=now;p.classList.add('v0769DamageEnhanced');p.dataset.v0769Sig=sig;
+    p.querySelectorAll(':scope > .v0769DamageArt,:scope > .v0769DamageInfo').forEach(x=>x.remove());
+    const a=document.createElement('div');a.className='v0769DamageArt';a.innerHTML=art(c);p.prepend(a);
+    const info=document.createElement('div');info.className='v0769DamageInfo';info.innerHTML='<div class="v0769DamageLabel">DAMAGE CHECK</div><div class="v0769DamageName">'+esc(c?.name||c?.no||'公開カード')+'</div>'+(lucky?'<div class="v0769DamageLucky">★ LUCKY!</div>':'')+(m?'<div class="v0769DamageCount">'+esc(m[1])+' / '+esc(m[2])+'枚目</div>':'');p.appendChild(info);
+  }
+  function cardEl(uid){
+    if(uid==null)return null;const xs=[...document.querySelectorAll('.card[data-uid="'+String(uid)+'"]')].filter(visible);return xs[0]||null;
+  }
+  function center(el){if(!el)return null;const r=el.getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2,r}}
+  function playerTarget(attOwner){
+    try{const enemy=attOwner===G?.p?document.querySelector('.v04Play .side.enemy'):document.querySelector('.v04Play .side.player');if(!enemy)return null;return enemy.querySelector('.stack')||enemy}catch(_e){return null}
+  }
+  function targetElement(attOwner,target){if(!target)return null;if(target.type==='player')return playerTarget(attOwner);return cardEl(target.uid)}
+  function speedName(){return flat(document.getElementById('v0756CpuSpeedBtn')?.textContent||'')}
+  function arrowDuration(){const t=speedName();if(t.includes('即時'))return 520;if(t.includes('速い'))return 950;if(t.includes('普通'))return 1550;return 2200}
+  function attackLayer(){let x=document.getElementById('v0769AttackLayer');if(!x){x=document.createElement('div');x.id='v0769AttackLayer';document.documentElement.appendChild(x)}return x}
+  function ring(layer,pt,cls){const d=document.createElement('div');d.className='v0769AttackRing '+(cls||'');d.style.left=(pt.r.left-5)+'px';d.style.top=(pt.r.top-5)+'px';d.style.width=(pt.r.width+10)+'px';d.style.height=(pt.r.height+10)+'px';layer.appendChild(d)}
+  function showAttack(attOwner,atk,target){
+    try{
+      const ae=cardEl(atk?.uid),te=targetElement(attOwner,target),a=center(ae),b=center(te);if(!a||!b)return;
+      const sig=String(atk?.uid)+'|'+String(target?.type)+'|'+String(target?.uid??'player')+'|'+String(G?.turnSeq||'');const now=Date.now();if(sig===lastAttackSig&&now-lastAttackAt<900)return;lastAttackSig=sig;lastAttackAt=now;
+      const layer=attackLayer();layer.innerHTML='';const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),defs=document.createElementNS(ns,'defs'),marker=document.createElementNS(ns,'marker');
+      marker.setAttribute('id','v0769ArrowHead');marker.setAttribute('markerWidth','12');marker.setAttribute('markerHeight','12');marker.setAttribute('refX','10');marker.setAttribute('refY','4');marker.setAttribute('orient','auto');marker.setAttribute('markerUnits','strokeWidth');const ph=document.createElementNS(ns,'path');ph.setAttribute('d','M0,0 L0,8 L11,4 z');ph.setAttribute('fill','#ffd84f');marker.appendChild(ph);defs.appendChild(marker);svg.appendChild(defs);
+      const dx=b.x-a.x,dy=b.y-a.y,curve=Math.min(90,Math.max(35,Math.abs(dx)*.12+Math.abs(dy)*.08));const path=document.createElementNS(ns,'path');path.setAttribute('d','M '+a.x+' '+a.y+' Q '+((a.x+b.x)/2)+' '+((a.y+b.y)/2-curve)+' '+b.x+' '+b.y);path.setAttribute('class','v0769AttackPath');path.setAttribute('marker-end','url(#v0769ArrowHead)');svg.appendChild(path);layer.appendChild(svg);ring(layer,a,'source');ring(layer,b,'target');
+      const badge=document.createElement('div');badge.className='v0769AttackBadge';let tn='攻撃対象';try{if(target?.type==='player')tn=(typeof other==='function'?other(attOwner)?.name:'PLAYER')||'PLAYER';else{const def=typeof other==='function'?other(attOwner):null;const arr=[...(def?.pals||[]),...(def?.supports||[]),...(def?.buildings||[]),...(def?.gears||[])];tn=arr.find(x=>x.uid===target.uid)?.name||tn}}catch(_e){}badge.innerHTML='<b>攻撃</b>　'+esc(atk?.name||'CPU')+' → '+esc(tn);layer.appendChild(badge);
+      setTimeout(()=>{if(layer&&Date.now()-lastAttackAt>=arrowDuration()-80)layer.innerHTML=''},arrowDuration());
+    }catch(_e){}
+  }
+  try{if(typeof declareBattle==='function'&&!declareBattle.__v0769Wrapped){const base=declareBattle;const w=function(attOwner,attUid,target,after){try{const atk=attOwner?.pals?.find(x=>x.uid===attUid);showAttack(attOwner,atk,target)}catch(_e){}return base.apply(this,arguments)};w.__v0769Wrapped=true;declareBattle=w}}catch(_e){}
+  try{if(typeof resolveBattle==='function'&&!resolveBattle.__v0769ArrowWrapped){const base=resolveBattle;const w=function(attOwner,atk,target){try{showAttack(attOwner,atk,target)}catch(_e){}return base.apply(this,arguments)};w.__v0769ArrowWrapped=true;resolveBattle=w}}catch(_e){}
+  function sync(){scheduled=false;try{enhanceDamage()}catch(_e){}try{if(typeof pendingBlock!=='undefined'&&pendingBlock?.atk&&pendingBlock?.target)showAttack(pendingBlock.attOwner||G?.a,pendingBlock.atk,pendingBlock.target)}catch(_e){}try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.69';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.69'})}catch(_e){}}
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(sync)}
+  try{new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class','style','hidden']})}catch(_e){}
+  document.addEventListener('pointerup',schedule,{passive:true});addEventListener('pageshow',()=>{graveSeen=new Set();recentGrave=[];lastDamageSig='';lastAttackSig='';setTimeout(schedule,80)},{passive:true});setInterval(schedule,100);
+  schedule();setTimeout(schedule,250);setTimeout(schedule,900);
+  console.info('Palworld OCG v0.7.69 DAMAGE CHECK inline image + attack arrow + slow CPU pacing applied');
+})();
+</script>
+
+
 `;
 
 function noCache(h){
@@ -4498,7 +4733,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.67-tier-legal-guard-full-test");
+      h.set("x-palworld-bridge","v0.7.69-battle-clarity");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -4523,8 +4758,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.67 — Tier候補合法性ガード・Lucky8枚自動修復・全検査・ルール監査・診断・アサイン常時表示・CPU速度切替・能力二重発動防止・カード詳細全画面・公式ルール同期";
-        m.start_url="/?pwa=1&v=0767";
+        m.description="Palworld OCG v0.7.69 — DAMAGE CHECK画像固定表示・攻撃矢印強化・CPUゆっくり表示・Tier候補合法性ガード・全検査・診断・公式ルール同期";
+        m.start_url="/?pwa=1&v=0769";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -4537,7 +4772,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.67 tier deck legal guard + full test suite + diagnostics + official sync\n";
+        sw+="\n// v0.7.69 damage image inline + attack arrow + slow CPU pacing + tier legal guard + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
