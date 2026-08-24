@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.71";
+const V="0.7.72";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -2582,8 +2582,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.70')title.textContent='v0.7.71';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.71'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.70')title.textContent='v0.7.72';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.72'});
       syncButton();
     }catch(_e){}
   }
@@ -3580,27 +3580,27 @@ const PATCH=`
 
 
 
-<style id="v0771IntegratedBattleCoreStyle">
-#v0771CoreError{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:2147483646;background:#6b1018;color:white;border:1px solid #ff7780;border-radius:10px;padding:7px 12px;font:800 11px/1.35 sans-serif;box-shadow:0 6px 24px #0008;max-width:90vw;text-align:center}
-#v0771AttackLayer{position:fixed;inset:0;z-index:2147482500;pointer-events:none;overflow:hidden}
-#v0771AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.v0771AttackRing{position:fixed;border:4px solid #ffd95b;border-radius:14px;box-shadow:0 0 0 3px #0009,0 0 22px #ffd95bcc;animation:v0771Pulse .7s ease-in-out infinite alternate}
-.v0771AttackRing.target{border-color:#ff6f62;box-shadow:0 0 0 3px #0009,0 0 24px #ff6f62cc}
-#v0771AttackLabel{position:fixed;left:50%;top:11%;transform:translateX(-50%);background:#10151deF;border:2px solid #ffd95b;border-radius:14px;color:#fff;padding:8px 14px;font:900 15px/1.25 sans-serif;max-width:82vw;text-align:center;box-shadow:0 10px 28px #000b}
-@keyframes v0771Pulse{from{filter:brightness(.9);transform:scale(.99)}to{filter:brightness(1.25);transform:scale(1.02)}}
-#v0771DamageOverlay{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;background:#0008;pointer-events:none;padding:10px}
-#v0771DamageOverlay[hidden]{display:none!important}
-.v0771DamageBox{width:min(470px,86vw);max-height:92vh;overflow:hidden;background:linear-gradient(180deg,#123529,#091713);border:2px solid #e7ca68;border-radius:20px;color:#fff;text-align:center;padding:12px 18px 14px;box-shadow:0 18px 48px #000c}
-.v0771DamageHead{font:1000 18px/1.15 sans-serif;letter-spacing:.08em;color:#f5df8d}.v0771DamageWho{font:800 10px/1.25 sans-serif;opacity:.9;margin-top:3px}.v0771DamageCount{font:800 10px/1.2 sans-serif;color:#d8ddeb;margin-top:4px}
-.v0771DamageStage{height:min(260px,48vh);display:flex;align-items:center;justify-content:center;margin:8px 0}.v0771DamageStage img{display:block!important;max-height:100%!important;max-width:190px!important;width:auto!important;height:auto!important;object-fit:contain!important;filter:drop-shadow(0 8px 14px #0009)}
-.v0771DamageStage .card{width:145px!important;height:205px!important;transform:none!important;pointer-events:none!important}.v0771DamageName{font:900 14px/1.25 sans-serif}.v0771DamageLucky{margin-top:5px;font:1000 17px/1.15 sans-serif;color:#ffe45f}.v0771DamageNormal{margin-top:5px;font:800 10px/1.2 sans-serif;color:#cfe8dd}
-@media (max-height:520px) and (orientation:landscape){#v0771AttackLabel{top:7%;font-size:12px;padding:6px 10px}.v0771DamageBox{width:min(390px,80vw);padding:8px 14px}.v0771DamageHead{font-size:14px}.v0771DamageStage{height:min(190px,44vh);margin:5px 0}.v0771DamageStage img{max-width:135px!important}.v0771DamageName{font-size:11px}.v0771DamageLucky{font-size:13px}}
+<style id="v0772IntegratedBattleCoreStyle">
+#v0772CoreError{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:2147483646;background:#6b1018;color:white;border:1px solid #ff7780;border-radius:10px;padding:7px 12px;font:800 11px/1.35 sans-serif;box-shadow:0 6px 24px #0008;max-width:90vw;text-align:center}
+#v0772AttackLayer{position:fixed;inset:0;z-index:2147482500;pointer-events:none;overflow:hidden}
+#v0772AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.v0772AttackRing{position:fixed;border:4px solid #ffd95b;border-radius:14px;box-shadow:0 0 0 3px #0009,0 0 22px #ffd95bcc;animation:v0772Pulse .7s ease-in-out infinite alternate}
+.v0772AttackRing.target{border-color:#ff6f62;box-shadow:0 0 0 3px #0009,0 0 24px #ff6f62cc}
+#v0772AttackLabel{position:fixed;left:50%;top:11%;transform:translateX(-50%);background:#10151deF;border:2px solid #ffd95b;border-radius:14px;color:#fff;padding:8px 14px;font:900 15px/1.25 sans-serif;max-width:82vw;text-align:center;box-shadow:0 10px 28px #000b}
+@keyframes v0772Pulse{from{filter:brightness(.9);transform:scale(.99)}to{filter:brightness(1.25);transform:scale(1.02)}}
+#v0772DamageOverlay{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;background:#0008;pointer-events:none;padding:10px}
+#v0772DamageOverlay[hidden]{display:none!important}
+.v0772DamageBox{width:min(470px,86vw);max-height:92vh;overflow:hidden;background:linear-gradient(180deg,#123529,#091713);border:2px solid #e7ca68;border-radius:20px;color:#fff;text-align:center;padding:12px 18px 14px;box-shadow:0 18px 48px #000c}
+.v0772DamageHead{font:1000 18px/1.15 sans-serif;letter-spacing:.08em;color:#f5df8d}.v0772DamageWho{font:800 10px/1.25 sans-serif;opacity:.9;margin-top:3px}.v0772DamageCount{font:800 10px/1.2 sans-serif;color:#d8ddeb;margin-top:4px}
+.v0772DamageStage{height:min(260px,48vh);display:flex;align-items:center;justify-content:center;margin:8px 0}.v0772DamageStage img{display:block!important;max-height:100%!important;max-width:190px!important;width:auto!important;height:auto!important;object-fit:contain!important;filter:drop-shadow(0 8px 14px #0009)}
+.v0772DamageStage .card{width:145px!important;height:205px!important;transform:none!important;pointer-events:none!important}.v0772DamageName{font:900 14px/1.25 sans-serif}.v0772DamageLucky{margin-top:5px;font:1000 17px/1.15 sans-serif;color:#ffe45f}.v0772DamageNormal{margin-top:5px;font:800 10px/1.2 sans-serif;color:#cfe8dd}
+@media (max-height:520px) and (orientation:landscape){#v0772AttackLabel{top:7%;font-size:12px;padding:6px 10px}.v0772DamageBox{width:min(390px,80vw);padding:8px 14px}.v0772DamageHead{font-size:14px}.v0772DamageStage{height:min(190px,44vh);margin:5px 0}.v0772DamageStage img{max-width:135px!important}.v0772DamageName{font-size:11px}.v0772DamageLucky{font-size:13px}}
 </style>
-<script id="v0771IntegratedBattleCoreScript">
+<script id="v0772IntegratedBattleCoreScript">
 (()=>{
-  if(globalThis.__v0771IntegratedCoreApplied)return;globalThis.__v0771IntegratedCoreApplied=true;
+  if(globalThis.__v0772IntegratedCoreApplied)return;globalThis.__v0772IntegratedCoreApplied=true;
   const SPEED_KEY='palworld_cpu_speed_v0769';
-  let resumeKey='',nextCpuAt=0,busyUntil=0,attackTimer=0,damageTimer=0,damageQueue=[],damageShowing=false;
+  let resumeKey='',nextCpuAt=0,busyUntil=0,attackTimer=0,damageTimer=0,damageQueue=[],damageShowing=false,cpuGateTurn='';
   const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
   const flat=s=>String(s??'').replace(/\s+/g,' ').trim();
   function stress(){try{return !!(globalThis.v077Stress?.active||G?.stressMode||G?.cpuStress)}catch(_e){return false}}
@@ -3608,27 +3608,45 @@ const PATCH=`
   function preDelay(){if(stress())return 0;return ({slow:2200,normal:1300,fast:650,instant:0})[mode()]}
   function postDelay(){if(stress())return 0;return ({slow:1400,normal:850,fast:400,instant:20})[mode()]}
   function revealDelay(){if(stress())return 20;return ({slow:1900,normal:1450,fast:900,instant:420})[mode()]}
-  globalThis.v0771CpuTurnLeadDelay=function(){if(stress())return 10;return ({slow:1250,normal:750,fast:350,instant:20})[mode()]};
-  function trace(code,data){try{const key='palworld_v0771_battle_trace',a=JSON.parse(localStorage.getItem(key)||'[]');a.unshift({at:new Date().toISOString(),code,data:data||null});localStorage.setItem(key,JSON.stringify(a.slice(0,80)))}catch(_e){}try{console.info('[v0771]',code,data||'')}catch(_e){}}
-  function statusCheck(){const s=globalThis.__v0771SourcePatchStatus||{},missing=Object.keys(s).filter(k=>!s[k]);if(missing.length){let e=document.getElementById('v0771CoreError');if(!e){e=document.createElement('div');e.id='v0771CoreError';document.body.appendChild(e)}e.textContent='ERR-CORE-0001 戦闘コア直挿し失敗: '+missing.join(', ');trace('ERR-CORE-0001',{missing,status:s})}else trace('CORE-PATCH-OK',s)}
+  globalThis.v0772CpuTurnLeadDelay=function(){if(stress())return 10;return ({slow:1250,normal:750,fast:350,instant:20})[mode()]};
+  function trace(code,data){try{const key='palworld_v0772_battle_trace',a=JSON.parse(localStorage.getItem(key)||'[]');a.unshift({at:new Date().toISOString(),code,data:data||null});localStorage.setItem(key,JSON.stringify(a.slice(0,80)))}catch(_e){}try{console.info('[v0772]',code,data||'')}catch(_e){}}
+  function statusCheck(){const s=globalThis.__v0772SourcePatchStatus||{},missing=Object.keys(s).filter(k=>!s[k]);if(missing.length){let e=document.getElementById('v0772CoreError');if(!e){e=document.createElement('div');e.id='v0772CoreError';document.body.appendChild(e)}e.textContent='ERR-CORE-0001 戦闘コア直挿し失敗: '+missing.join(', ');trace('ERR-CORE-0001',{missing,status:s})}else trace('CORE-PATCH-OK',s)}
   function cardEl(uid){if(uid==null)return null;const xs=[...document.querySelectorAll('.card[data-uid="'+uid+'"]')];return xs.find(x=>{const r=x.getBoundingClientRect();return r.width>8&&r.height>8})||xs[0]||null}
   function playerEl(def){try{const boxes=[...document.querySelectorAll('.v04PlayerBox,.v04Controls .v04PlayerBox,.v04SideMeta,.playerBox')];const name=flat(def?.name);return boxes.find(x=>name&&flat(x.textContent).includes(name))||boxes[0]||document.querySelector('.v04Controls')||document.querySelector('.v04Play')}catch(_e){return document.querySelector('.v04Play')}}
   function targetCard(attOwner,target){try{const d=other(attOwner);if(target?.type==='pal')return d?.pals?.find(x=>x.uid===target.uid)||null;if(target?.type==='structure')return d?.supports?.find(x=>x.uid===target.uid)||null}catch(_e){}return null}
   function attackNodes(attOwner,atk,target){const src=cardEl(atk?.uid);let dst=null,name='';if(target?.type==='player'){const d=other(attOwner);dst=playerEl(d);name=d?.name||'PLAYER'}else{const c=targetCard(attOwner,target);dst=cardEl(c?.uid||target?.uid);name=c?.name||'対象'}return {src,dst,name}}
-  function clearAttack(){clearTimeout(attackTimer);const l=document.getElementById('v0771AttackLayer');if(l)l.innerHTML=''}
-  function drawAttack(attOwner,atk,target){try{const {src,dst,name}=attackNodes(attOwner,atk,target);if(!src||!dst)return false;const sr=src.getBoundingClientRect(),dr=dst.getBoundingClientRect();if(sr.width<5||dr.width<5)return false;let l=document.getElementById('v0771AttackLayer');if(!l){l=document.createElement('div');l.id='v0771AttackLayer';document.body.appendChild(l)}const sx=sr.left+sr.width/2,sy=sr.top+sr.height/2,dx=dr.left+dr.width/2,dy=dr.top+dr.height/2;const pad=5;l.innerHTML='<div class="v0771AttackRing" style="left:'+(sr.left-pad)+'px;top:'+(sr.top-pad)+'px;width:'+(sr.width+pad*2)+'px;height:'+(sr.height+pad*2)+'px"></div><div class="v0771AttackRing target" style="left:'+(dr.left-pad)+'px;top:'+(dr.top-pad)+'px;width:'+(dr.width+pad*2)+'px;height:'+(dr.height+pad*2)+'px"></div><svg><defs><marker id="v0771ArrowHead" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#ffd95b"></path></marker></defs><line x1="'+sx+'" y1="'+sy+'" x2="'+dx+'" y2="'+dy+'" stroke="#ffd95b" stroke-width="7" stroke-linecap="round" marker-end="url(#v0771ArrowHead)" style="filter:drop-shadow(0 2px 3px #000)"></line></svg><div id="v0771AttackLabel">攻撃　'+esc(atk?.name||'攻撃側')+' → '+esc(name)+'</div>';clearTimeout(attackTimer);attackTimer=setTimeout(clearAttack,Math.max(1600,preDelay()+750));trace('ATK-VIS-001',{from:atk?.no||atk?.name,to:target?.type==='player'?'PLAYER':target?.uid});return true}catch(e){trace('ERR-ATK-VIS-001',{message:String(e)});return false}}
-  globalThis.v0771MaybeDelayAttack=function(attOwner,atk,target,targetCard,after){drawAttack(attOwner,atk,target);let ai=false;try{ai=!!attOwner?.isAI||attOwner===G?.a}catch(_e){}if(!ai||stress())return false;const key=String(atk?.uid)+'|'+String(target?.type)+'|'+String(target?.uid??'player');if(resumeKey===key){resumeKey='';return false}const d=preDelay();if(d<=0)return false;resumeKey=key;nextCpuAt=Math.max(nextCpuAt,Date.now()+d+postDelay());trace('CPU-DELAY-001',{ms:d,key});setTimeout(()=>{try{declareBattle(attOwner,atk.uid,target,after)}catch(e){resumeKey='';trace('ERR-CPU-DELAY-001',{message:String(e)})}},d);return true};
-  globalThis.v0771RefreshAttackCue=function(attOwner,atk,target){drawAttack(attOwner,atk,target)};
-  globalThis.v0771GateCpuAttack=function(){if(stress())return false;const now=Date.now(),gate=Math.max(nextCpuAt,busyUntil);if(gate>now+25){setTimeout(()=>{try{aiAttackNext()}catch(_e){}},gate-now+35);return true}return false};
+  function clearAttack(){clearTimeout(attackTimer);const l=document.getElementById('v0772AttackLayer');if(l)l.innerHTML=''}
+  function drawAttack(attOwner,atk,target){try{const {src,dst,name}=attackNodes(attOwner,atk,target);if(!src||!dst)return false;const sr=src.getBoundingClientRect(),dr=dst.getBoundingClientRect();if(sr.width<5||dr.width<5)return false;let l=document.getElementById('v0772AttackLayer');if(!l){l=document.createElement('div');l.id='v0772AttackLayer';document.body.appendChild(l)}const sx=sr.left+sr.width/2,sy=sr.top+sr.height/2,dx=dr.left+dr.width/2,dy=dr.top+dr.height/2;const pad=5;l.innerHTML='<div class="v0772AttackRing" style="left:'+(sr.left-pad)+'px;top:'+(sr.top-pad)+'px;width:'+(sr.width+pad*2)+'px;height:'+(sr.height+pad*2)+'px"></div><div class="v0772AttackRing target" style="left:'+(dr.left-pad)+'px;top:'+(dr.top-pad)+'px;width:'+(dr.width+pad*2)+'px;height:'+(dr.height+pad*2)+'px"></div><svg><defs><marker id="v0772ArrowHead" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#ffd95b"></path></marker></defs><line x1="'+sx+'" y1="'+sy+'" x2="'+dx+'" y2="'+dy+'" stroke="#ffd95b" stroke-width="7" stroke-linecap="round" marker-end="url(#v0772ArrowHead)" style="filter:drop-shadow(0 2px 3px #000)"></line></svg><div id="v0772AttackLabel">攻撃　'+esc(atk?.name||'攻撃側')+' → '+esc(name)+'</div>';clearTimeout(attackTimer);attackTimer=setTimeout(clearAttack,Math.max(1600,preDelay()+750));trace('ATK-VIS-001',{from:atk?.no||atk?.name,to:target?.type==='player'?'PLAYER':target?.uid});return true}catch(e){trace('ERR-ATK-VIS-001',{message:String(e)});return false}}
+  globalThis.v0772MaybeDelayAttack=function(attOwner,atk,target,targetCard,after){drawAttack(attOwner,atk,target);let ai=false;try{ai=!!attOwner?.isAI||attOwner===G?.a}catch(_e){}if(!ai||stress())return false;const key=String(atk?.uid)+'|'+String(target?.type)+'|'+String(target?.uid??'player');if(resumeKey===key){resumeKey='';return false}const d=preDelay();if(d<=0)return false;resumeKey=key;nextCpuAt=Math.max(nextCpuAt,Date.now()+d+postDelay());trace('CPU-DELAY-001',{ms:d,key});setTimeout(()=>{try{declareBattle(attOwner,atk.uid,target,after)}catch(e){resumeKey='';trace('ERR-CPU-DELAY-001',{message:String(e)})}},d);return true};
+  globalThis.v0772RefreshAttackCue=function(attOwner,atk,target){drawAttack(attOwner,atk,target)};
+  globalThis.v0772GateCpuAttack=function(){
+    if(stress())return false;
+    const now=Date.now();
+    let turnKey='';try{turnKey=String(G?.turnSeq??'')+'|'+String(G?.turn??'')}catch(_e){}
+    if(turnKey&&G?.turn==='a'&&cpuGateTurn!==turnKey){
+      cpuGateTurn=turnKey;
+      let lead=0;try{lead=Number(globalThis.v0772CpuTurnLeadDelay?.()||0)}catch(_e){}
+      nextCpuAt=Math.max(nextCpuAt,now+Math.max(0,lead));
+      trace('CPU-TURN-LEAD-001',{ms:Math.max(0,lead),turn:G?.turnSeq});
+    }
+    const gate=Math.max(nextCpuAt,busyUntil);
+    if(gate>now+25){
+      const wait=gate-now+35;
+      trace('CPU-ATTACK-GATE-001',{ms:wait,turn:G?.turnSeq});
+      setTimeout(()=>{try{aiAttackNext()}catch(_e){}},wait);
+      return true;
+    }
+    return false;
+  };
   function existingImage(c){try{const name=flat(c?.name),no=flat(c?.no);const imgs=[...document.images];return imgs.find(i=>i.complete&&i.naturalWidth>20&&((name&&flat(i.alt)===name)||(no&&(i.dataset?.no===no||String(i.src).includes(no)))))||null}catch(_e){return null}}
-  function art(c){const ex=existingImage(c);if(ex)return '<img class="v0771DamageImg" src="'+esc(ex.currentSrc||ex.src)+'" alt="'+esc(c?.name)+'">';try{if(typeof imageTag==='function')return imageTag(c,'v0771DamageImg')}catch(_e){}try{if(typeof cardHTML==='function')return cardHTML(c,{})}catch(_e){}return '<div style="padding:35px 10px;font-weight:900">'+esc(c?.name||c?.no||'公開カード')+'</div>'}
-  function host(){let x=document.getElementById('v0771DamageOverlay');if(!x){x=document.createElement('div');x.id='v0771DamageOverlay';x.hidden=true;document.body.appendChild(x)}return x}
-  function pump(){if(damageShowing||!damageQueue.length)return;damageShowing=true;const it=damageQueue.shift(),x=host();clearAttack();x.innerHTML='<div class="v0771DamageBox"><div class="v0771DamageHead">DAMAGE CHECK</div><div class="v0771DamageWho">'+esc(it.who)+'</div><div class="v0771DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0771DamageStage">'+art(it.card)+'</div><div class="v0771DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0771DamageLucky">★ LUCKY!</div>':'<div class="v0771DamageNormal">公開</div>')+'</div>';x.hidden=false;trace('DMG-REVEAL-001',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky});const d=revealDelay();clearTimeout(damageTimer);damageTimer=setTimeout(()=>{x.hidden=true;damageShowing=false;pump()},d)}
-  globalThis.v0771QueueDamageReveal=function(def,cards,amount,lucky){cards=Array.isArray(cards)?cards.filter(Boolean):[];if(!cards.length){trace('ERR-DMG-REVEAL-001',{reason:'no cards',amount});return}const who=(def?.name||'PLAYER')+' のダメージチェック';cards.forEach((c,i)=>damageQueue.push({card:c,index:i+1,total:cards.length,who}));const totalMs=revealDelay()*cards.length+postDelay();busyUntil=Math.max(busyUntil,Date.now()+totalMs);nextCpuAt=Math.max(nextCpuAt,busyUntil);pump()};
-  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.71';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.71'})}catch(_e){}}
-  addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;damageQueue=[];damageShowing=false;clearAttack();const d=document.getElementById('v0771DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
+  function art(c){const ex=existingImage(c);if(ex)return '<img class="v0772DamageImg" src="'+esc(ex.currentSrc||ex.src)+'" alt="'+esc(c?.name)+'">';try{if(typeof imageTag==='function')return imageTag(c,'v0772DamageImg')}catch(_e){}try{if(typeof cardHTML==='function')return cardHTML(c,{})}catch(_e){}return '<div style="padding:35px 10px;font-weight:900">'+esc(c?.name||c?.no||'公開カード')+'</div>'}
+  function host(){let x=document.getElementById('v0772DamageOverlay');if(!x){x=document.createElement('div');x.id='v0772DamageOverlay';x.hidden=true;document.body.appendChild(x)}return x}
+  function pump(){if(damageShowing||!damageQueue.length)return;damageShowing=true;const it=damageQueue.shift(),x=host();clearAttack();x.innerHTML='<div class="v0772DamageBox"><div class="v0772DamageHead">DAMAGE CHECK</div><div class="v0772DamageWho">'+esc(it.who)+'</div><div class="v0772DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0772DamageStage">'+art(it.card)+'</div><div class="v0772DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0772DamageLucky">★ LUCKY!</div>':'<div class="v0772DamageNormal">公開</div>')+'</div>';x.hidden=false;trace('DMG-REVEAL-001',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky});const d=revealDelay();clearTimeout(damageTimer);damageTimer=setTimeout(()=>{x.hidden=true;damageShowing=false;pump()},d)}
+  globalThis.v0772QueueDamageReveal=function(def,cards,amount,lucky){cards=Array.isArray(cards)?cards.filter(Boolean):[];if(!cards.length){trace('ERR-DMG-REVEAL-001',{reason:'no cards',amount});return}const who=(def?.name||'PLAYER')+' のダメージチェック';cards.forEach((c,i)=>damageQueue.push({card:c,index:i+1,total:cards.length,who}));const totalMs=revealDelay()*cards.length+postDelay();busyUntil=Math.max(busyUntil,Date.now()+totalMs);nextCpuAt=Math.max(nextCpuAt,busyUntil);pump()};
+  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.72';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.72'})}catch(_e){}}
+  addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';damageQueue=[];damageShowing=false;clearAttack();const d=document.getElementById('v0772DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
   setInterval(version,700);setTimeout(statusCheck,150);version();
-  console.info('Palworld OCG v0.7.71 integrated battle-core helpers loaded; combat hooks are source-inserted, not runtime wrappers');
+  console.info('Palworld OCG v0.7.72 integrated battle-core helpers loaded; CPU lead delay is enforced at aiAttackNext entrance');
 })();
 </script>
 
@@ -3636,18 +3654,43 @@ const PATCH=`
 `;
 
 
-function v0771ApplyCoreSource(html){
-  const status={};
-  const reps=[["AI_TURN_LEAD","setTimeout(aiAttackNext,170)","setTimeout(aiAttackNext,typeof v0771CpuTurnLeadDelay==='function'?v0771CpuTurnLeadDelay():170)"],
-["AI_ATTACK_GATE","function aiAttackNext(){if(G.over||G.turn!=='a'||G.phase!=='MAIN'||pendingBlock||pendingChoice||pendingQuick)return;","function aiAttackNext(){if(typeof v0771GateCpuAttack==='function'&&v0771GateCpuAttack())return;if(G.over||G.turn!=='a'||G.phase!=='MAIN'||pendingBlock||pendingChoice||pendingQuick)return;"],
-["DECLARE_ATTACK_CUE","if(target.type==='player'){if(!canAttackPlayer(atk,def))return}else if(!targetCard||!canAttackCard(atk,targetCard,def))return;atk.rest=true;","if(target.type==='player'){if(!canAttackPlayer(atk,def))return}else if(!targetCard||!canAttackCard(atk,targetCard,def))return;if(typeof v0771MaybeDelayAttack==='function'&&v0771MaybeDelayAttack(attOwner,atk,target,targetCard,after))return;atk.rest=true;"],
-["FINAL_TARGET_CUE","function quickWindowThenResolve(attOwner,atk,target,after=null){const def=other(attOwner),ints=interruptCards(def);","function quickWindowThenResolve(attOwner,atk,target,after=null){if(typeof v0771RefreshAttackCue==='function')v0771RefreshAttackCue(attOwner,atk,target);const def=other(attOwner),ints=interruptCards(def);"],
-["PLAYER_DAMAGE_REVEAL","function playerDamage(def,amount){if(amount<=0){log(`${def.name}: 打撃0 — ダメージなし`);return}let milled=0,lucky=false;while(milled<amount&&def.deck.length){const c=def.deck.shift();milled++;putGrave(def,c,'Damage Check');if(c.lucky){lucky=true;break}}if(!lucky){def.life-=amount;log(`${def.name}: Damage Check ${milled}枚 / ライフ-${amount}`)}else log(`${def.name}: Lucky Pal! このダメージ解決ではライフ減少なし`);if(def.life<=0){loseGame(def,'ライフ0');return}if(def.deck.length===0){loseGame(def,'デッキ0枚');return}render()}","function playerDamage(def,amount){if(amount<=0){log(`${def.name}: 打撃0 — ダメージなし`);return}let milled=0,lucky=false,revealed=[];while(milled<amount&&def.deck.length){const c=def.deck.shift();milled++;revealed.push(c);putGrave(def,c,'Damage Check');if(c.lucky){lucky=true;break}}if(!lucky){def.life-=amount;log(`${def.name}: Damage Check ${milled}枚 / ライフ-${amount}`)}else log(`${def.name}: Lucky Pal! このダメージ解決ではライフ減少なし`);if(typeof v0771QueueDamageReveal==='function')v0771QueueDamageReveal(def,revealed,amount,lucky);if(def.life<=0){loseGame(def,'ライフ0');return}if(def.deck.length===0){loseGame(def,'デッキ0枚');return}render()}"]];
+function v0772ApplyCoreSource(html){
+  const status={AI_TURN_LEAD:true};
+  const gateCode="if(typeof v0772GateCpuAttack==='function'&&v0772GateCpuAttack())return;";
+
+  // v0.7.72: do not depend on the exact aiTurn scheduling literal.
+  // The first aiAttackNext call of each CPU turn is held by v0772GateCpuAttack itself.
+  // Only inject at the aiAttackNext function entrance, accepting several declaration styles.
+  if(html.includes(gateCode)){
+    status.AI_ATTACK_GATE=true;
+  }else{
+    const gatePatterns=[
+      /(?:async\s+)?function\s+aiAttackNext\s*\([^)]*\)\s*\{/,
+      /\b(?:const|let|var)\s+aiAttackNext\s*=\s*(?:async\s*)?function\s*\([^)]*\)\s*\{/,
+      /\b(?:const|let|var)\s+aiAttackNext\s*=\s*(?:async\s*)?\([^)]*\)\s*=>\s*\{/,
+      /\baiAttackNext\s*=\s*(?:async\s*)?function\s*\([^)]*\)\s*\{/,
+      /\baiAttackNext\s*=\s*(?:async\s*)?\([^)]*\)\s*=>\s*\{/
+    ];
+    status.AI_ATTACK_GATE=false;
+    for(const re of gatePatterns){
+      if(re.test(html)){
+        html=html.replace(re,m=>m+gateCode);
+        status.AI_ATTACK_GATE=true;
+        break;
+      }
+    }
+  }
+
+  const reps=[
+    ["DECLARE_ATTACK_CUE","if(target.type==='player'){if(!canAttackPlayer(atk,def))return}else if(!targetCard||!canAttackCard(atk,targetCard,def))return;atk.rest=true;","if(target.type==='player'){if(!canAttackPlayer(atk,def))return}else if(!targetCard||!canAttackCard(atk,targetCard,def))return;if(typeof v0772MaybeDelayAttack==='function'&&v0772MaybeDelayAttack(attOwner,atk,target,targetCard,after))return;atk.rest=true;"],
+    ["FINAL_TARGET_CUE","function quickWindowThenResolve(attOwner,atk,target,after=null){const def=other(attOwner),ints=interruptCards(def);","function quickWindowThenResolve(attOwner,atk,target,after=null){if(typeof v0772RefreshAttackCue==='function')v0772RefreshAttackCue(attOwner,atk,target);const def=other(attOwner),ints=interruptCards(def);"],
+    ["PLAYER_DAMAGE_REVEAL","function playerDamage(def,amount){if(amount<=0){log(`${def.name}: 打撃0 — ダメージなし`);return}let milled=0,lucky=false;while(milled<amount&&def.deck.length){const c=def.deck.shift();milled++;putGrave(def,c,'Damage Check');if(c.lucky){lucky=true;break}}if(!lucky){def.life-=amount;log(`${def.name}: Damage Check ${milled}枚 / ライフ-${amount}`)}else log(`${def.name}: Lucky Pal! このダメージ解決ではライフ減少なし`);if(def.life<=0){loseGame(def,'ライフ0');return}if(def.deck.length===0){loseGame(def,'デッキ0枚');return}render()}","function playerDamage(def,amount){if(amount<=0){log(`${def.name}: 打撃0 — ダメージなし`);return}let milled=0,lucky=false,revealed=[];while(milled<amount&&def.deck.length){const c=def.deck.shift();milled++;revealed.push(c);putGrave(def,c,'Damage Check');if(c.lucky){lucky=true;break}}if(!lucky){def.life-=amount;log(`${def.name}: Damage Check ${milled}枚 / ライフ-${amount}`)}else log(`${def.name}: Lucky Pal! このダメージ解決ではライフ減少なし`);if(typeof v0772QueueDamageReveal==='function')v0772QueueDamageReveal(def,revealed,amount,lucky);if(def.life<=0){loseGame(def,'ライフ0');return}if(def.deck.length===0){loseGame(def,'デッキ0枚');return}render()}" ]
+  ];
   for(const [id,from,to] of reps){
     if(html.includes(from)){html=html.replace(from,to);status[id]=true}else status[id]=false;
   }
-  const boot='<script>window.__v0771SourcePatchStatus='+JSON.stringify(status).replace(/</g,'\u003c')+';<\/script>';
-  html=html.includes('</head>')?html.replace('</head>',boot+'\n</head>'):boot+html;
+  const boot='<script>window.__v0772SourcePatchStatus='+JSON.stringify(status).replace(/</g,'\\u003c')+';<\\/script>';
+  html=html.includes('</head>')?html.replace('</head>',boot+'\\n</head>'):boot+html;
   return {html,status};
 }
 
@@ -3664,13 +3707,13 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.71-integrated-battle-core");
+      h.set("x-palworld-bridge","v0.7.72-integrated-battle-core");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
       if(u.pathname==="/"||u.pathname==="/index.html"){
         let html=await r.text();
-        const core=v0771ApplyCoreSource(html);html=core.html;
+        const core=v0772ApplyCoreSource(html);html=core.html;
         if(!html.includes('id="v0738CenterRifleFix"')){
           html=html.includes("</body>")
             ?html.replace("</body>",PATCH+"\n</body>")
@@ -3690,8 +3733,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.71 — 戦闘コア直挿し統合・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断・公式ルール同期";
-        m.start_url="/?pwa=1&v=0771";
+        m.description="Palworld OCG v0.7.72 — 戦闘コア直挿し統合・AI入口ゲート・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断・公式ルール同期";
+        m.start_url="/?pwa=1&v=0772";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -3704,7 +3747,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.71 integrated battle core source patch + damage image + attack arrow + CPU readability + diagnostics\n";
+        sw+="\n// v0.7.72 integrated battle core + robust AI attack entrance gate + damage image + attack arrow + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
