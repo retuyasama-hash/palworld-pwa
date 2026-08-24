@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.62";
+const V="0.7.64";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -687,7 +687,7 @@ const PATCH=`
     v072RunBP01Tests=async function(){
       await baseRunBp();
       if(v072BpReport){
-        v072BpReport.version='0.7.62 Rule Audit + Diagnostics + Official Sync';
+        v072BpReport.version='0.7.64 Tier Legal Guard + Full Test + Diagnostics + Official Sync';
         v072BpReport.ruleSync='Q74 Main Name + Q93 boundary + BP01-084 AUTO queue + official rules';
         try{
           localStorage.setItem(V072_BP_REPORT_KEY,JSON.stringify(v072BpReport));
@@ -703,7 +703,7 @@ const PATCH=`
       const r=baseRenderOfficial();
       try{
         const title=document.querySelector('.v04Title');
-        if(title && !G?.cpuVsCpu)title.textContent='v0.7.62';
+        if(title && !G?.cpuVsCpu)title.textContent='v0.7.64';
       }catch(_e){}
       return r;
     };
@@ -3468,7 +3468,7 @@ const PATCH=`
   if(globalThis.__v0762DiagnosticsApplied)return;
   globalThis.__v0762DiagnosticsApplied=true;
 
-  const VERSION='0.7.62';
+  const VERSION='0.7.64';
   const STORE='palworld_diag_v0762';
   const MAX=80;
   const OFFICIAL_QA_TOTAL=97;
@@ -3701,7 +3701,508 @@ const PATCH=`
   addEventListener('pageshow',boot,{passive:true});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
   boot();setTimeout(boot,500);setTimeout(boot,1600);
-  console.info('Palworld OCG v0.7.62 rule audit + diagnostics applied');
+  console.info('Palworld OCG v0.7.64 rule audit + diagnostics applied');
+})();
+</script>
+
+
+<style id="v0763FullSuiteStyle">
+.v0763SuiteBox{border:1px solid #365e52!important;background:#091d18!important;border-radius:10px!important;padding:8px!important;margin:8px 0!important}
+.v0763SuiteTitle{font-size:10px!important;font-weight:950!important;color:#fff4bd!important;margin-bottom:5px!important}
+.v0763SuiteGrid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}
+.v0763SuiteCell{border:1px solid #29483f!important;background:#0d2720!important;border-radius:8px!important;padding:6px!important;text-align:center!important}
+.v0763SuiteCell b{display:block!important;font-size:10px!important;color:#fff!important}.v0763SuiteCell span{display:block!important;font-size:6.5px!important;color:#aec7bf!important;margin-top:2px!important}
+.v0763SuiteDetail{font-size:7px!important;line-height:1.4!important;color:#c5d7d1!important;margin-top:6px!important;white-space:pre-wrap!important;word-break:break-word!important}
+.v0763SuiteBtns{display:flex!important;flex-wrap:wrap!important;gap:5px!important;margin-top:7px!important}
+.v0763SuiteBtns button{border:1px solid #557c70!important;background:#102b23!important;color:#fff!important;border-radius:8px!important;padding:6px 9px!important;font-size:7px!important;font-weight:850!important}
+.v0763SuiteBtns button.primary{border-color:#d7ba58!important;background:#483b0c!important;color:#fff7d2!important}
+.v0763SuiteBtns button:disabled{opacity:.5!important}
+@media(max-height:520px) and (orientation:landscape){.v0763SuiteBox{padding:5px!important;margin:5px 0!important}.v0763SuiteGrid{gap:3px!important}.v0763SuiteCell{padding:4px!important}.v0763SuiteBtns button{padding:4px 7px!important;font-size:6.5px!important}}
+</style>
+<script id="v0763FullSuiteScript">
+(()=>{
+  if(globalThis.__v0763FullSuiteApplied)return;
+  globalThis.__v0763FullSuiteApplied=true;
+  const VERSION='0.7.64', STORE='palworld_suite_v0763';
+  let busy=false, queued=false;
+
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  function now(){return new Date().toISOString()}
+  function load(){try{return JSON.parse(localStorage.getItem(STORE)||'null')}catch(_e){return null}}
+  function save(v){try{localStorage.setItem(STORE,JSON.stringify(v))}catch(_e){};sync()}
+  function diag(code,msg,meta,err){try{if(typeof palDiagRecord==='function')palDiagRecord(code,msg,meta||null,err||null,false)}catch(_e){}}
+  function info(msg){try{let t=document.getElementById('v0763SuiteToast');if(!t){t=document.createElement('div');t.id='v0763SuiteToast';t.className='v0762ErrorToast';t.style.borderColor='#d7ba58';t.style.background='#332a0df3';document.body.appendChild(t)}t.textContent=msg;t.hidden=false;setTimeout(()=>{if(t)t.hidden=true},3500)}catch(_e){}}
+  function safeJson(x){try{return JSON.parse(JSON.stringify(x,(k,v)=>typeof v==='function'?'[Function]':v))}catch(_e){return String(x)}}
+
+  function scanResultTree(root){
+    const out={total:0,ok:0,fail:0,error:0,unknown:0,failures:[]};
+    const seen=new WeakSet();
+    function walk(x,path){
+      if(x==null||typeof x!=='object')return;
+      if(seen.has(x))return;seen.add(x);
+      if(Array.isArray(x)){x.forEach((v,i)=>walk(v,path+'['+i+']'));return}
+      const hasSignal=('status' in x)||('ok' in x)||('pass' in x)||('passed' in x);
+      if(hasSignal){
+        out.total++;
+        const s=String(x.status??x.result??'').toLowerCase();
+        const bad=x.ok===false||x.pass===false||x.passed===false||['fail','failed','mismatch','error','ng'].includes(s);
+        const good=x.ok===true||x.pass===true||x.passed===true||['ok','pass','passed','normal','success'].includes(s);
+        if(bad){if(s==='error')out.error++;else out.fail++;out.failures.push({path,id:x.id||x.no||x.cardNo||'',status:s||'fail',reason:x.reason||x.reasons||x.message||x.detail||''})}
+        else if(good)out.ok++; else out.unknown++;
+      }
+      Object.keys(x).forEach(k=>walk(x[k],path?path+'.'+k:k));
+    }
+    walk(root,'report');return out;
+  }
+
+  async function runScenario(){
+    const started=performance.now();
+    try{
+      if(typeof v0712ScenarioCases!=='function')throw new Error('v0712ScenarioCases is not available');
+      const cases=v0712ScenarioCases();
+      if(!Array.isArray(cases)||!cases.length)throw new Error('scenario case list is empty');
+      const results=[];
+      for(let i=0;i<cases.length;i++){
+        try{results.push(await cases[i]())}
+        catch(e){results.push({id:'R?'+(i+1),status:'error',message:e?.message||String(e)})}
+      }
+      const c=scanResultTree(results);
+      // Some scenario results may not expose a generic status shape. Fall back to common result fields.
+      if(c.total===0){
+        c.total=results.length;
+        results.forEach((r,i)=>{
+          const s=String(r?.status??r?.result??'').toLowerCase();
+          if(['ok','pass','passed','normal','success'].includes(s)||r?.ok===true||r?.pass===true)c.ok++;
+          else if(['error'].includes(s))c.error++;
+          else if(['fail','failed','mismatch','ng'].includes(s)||r?.ok===false||r?.pass===false){c.fail++;c.failures.push({id:r?.id||'R'+(i+1),reason:r?.reason||r?.message||''})}
+          else c.unknown++;
+        });
+      }
+      const summary={kind:'scenario',at:now(),durationMs:Math.round((performance.now()-started)*10)/10,total:results.length,ok:c.ok,fail:c.fail,error:c.error,unknown:c.unknown,failures:c.failures.slice(0,30)};
+      if(summary.fail||summary.error)diag('ERR-TEST-0101','公式裁定シナリオテストにFAIL/ERROR',{op:'scenario',summary});
+      return summary;
+    }catch(e){diag('ERR-TEST-0100','公式裁定シナリオテストを起動できません',{op:'scenario'},e);return {kind:'scenario',at:now(),durationMs:Math.round(performance.now()-started),total:0,ok:0,fail:0,error:1,unknown:0,message:e?.message||String(e)}}
+  }
+
+  async function runBp100(){
+    const started=performance.now();
+    try{
+      if(typeof v072RunBP01Tests!=='function')throw new Error('v072RunBP01Tests is not available');
+      await v072RunBP01Tests();
+      let report=null;try{if(typeof v072BpReport!=='undefined')report=v072BpReport}catch(_e){}
+      if(!report)throw new Error('v072BpReport was not produced');
+      const c=scanResultTree(report);
+      // Prefer explicit report counters when present.
+      function num(...keys){for(const k of keys){const v=Number(report?.[k]);if(Number.isFinite(v))return v}return null}
+      let total=num('total','count','completed','done');
+      let ok=num('ok','normal','passed','passCount','success');
+      let fail=num('fail','failed','mismatch','mismatches','failCount');
+      let error=num('error','errors','errorCount');
+      if(total==null||total<50) total=c.total||100;
+      if(ok==null)ok=c.ok;
+      if(fail==null)fail=c.fail;
+      if(error==null)error=c.error;
+      if((ok||0)+(fail||0)+(error||0)===0 && Array.isArray(report?.results)){
+        total=report.results.length;const cc=scanResultTree(report.results);ok=cc.ok;fail=cc.fail;error=cc.error;
+      }
+      const summary={kind:'bp100',at:now(),durationMs:Math.round((performance.now()-started)*10)/10,total:Number(total||0),ok:Number(ok||0),fail:Number(fail||0),error:Number(error||0),unknown:Math.max(0,Number(total||0)-Number(ok||0)-Number(fail||0)-Number(error||0)),failures:c.failures.slice(0,30)};
+      if(summary.fail||summary.error)diag('ERR-TEST-0201','BP01 100種単体テストにFAIL/ERROR',{op:'bp100',summary});
+      return summary;
+    }catch(e){diag('ERR-TEST-0200','BP01 100種単体テストを起動できません',{op:'bp100'},e);return {kind:'bp100',at:now(),durationMs:Math.round(performance.now()-started),total:0,ok:0,fail:0,error:1,unknown:0,message:e?.message||String(e)}}
+  }
+
+  function stressCandidates(){
+    const arr=[];
+    function add(name,fn,ctx){
+      if(typeof fn!=='function')return;
+      let src='';try{src=Function.prototype.toString.call(fn).slice(0,8000)}catch(_e){}
+      let score=0;
+      if(/stress/i.test(name))score+=5;if(/v077/i.test(name))score+=2;if(/run|start|begin|launch/i.test(name))score+=3;
+      if(/v077Stress/.test(src))score+=3;if(/1000/.test(src))score+=2;if(/stress/i.test(src))score+=1;
+      if(/setupCpuVsCpu/.test(name))score-=5;
+      if(score>=5)arr.push({name,fn,ctx,score,len:fn.length});
+    }
+    try{Object.getOwnPropertyNames(globalThis).forEach(n=>{let v;try{v=globalThis[n]}catch(_e){return}add(n,v,globalThis)})}catch(_e){}
+    try{const s=globalThis.v077Stress;if(s&&typeof s==='object')Object.keys(s).forEach(k=>add('v077Stress.'+k,s[k],s))}catch(_e){}
+    arr.sort((a,b)=>b.score-a.score||a.len-b.len);return arr;
+  }
+  function stressSnapshot(){
+    const out={};
+    try{if(globalThis.v077Stress)out.v077Stress=safeJson(globalThis.v077Stress)}catch(_e){}
+    try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/stress|v077/i.test(k||''))out[k]=localStorage.getItem(k)}}catch(_e){}
+    return out;
+  }
+  function stressNumbers(x){
+    const nums={completed:null,total:null,fail:null,error:null};const seen=new WeakSet();
+    function walk(v){if(v==null||typeof v!=='object'||seen.has(v))return;seen.add(v);for(const [k,val] of Object.entries(v)){const kl=k.toLowerCase();if(typeof val==='number'&&Number.isFinite(val)){if(nums.completed==null&&/completed|complete|done|finished|games?done/.test(kl))nums.completed=val;if(nums.total==null&&/total|target|games?$|count$/.test(kl))nums.total=val;if(nums.fail==null&&/fail|mismatch|invalid/.test(kl))nums.fail=val;if(nums.error==null&&/error|exception|crash/.test(kl))nums.error=val}if(val&&typeof val==='object')walk(val)}}
+    walk(x);return nums;
+  }
+  async function runStress1000(){
+    const started=performance.now();
+    try{
+      const cand=stressCandidates();
+      const c=cand.find(x=>x.len<=1);
+      if(!c)throw new Error('1000戦ストレステストの安全に呼べるランナーを検出できません。候補: '+cand.slice(0,8).map(x=>x.name+'('+x.len+')').join(', '));
+      let ret;
+      try{ret=c.len===0?c.fn.call(c.ctx):c.fn.call(c.ctx,1000)}catch(e){throw new Error(c.name+' 起動失敗: '+(e?.message||e))}
+      if(ret&&typeof ret.then==='function')await ret;
+      // If the existing stress engine continues asynchronously, wait for active=false.
+      const limit=Date.now()+300000;
+      let everActive=false;
+      while(Date.now()<limit){
+        let active=false;try{active=!!globalThis.v077Stress?.active}catch(_e){}
+        if(active)everActive=true;
+        if(everActive&&!active)break;
+        if(!everActive&&Date.now()-Math.round(performance.timeOrigin+started)>2500)break;
+        await sleep(250);
+      }
+      let active=false;try{active=!!globalThis.v077Stress?.active}catch(_e){}
+      if(active){diag('ERR-TEST-0302','1000戦ストレステストが5分以内に完了しませんでした',{op:'stress1000',runner:c.name});return {kind:'stress1000',at:now(),durationMs:Math.round(performance.now()-started),total:1000,ok:0,fail:0,error:1,unknown:1000,message:'timeout',runner:c.name}}
+      const snap=stressSnapshot(), n=stressNumbers(snap);
+      const completed=Number(n.completed??n.total??0);
+      const fail=Number(n.fail||0), error=Number(n.error||0);
+      const summary={kind:'stress1000',at:now(),durationMs:Math.round((performance.now()-started)*10)/10,total:1000,ok:completed>=1000&&!fail&&!error?1000:Math.min(1000,Math.max(0,completed-fail-error)),fail,error,unknown:completed>=1000?0:Math.max(0,1000-completed),completed,runner:c.name,candidates:cand.slice(0,10).map(x=>({name:x.name,score:x.score,args:x.len})),snapshot:snap};
+      if(fail||error||completed<1000)diag('ERR-TEST-0301','1000戦ストレステスト結果に未完了/FAIL/ERROR',{op:'stress1000',summary:{completed,fail,error,runner:c.name}});
+      return summary;
+    }catch(e){const candidates=stressCandidates().slice(0,12).map(x=>({name:x.name,score:x.score,args:x.len}));diag('ERR-TEST-0300','1000戦ストレステストを起動できません',{op:'stress1000',candidates},e);return {kind:'stress1000',at:now(),durationMs:Math.round(performance.now()-started),total:1000,ok:0,fail:0,error:1,unknown:1000,message:e?.message||String(e),candidates}}
+  }
+
+  async function runOne(kind){
+    if(busy)return;busy=true;sync();
+    const all=load()||{version:VERSION,updatedAt:null};
+    try{
+      info(kind==='scenario'?'裁定22件を実行中…':kind==='bp100'?'BP01 100種を実行中…':'1000戦ストレスを実行中…');
+      const r=kind==='scenario'?await runScenario():kind==='bp100'?await runBp100():await runStress1000();
+      all.version=VERSION;all.updatedAt=now();all[kind]=r;save(all);
+      info((r.fail||r.error)?'⚠ '+kind+'：要確認':'✅ '+kind+'：完了');
+    }finally{busy=false;sync()}
+  }
+  async function runAll(){
+    if(busy)return;busy=true;sync();
+    const all={version:VERSION,startedAt:now(),updatedAt:null};
+    try{
+      info('全検査：裁定22件 → BP01 100種 → 1000戦');
+      all.scenario=await runScenario();save({...all,updatedAt:now()});
+      all.bp100=await runBp100();save({...all,updatedAt:now()});
+      all.stress1000=await runStress1000();all.updatedAt=now();all.finishedAt=now();save(all);
+      const bad=[all.scenario,all.bp100,all.stress1000].some(r=>(r?.fail||0)>0||(r?.error||0)>0||(r?.unknown||0)>0);
+      info(bad?'⚠ 全検査完了：要確認項目あり':'✅ 全検査完了：全項目PASS');
+    }finally{busy=false;sync()}
+  }
+  function reportText(){
+    const r=load();
+    return 'Palworld OCG 全検査レポート\nApp v'+VERSION+'\n日時: '+new Date().toLocaleString()+'\n\n'+JSON.stringify(r,null,2);
+  }
+  async function copyReport(){
+    const t=reportText();
+    try{await navigator.clipboard.writeText(t);info('全検査レポートをコピーしました');return}catch(_e){}
+    try{const x=document.createElement('textarea');x.value=t;x.style.position='fixed';x.style.opacity='0';document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();info('全検査レポートをコピーしました')}catch(e){diag('ERR-TEST-0001','全検査レポートのコピーに失敗',{op:'copySuite'},e)}
+  }
+  function fmt(r){if(!r)return '未実行';if(r.error&&r.total===0)return '起動エラー';return (r.ok||0)+'/'+(r.total||0)+(r.fail?' F'+r.fail:'')+(r.error?' E'+r.error:'')+(r.unknown?' ?'+r.unknown:'')}
+  function detail(r){
+    if(!r)return '';
+    let x='時間 '+(r.durationMs??'-')+'ms';if(r.runner)x+=' / runner '+r.runner;if(r.completed!=null)x+=' / 完了 '+r.completed;
+    if(r.message)x+=' / '+r.message;return x;
+  }
+  function augment(){
+    const panel=document.querySelector('#v0762DiagOverlay .v0762DiagPanel');if(!panel)return;
+    const actions=panel.querySelector('.v0762DiagActions');if(!actions)return;
+    // Clarify what the original button actually invokes.
+    const old=actions.querySelector('[data-act="official"]');if(old&&!busy)old.textContent='BP01 100種テスト';
+    let box=panel.querySelector('.v0763SuiteBox');
+    if(!box){box=document.createElement('div');box.className='v0763SuiteBox';actions.insertAdjacentElement('afterend',box)}
+    const r=load()||{};
+    box.innerHTML='<div class="v0763SuiteTitle">全検査 v'+VERSION+'</div><div class="v0763SuiteGrid">'+
+      '<div class="v0763SuiteCell"><b>'+fmt(r.scenario)+'</b><span>裁定シナリオ</span></div>'+
+      '<div class="v0763SuiteCell"><b>'+fmt(r.bp100)+'</b><span>BP01 100種</span></div>'+
+      '<div class="v0763SuiteCell"><b>'+fmt(r.stress1000)+'</b><span>1000戦ストレス</span></div>'+
+      '<div class="v0763SuiteCell"><b>'+((typeof palValidateState==='function'&&palValidateState('suiteView',true))?'OK':'要確認')+'</b><span>現在状態</span></div></div>'+
+      '<div class="v0763SuiteDetail">'+[detail(r.scenario),detail(r.bp100),detail(r.stress1000)].filter(Boolean).join('\n')+'</div>'+
+      '<div class="v0763SuiteBtns"><button data-suite="scenario">裁定22件</button><button data-suite="bp100">BP01 100種</button><button data-suite="stress1000">1000戦</button><button class="primary" data-suite="all">全検査</button><button data-suite="copy">結果コピー</button></div>';
+    box.querySelectorAll('button').forEach(b=>b.disabled=busy);
+    box.querySelector('[data-suite="scenario"]')?.addEventListener('click',()=>runOne('scenario'));
+    box.querySelector('[data-suite="bp100"]')?.addEventListener('click',()=>runOne('bp100'));
+    box.querySelector('[data-suite="stress1000"]')?.addEventListener('click',()=>runOne('stress1000'));
+    box.querySelector('[data-suite="all"]')?.addEventListener('click',runAll);
+    box.querySelector('[data-suite="copy"]')?.addEventListener('click',copyReport);
+  }
+  function sync(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;augment()})}
+  try{new MutationObserver(sync).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  document.addEventListener('pointerup',()=>setTimeout(sync,0),{passive:true});
+  globalThis.palRunScenarioTests=()=>runOne('scenario');
+  globalThis.palRunBp100Tests=()=>runOne('bp100');
+  globalThis.palRunStress1000=()=>runOne('stress1000');
+  globalThis.palRunFullSuite=runAll;
+  globalThis.palCopyFullSuiteReport=copyReport;
+  sync();setTimeout(sync,600);setTimeout(sync,1800);
+  console.info('Palworld OCG v0.7.64 full test suite applied');
+})();
+</script>
+
+
+<style id="v0764TierDeckGuardStyle">
+.v0764TierGuardStatus{margin-top:6px!important;border:1px solid #456f63!important;background:#0b211b!important;border-radius:8px!important;padding:6px!important;font-size:7px!important;line-height:1.45!important;color:#d9e8e2!important;white-space:pre-wrap!important}
+.v0764TierGuardStatus b{color:#fff1a9!important}
+.v0764TierGuardOk{color:#83e7b6!important}.v0764TierGuardBad{color:#ff9d96!important}
+</style>
+<script id="v0764TierDeckGuardScript">
+(()=>{
+  if(globalThis.__v0764TierDeckGuardApplied)return;
+  globalThis.__v0764TierDeckGuardApplied=true;
+  const VERSION='0.7.64';
+  const STORE='palworld_tier_deck_guard_v0764';
+  const tierFingerprints=new Set();
+  let tierDepth=0,tierUiUntil=0,scanQueued=false,wrapping=false;
+  const baseStorageSet=Storage.prototype.setItem;
+
+  function clean(v){return String(v==null?'':v).replace(/\s+/g,' ').trim()}
+  function now(){return Date.now()}
+  function tierActive(){return tierDepth>0||now()<tierUiUntil}
+  function isTierText(v){return /(?:Tier|tier|世代|候補|新候補|Elo|進化|generation|evolution|research|league|rank)/i.test(String(v||''))}
+  function toast(msg,bad){
+    try{
+      let t=document.getElementById('v0764TierGuardToast');
+      if(!t){t=document.createElement('div');t.id='v0764TierGuardToast';t.className='v0762ErrorToast';document.body.appendChild(t)}
+      t.style.borderColor=bad?'#e2736d':'#d7ba58';t.style.background=bad?'#421613f2':'#332a0df3';
+      t.textContent=msg;t.hidden=false;clearTimeout(t.__timer);t.__timer=setTimeout(()=>{if(t)t.hidden=true},4200);
+    }catch(_e){}
+  }
+  function diag(code,msg,meta,err){
+    try{if(typeof palDiagRecord==='function')palDiagRecord(code,msg,Object.assign({op:'tierDeckGuard',version:VERSION},meta||{}),err||null,false);else console.error(code,msg,meta||'',err||'')}catch(_e){}
+  }
+  function loadLog(){try{const x=JSON.parse(localStorage.getItem(STORE)||'{}');return x&&typeof x==='object'?x:{}}catch(_e){return {}}}
+  function saveLog(x){try{baseStorageSet.call(localStorage,STORE,JSON.stringify(x))}catch(_e){}}
+  function addLog(type,data){
+    const x=loadLog();if(!Array.isArray(x.entries))x.entries=[];
+    x.version=VERSION;x.updatedAt=new Date().toISOString();
+    x.entries.unshift(Object.assign({time:new Date().toISOString(),type:type},data||{}));
+    x.entries=x.entries.slice(0,80);
+    x.repaired=x.entries.filter(e=>e.type==='repaired').length;
+    x.errors=x.entries.filter(e=>e.type==='error').length;
+    saveLog(x);return x;
+  }
+  function cardDef(no){
+    try{return globalThis.CARD_DB?.[no]||globalThis.BP01_BY_NO?.[no]||null}catch(_e){return null}
+  }
+  function allCardDefs(){
+    const m=new Map();
+    try{Object.values(globalThis.CARD_DB||{}).forEach(c=>{if(c?.no)m.set(String(c.no),c)})}catch(_e){}
+    try{Object.values(globalThis.BP01_BY_NO||{}).forEach(c=>{if(c?.no&&!m.has(String(c.no)))m.set(String(c.no),c)})}catch(_e){}
+    return [...m.values()];
+  }
+  function looksCounts(x){
+    if(!x||typeof x!=='object'||Array.isArray(x))return false;
+    const es=Object.entries(x);if(!es.length)return false;
+    let seen=0;
+    for(const [k,v] of es){if(/^(?:TD|BP|EBP)\d{2}-\d{3}$/i.test(k)&&Number.isFinite(Number(v)))seen++}
+    return seen>0&&seen>=Math.max(1,Math.floor(es.length*.6));
+  }
+  function refOf(deck){
+    if(!deck||typeof deck!=='object')return null;
+    if(deck.cards&&looksCounts(deck.cards)){
+      return {kind:'cards',deck:deck,counts:Object.fromEntries(Object.entries(deck.cards).map(([k,v])=>[k,Math.max(0,Math.floor(Number(v)||0))]))};
+    }
+    if(Array.isArray(deck.main)){
+      const counts={};
+      for(const row of deck.main){
+        if(Array.isArray(row)){const no=String(row[0]||'');let n=Number(row.length>2?row[2]:row[1]);if(cardDef(no)&&Number.isFinite(n)&&n>0)counts[no]=(counts[no]||0)+Math.floor(n)}
+        else if(row&&typeof row==='object'){const no=String(row.no||row.cardNo||'');const n=Number(row.count??row.qty??row.n??1);if(cardDef(no)&&Number.isFinite(n)&&n>0)counts[no]=(counts[no]||0)+Math.floor(n)}
+      }
+      if(Object.keys(counts).length)return {kind:'main',deck:deck,counts:counts};
+    }
+    if(looksCounts(deck))return {kind:'raw',deck:deck,counts:Object.fromEntries(Object.entries(deck).map(([k,v])=>[k,Math.max(0,Math.floor(Number(v)||0))]))};
+    return null;
+  }
+  function commit(ref,counts){
+    if(!ref)return false;
+    if(ref.kind==='cards'||ref.kind==='raw'){
+      const dst=ref.kind==='cards'?ref.deck.cards:ref.deck;
+      Object.keys(dst).forEach(k=>{if(/^(?:TD|BP|EBP)\d{2}-\d{3}$/i.test(k))delete dst[k]});
+      Object.entries(counts).forEach(([no,n])=>{if(n>0)dst[no]=n});return true;
+    }
+    if(ref.kind==='main'){
+      const old=new Map();ref.deck.main.forEach(r=>{const no=Array.isArray(r)?String(r[0]||''):String(r?.no||r?.cardNo||'');if(no)old.set(no,r)});
+      ref.deck.main=Object.entries(counts).filter(([,n])=>n>0).sort(([a],[b])=>a.localeCompare(b)).map(([no,n])=>{
+        const r=old.get(no),d=cardDef(no);
+        if(Array.isArray(r)){const z=r.slice();if(z.length<3)return [no,d?.name||no,n];z[0]=no;z[1]=typeof z[1]==='string'?z[1]:(d?.name||no);z[2]=n;return z}
+        if(r&&typeof r==='object'){const z=Object.assign({},r);z.no=z.no||no;if('count'in z)z.count=n;else if('qty'in z)z.qty=n;else if('n'in z)z.n=n;else z.count=n;return z}
+        return [no,d?.name||no,n];
+      });return true;
+    }
+    return false;
+  }
+  function fingerprint(counts){return Object.entries(counts||{}).filter(([,n])=>Number(n)>0).sort(([a],[b])=>a.localeCompare(b)).map(([no,n])=>no+':'+Number(n)).join('|')}
+  function auditCounts(counts){
+    const st={total:0,lucky:0,colors:[],sameNameOver:[],unknown:[],errors:[]};const colors=new Set(),names={};
+    for(const [no,n0] of Object.entries(counts||{})){
+      const n=Math.max(0,Math.floor(Number(n0)||0));if(!n)continue;st.total+=n;
+      const c=cardDef(no);if(!c){st.unknown.push(no);continue}
+      if(c.lucky)st.lucky+=n;
+      if(c.color&&c.color!=='colorless')colors.add(String(c.color));
+      const nm=String(c.name||no);names[nm]=(names[nm]||0)+n;
+    }
+    st.colors=[...colors];st.sameNameOver=Object.entries(names).filter(([,n])=>n>4);
+    if(st.total!==50)st.errors.push('メインデッキ50枚（現在'+st.total+'枚）');
+    if(st.colors.length>2)st.errors.push('色は最大2色（現在'+st.colors.length+'色）');
+    if(st.sameNameOver.length)st.errors.push('同名4枚超過: '+st.sameNameOver[0][0]+' '+st.sameNameOver[0][1]+'枚');
+    if(st.lucky>8)st.errors.push('Luckyは8枚まで（現在'+st.lucky+'枚）');
+    if(st.unknown.length)st.errors.push('未登録カード: '+st.unknown.slice(0,4).join(','));
+    st.ok=!st.errors.length;return st;
+  }
+  function nameCounts(counts){const m={};Object.entries(counts).forEach(([no,n])=>{const c=cardDef(no);if(c&&n>0){const nm=String(c.name||no);m[nm]=(m[nm]||0)+Number(n)}});return m}
+  function repairLucky(counts){
+    const before=auditCounts(counts);if(before.lucky<=8)return {ok:before.ok,changed:false,counts:counts,before:before,after:before,removed:[],added:[]};
+    if(before.total!==50||before.colors.length>2||before.sameNameOver.length||before.unknown.length)return {ok:false,changed:false,counts:counts,before:before,after:before,reason:'Lucky以外にもルール違反があるため自動修復しません'};
+    const out=Object.assign({},counts),removed=[],added=[];let need=before.lucky-8;
+    const luckyRows=Object.entries(out).filter(([no,n])=>n>0&&cardDef(no)?.lucky).sort((a,b)=>Number(b[1])-Number(a[1])||String(b[0]).localeCompare(String(a[0])));
+    for(const [no] of luckyRows){while(need>0&&out[no]>0){out[no]--;need--;removed.push(no)}if(out[no]<=0)delete out[no];if(need<=0)break}
+    if(need>0)return {ok:false,changed:false,counts:counts,before:before,after:auditCounts(out),reason:'Lucky超過分を除去できませんでした'};
+    let fill=removed.length;const allowed=new Set(before.colors);allowed.add('colorless');
+    const pool=allCardDefs().filter(c=>c&&c.no&&!c.lucky&&c.catalogOnly!==true&&(allowed.has(String(c.color||'colorless')))).sort((a,b)=>{
+      const ae=out[a.no]>0?0:1,be=out[b.no]>0?0:1;if(ae!==be)return ae-be;
+      const ac=Number(out[a.no]||0),bc=Number(out[b.no]||0);if(ac!==bc)return bc-ac;
+      return String(a.no).localeCompare(String(b.no));
+    });
+    let guard=0;
+    while(fill>0&&guard++<200){
+      let chosen=null;const names=nameCounts(out);
+      for(const c of pool){const cur=Number(out[c.no]||0);const nm=String(c.name||c.no);if(cur>=4)continue;if((names[nm]||0)>=4)continue;chosen=c;break}
+      if(!chosen)break;out[chosen.no]=Number(out[chosen.no]||0)+1;added.push(chosen.no);fill--;
+      pool.sort((a,b)=>{const ae=out[a.no]>0?0:1,be=out[b.no]>0?0:1;if(ae!==be)return ae-be;const ac=Number(out[a.no]||0),bc=Number(out[b.no]||0);if(ac!==bc)return bc-ac;return String(a.no).localeCompare(String(b.no))});
+    }
+    const after=auditCounts(out);return {ok:fill===0&&after.ok,changed:fill===0,counts:out,before:before,after:after,removed:removed,added:added,reason:fill?'交換先カードが不足しました':''};
+  }
+  function deckLabel(deck,key){return clean(deck?.name||deck?.title||deck?.label||key||'Tier候補')}
+  function ensureDeck(deck,key,context,forceTier){
+    const ref=refOf(deck);if(!ref)return {skipped:true,ok:true};
+    const label=deckLabel(deck,key);const beforeFp=fingerprint(ref.counts);if(isTierText(label)||forceTier)tierFingerprints.add(beforeFp);
+    const st=auditCounts(ref.counts);if(st.ok){if(isTierText(label)||forceTier)tierFingerprints.add(beforeFp);return {ok:true,changed:false,stats:st,label:label}}
+    const isTier=!!forceTier||isTierText(label)||isTierText(key)||tierActive()||tierFingerprints.has(beforeFp);
+    if(!isTier)return {ok:false,changed:false,stats:st,label:label,nonTier:true};
+    if(st.lucky>8){
+      const rr=repairLucky(ref.counts);
+      if(rr.ok&&rr.changed&&commit(ref,rr.counts)){
+        const afterFp=fingerprint(rr.counts);tierFingerprints.add(beforeFp);tierFingerprints.add(afterFp);
+        addLog('repaired',{label:label,key:String(key||''),context:String(context||''),beforeLucky:st.lucky,afterLucky:rr.after.lucky,removed:rr.removed,added:rr.added});
+        console.warn('[v0.7.64] Tier deck auto-repaired',label,'Lucky',st.lucky,'->',rr.after.lucky,rr.removed,rr.added);
+        toast('Tier候補を自動調整: Lucky '+st.lucky+'→'+rr.after.lucky+'枚',false);
+        return {ok:true,changed:true,stats:rr.after,label:label,removed:rr.removed,added:rr.added};
+      }
+    }
+    const code='ERR-TIER-DECK-0201';
+    const msg=label+' がデッキルール違反: '+st.errors.join(' / ');
+    addLog('error',{code:code,label:label,key:String(key||''),context:String(context||''),errors:st.errors,stats:st});diag(code,msg,{label:label,key:key||'',context:context||'',stats:st});toast(code+' '+msg,true);
+    return {ok:false,changed:false,stats:st,label:label,code:code};
+  }
+  function walkTierObject(root,context,forceTier,seen,depth){
+    if(!root||typeof root!=='object'||depth>6)return {changed:0,errors:0,checked:0};
+    seen=seen||new WeakSet();if(seen.has(root))return {changed:0,errors:0,checked:0};seen.add(root);
+    let out={changed:0,errors:0,checked:0};
+    const ref=refOf(root);
+    if(ref){const r=ensureDeck(root,'',context,forceTier);out.checked++;if(r.changed)out.changed++;if(!r.ok&&!r.nonTier)out.errors++}
+    const keys=Object.keys(root).slice(0,300);
+    for(const k of keys){
+      let v;try{v=root[k]}catch(_e){continue}if(!v||typeof v!=='object')continue;
+      const childForce=forceTier||isTierText(k)||isTierText(root?.name||root?.title||root?.label||'');
+      const r=walkTierObject(v,context+'.'+k,childForce,seen,depth+1);out.changed+=r.changed;out.errors+=r.errors;out.checked+=r.checked;
+    }
+    return out;
+  }
+  function scanDeckRegistry(context){
+    let out={changed:0,errors:0,checked:0};
+    try{for(const [k,d] of Object.entries(globalThis.DECKS||{})){if(!isTierText(k)&&!isTierText(d?.name))continue;const r=ensureDeck(d,k,context||'DECKS',true);out.checked++;if(r.changed)out.changed++;if(!r.ok)out.errors++}}catch(e){diag('ERR-TIER-DECK-0901','DECKS監査中に例外',{context:context||''},e)}
+    return out;
+  }
+  function scanGlobals(context){
+    let out={changed:0,errors:0,checked:0};
+    const names=Object.getOwnPropertyNames(globalThis).filter(n=>isTierText(n)&&!/^__v0764/.test(n)).slice(0,120);
+    for(const n of names){let v;try{v=globalThis[n]}catch(_e){continue}if(!v||typeof v!=='object')continue;const r=walkTierObject(v,'global.'+n,true,new WeakSet(),0);out.changed+=r.changed;out.errors+=r.errors;out.checked+=r.checked}
+    return out;
+  }
+  function tierStorageKey(k,v){return /tier|generation|evolution|research|league|elo|rank/i.test(String(k||''))||(/(?:Tier|世代|候補|Elo)/.test(String(v||''))&&/cards|main/.test(String(v||'')))}
+  function repairJsonText(k,v,context){
+    if(!tierStorageKey(k,v))return {value:v,changed:0,errors:0,checked:0};
+    let obj;try{obj=JSON.parse(v)}catch(_e){return {value:v,changed:0,errors:0,checked:0}}if(!obj||typeof obj!=='object')return {value:v,changed:0,errors:0,checked:0};
+    const r=walkTierObject(obj,context||('storage.'+k),true,new WeakSet(),0);return {value:r.changed?JSON.stringify(obj):v,changed:r.changed,errors:r.errors,checked:r.checked};
+  }
+  function scanStorage(context){
+    let out={changed:0,errors:0,checked:0};
+    try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!k||k===STORE)continue;const v=localStorage.getItem(k);if(!tierStorageKey(k,v))continue;const r=repairJsonText(k,v,context||('storage.'+k));out.changed+=r.changed;out.errors+=r.errors;out.checked+=r.checked;if(r.changed&&!r.errors)baseStorageSet.call(localStorage,k,r.value)}}catch(e){diag('ERR-TIER-DECK-0902','Tier履歴監査中に例外',{context:context||''},e)}
+    return out;
+  }
+  function scanSavedTierDecks(context){
+    let out={changed:0,errors:0,checked:0};
+    try{const arr=globalThis.v047SavedDecks;if(Array.isArray(arr)){for(const d of arr){if(!isTierText(d?.name))continue;const r=ensureDeck(d,d?.id||'',context||'savedTier',true);out.checked++;if(r.changed)out.changed++;if(!r.ok)out.errors++}}}catch(_e){}
+    return out;
+  }
+  function auditAll(context){
+    const rs=[scanDeckRegistry(context),scanSavedTierDecks(context),scanGlobals(context),scanStorage(context)];
+    const out=rs.reduce((a,r)=>({changed:a.changed+r.changed,errors:a.errors+r.errors,checked:a.checked+r.checked}),{changed:0,errors:0,checked:0});
+    const x=loadLog();x.lastAudit={time:new Date().toISOString(),context:String(context||''),checked:out.checked,repaired:out.changed,errors:out.errors};saveLog(x);syncPanel();return out;
+  }
+  function guardKey(k,context){
+    try{const d=globalThis.DECKS?.[k];if(!d)return true;const tier=isTierText(k)||isTierText(d?.name)||tierActive();if(!tier)return true;const r=ensureDeck(d,k,context,true);if(!r.ok)throw new Error('['+(r.code||'ERR-TIER-DECK-0201')+'] '+r.label+' は合法デッキではありません');return true}catch(e){if(/ERR-TIER-DECK/.test(String(e?.message||'')))throw e;diag('ERR-TIER-DECK-0202','Tier対戦開始前のデッキ監査に失敗',{key:k,context:context||''},e);throw e}
+  }
+  function wrapSetup(name){
+    try{const old=globalThis[name];if(typeof old!=='function'||old.__v0764TierGuard)return;
+      const w=function(){const args=[...arguments];args.forEach(a=>{if(typeof a==='string'&&globalThis.DECKS?.[a])guardKey(a,name)});return old.apply(this,arguments)};
+      w.__v0764TierGuard=true;w.__v0764TierOld=old;globalThis[name]=w;
+    }catch(_e){}
+  }
+  function patchValidate(){
+    try{const old=globalThis.v047Validate;if(typeof old!=='function'||old.__v0764TierGuard)return;
+      const w=function(cards){
+        const ref=refOf(cards);const fp=ref?fingerprint(ref.counts):'';
+        if(ref&&(tierActive()||tierFingerprints.has(fp))){const holder=looksCounts(cards)?cards:{cards:cards};const r=ensureDeck(holder,'Tier copy','v047Validate',true);if(!r.ok){return {ok:false,count:r.stats?.total||0,colors:r.stats?.colors||[],errors:r.stats?.errors||['Tierデッキルール違反']}}}
+        const res=old.apply(this,arguments);
+        try{const rr=refOf(cards);if(rr){const st=auditCounts(rr.counts);if(st.lucky>8){res.ok=false;res.errors=Array.isArray(res.errors)?res.errors:[];if(!res.errors.some(x=>/Lucky|ラッキー/.test(String(x))))res.errors.push('ラッキーアイコンを持つカードは8枚まで（現在'+st.lucky+'枚）')}}}catch(_e){}
+        return res;
+      };w.__v0764TierGuard=true;w.__v0764TierOld=old;globalThis.v047Validate=w;
+    }catch(_e){}
+  }
+  function patchPersist(){
+    try{const old=globalThis.v047Persist;if(typeof old!=='function'||old.__v0764TierGuard)return;
+      const w=function(){const r=scanSavedTierDecks('v047Persist');if(r.errors){diag('ERR-TIER-DECK-0301','違反Tierデッキの保存を停止',{errors:r.errors});return false}return old.apply(this,arguments)};w.__v0764TierGuard=true;w.__v0764TierOld=old;globalThis.v047Persist=w;
+    }catch(_e){}
+  }
+  function tierFnSource(src){return /(?:Tier表|Tier研究|世代進化|Elo|新候補|生存デッキ調整|デッキ一覧[^\n]{0,80}コピー)/i.test(src)}
+  function wrapTierFunctions(){
+    if(wrapping)return;wrapping=true;
+    try{
+      for(const n of Object.getOwnPropertyNames(globalThis)){
+        if(/^__v0764/.test(n))continue;let fn;try{fn=globalThis[n]}catch(_e){continue}if(typeof fn!=='function'||fn.__v0764TierFunction)continue;
+        let src='';try{src=Function.prototype.toString.call(fn)}catch(_e){}if(!tierFnSource(src))continue;
+        const w=function(){tierDepth++;try{[...arguments].forEach((a,i)=>{if(a&&typeof a==='object')walkTierObject(a,n+'.arg'+i,true,new WeakSet(),0)});const r=fn.apply(this,arguments);if(r&&typeof r.then==='function')return r.finally(()=>{tierDepth=Math.max(0,tierDepth-1);setTimeout(()=>auditAll(n+'.after'),0)});tierDepth=Math.max(0,tierDepth-1);setTimeout(()=>auditAll(n+'.after'),0);return r}catch(e){tierDepth=Math.max(0,tierDepth-1);throw e}};
+        w.__v0764TierFunction=true;w.__v0764TierOld=fn;globalThis[n]=w;
+      }
+    }finally{wrapping=false}
+  }
+  function patchStorage(){
+    if(Storage.prototype.setItem.__v0764TierGuard)return;
+    const w=function(k,v){
+      try{if(this===localStorage&&k!==STORE&&tierStorageKey(k,v)){const r=repairJsonText(k,String(v),'setItem.'+k);if(r.errors){diag('ERR-TIER-DECK-0302','違反Tier履歴の保存を停止',{key:k,errors:r.errors});toast('ERR-TIER-DECK-0302 違反Tier結果の保存を停止',true);return}if(r.changed)v=r.value}}
+      catch(e){diag('ERR-TIER-DECK-0903','Tier保存前監査に失敗',{key:String(k||'')},e)}
+      return baseStorageSet.call(this,k,v);
+    };w.__v0764TierGuard=true;Storage.prototype.setItem=w;
+  }
+  function syncPanel(){
+    try{
+      const panel=document.querySelector('#v0762DiagOverlay .v0762DiagPanel');if(!panel)return;const actions=panel.querySelector('.v0762DiagActions');if(!actions)return;
+      let b=actions.querySelector('[data-act="tierguard"]');if(!b){b=document.createElement('button');b.dataset.act='tierguard';b.textContent='Tierデッキ検査';b.addEventListener('click',()=>{const r=auditAll('manualTierAudit');toast(r.errors?'Tier検査: '+r.errors+'件の違反':'Tier検査OK / 修復 '+r.changed+'件',!!r.errors)});actions.appendChild(b)}
+      let s=panel.querySelector('.v0764TierGuardStatus');if(!s){s=document.createElement('div');s.className='v0764TierGuardStatus';const box=panel.querySelector('.v0763SuiteBox');(box||actions).insertAdjacentElement('afterend',s)}
+      const x=loadLog(),a=x.lastAudit||{};s.innerHTML='<b>Tierデッキ合法性ガード v'+VERSION+'</b>\n'+
+        '<span class="'+((a.errors||0)?'v0764TierGuardBad':'v0764TierGuardOk')+'">直近検査: '+(a.checked??'-')+'件 / 自動修復 '+(a.repaired??0)+' / 未修復 '+(a.errors??0)+'</span>\n'+
+        'Lucky上限: 8枚 / Tier候補のみ自動修復';
+    }catch(_e){}
+  }
+  function install(){wrapSetup('setupCpuVsCpu');wrapSetup('setupGame');patchValidate();patchPersist();patchStorage();wrapTierFunctions();auditAll('boot');syncPanel()}
+  document.addEventListener('click',e=>{try{const el=e.target?.closest?.('button,[role="button"]');if(!el)return;const tx=clean(el.textContent||'');const near=clean(el.closest?.('.modalCard,.v060Panel,.v0762DiagPanel,section,main')?.textContent||'');if((/コピー|対戦|研究|進化|生成/.test(tx)&&isTierText(near))||isTierText(tx)){tierUiUntil=now()+2200;setTimeout(()=>auditAll('tierUiClick'),0)}}catch(_e){}},true);
+  try{new MutationObserver(()=>{if(scanQueued)return;scanQueued=true;requestAnimationFrame(()=>{scanQueued=false;wrapTierFunctions();wrapSetup('setupCpuVsCpu');patchValidate();patchPersist();syncPanel()})}).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  addEventListener('pageshow',()=>setTimeout(install,80),{passive:true});
+  globalThis.palAuditTierDecks=()=>auditAll('manualApi');
+  globalThis.palTierDeckGuardStatus=()=>loadLog();
+  install();setTimeout(install,700);setTimeout(()=>{wrapTierFunctions();auditAll('lateBoot')},2200);
+  console.info('Palworld OCG v0.7.64 Tier legal-deck guard applied');
 })();
 </script>
 
@@ -3720,7 +4221,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.62-rule-audit-diagnostics");
+      h.set("x-palworld-bridge","v0.7.64-tier-legal-guard-full-test");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -3745,8 +4246,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.62 — ルール監査・診断・ アサイン常時表示・選択UI安全領域・CPU速度切替・能力二重発動防止・カード詳細全画面・配置選択・建築物攻撃・公式ルール同期";
-        m.start_url="/?pwa=1&v=0762";
+        m.description="Palworld OCG v0.7.64 — Tier候補合法性ガード・Lucky8枚自動修復・全検査・ルール監査・診断・アサイン常時表示・CPU速度切替・能力二重発動防止・カード詳細全画面・公式ルール同期";
+        m.start_url="/?pwa=1&v=0764";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -3759,7 +4260,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.62 rule audit + diagnostics + official sync + runtime error codes\n";
+        sw+="\n// v0.7.64 tier deck legal guard + full test suite + diagnostics + official sync\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
