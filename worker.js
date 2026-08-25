@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.77";
+const V="0.7.78";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -2582,8 +2582,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.70')title.textContent='v0.7.77';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.77'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.70')title.textContent='v0.7.78';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.78'});
       syncButton();
     }catch(_e){}
   }
@@ -3584,6 +3584,7 @@ const PATCH=`
 #v0772CoreError{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:2147483646;background:#6b1018;color:white;border:1px solid #ff7780;border-radius:10px;padding:7px 12px;font:800 11px/1.35 sans-serif;box-shadow:0 6px 24px #0008;max-width:90vw;text-align:center}
 #v0772AttackLayer{position:fixed;inset:0;z-index:2147482500;pointer-events:none;overflow:hidden}
 html.v0776DamageActive #v0772AttackLayer,body.v0776DamageActive #v0772AttackLayer{display:none!important}
+html.v0776DamageActive #v0757ActionCenter,body.v0776DamageActive #v0757ActionCenter{display:none!important}
 #v0772AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .v0772AttackRing{position:fixed;border:4px solid #ffd95b;border-radius:14px;box-shadow:0 0 0 3px #0009,0 0 22px #ffd95bcc;animation:v0772Pulse .7s ease-in-out infinite alternate}
 .v0772AttackRing.target{border-color:#ff6f62;box-shadow:0 0 0 3px #0009,0 0 24px #ff6f62cc}
@@ -3651,53 +3652,100 @@ html.v0776DamageActive #v0772AttackLayer,body.v0776DamageActive #v0772AttackLaye
         while(p&&depth++<7){const txt=flat(p.textContent||'');if((name&&txt.includes(name))||(no&&txt.includes(no))){ok=true;break}p=p.parentElement}
         if(!ok)continue;
         const clone=el.cloneNode(true);clone.classList.add('v0777DamageDomClone');clone.removeAttribute('onclick');clone.removeAttribute('onpointerup');clone.removeAttribute('onpointerdown');clone.querySelectorAll('button,.infoBtn,.actBtn').forEach(n=>n.remove());
-        try{const cs=getComputedStyle(el);if(cs.backgroundImage&&cs.backgroundImage!=='none'){clone.style.backgroundImage=cs.backgroundImage;clone.style.backgroundSize=cs.backgroundSize;clone.style.backgroundPosition=cs.backgroundPosition;clone.style.backgroundRepeat=cs.backgroundRepeat}}catch(_e){}
-        const srcArts=el.querySelectorAll('*'),dstArts=clone.querySelectorAll('*');
-        for(let i=0;i<Math.min(srcArts.length,dstArts.length);i++)try{const cs=getComputedStyle(srcArts[i]);if(cs.backgroundImage&&cs.backgroundImage!=='none'){dstArts[i].style.backgroundImage=cs.backgroundImage;dstArts[i].style.backgroundSize=cs.backgroundSize;dstArts[i].style.backgroundPosition=cs.backgroundPosition;dstArts[i].style.backgroundRepeat=cs.backgroundRepeat}}catch(_e){}
         return clone;
       }
     }catch(_e){}
     return null;
   }
-  function existingImage(c){
-    try{
-      const name=flat(c?.name),no=flat(c?.no),imgs=[...document.images].filter(i=>i.complete&&i.naturalWidth>20);
-      let hit=imgs.find(i=>((name&&flat(i.alt)===name)||(no&&(i.dataset?.no===no||String(i.src).includes(no)))));
-      if(hit)return hit;
-      for(const img of imgs){let el=img,depth=0;while(el&&depth++<7){const txt=flat(el.textContent||'');if((name&&txt.includes(name))||(no&&txt.includes(no)))return img;el=el.parentElement}}
-      return null;
-    }catch(_e){return null}
-  }
   function damageImageCandidates(c){
     const out=[],push=u=>{u=String(u||'').trim();if(u&&!out.includes(u))out.push(u)};
-    try{const ex=existingImage(c);if(ex)push(ex.currentSrc||ex.src)}catch(_e){}
     try{if(typeof v050ImageUrls!=='undefined'&&c?.no)push(v050ImageUrls[c.no])}catch(_e){}
     try{if(typeof EMBEDDED_CARD_IMAGES!=='undefined'&&c?.no)push(EMBEDDED_CARD_IMAGES[c.no])}catch(_e){}
     try{push(c?.imageUrl);push(c?.imageFallbackUrl)}catch(_e){}
     try{if(typeof imageCandidates==='function'&&c?.no)for(const u of imageCandidates(c.no)||[])push(u)}catch(_e){}
     return out;
   }
-  function fallbackCard(stage,c){
+  function fallbackCard(stage,c,reason){
     stage.innerHTML='';
-    try{if(typeof cardHTML==='function'){const wrap=document.createElement('div');wrap.innerHTML=cardHTML(c,{});const card=wrap.firstElementChild;if(card){card.removeAttribute('onclick');card.querySelectorAll('button,.infoBtn,.actBtn').forEach(n=>n.remove());stage.appendChild(card);trace('DMG-ART-CARD-001',{card:c?.no||c?.name});return}}}catch(_e){}
+    try{if(typeof cardHTML==='function'){const wrap=document.createElement('div');wrap.innerHTML=cardHTML(c,{});const card=wrap.firstElementChild;if(card){card.removeAttribute('onclick');card.querySelectorAll('button,.infoBtn,.actBtn').forEach(n=>n.remove());stage.appendChild(card);trace('DMG-ART-CARD-001',{card:c?.no||c?.name,reason:reason||''});return}}}catch(_e){}
     const d=document.createElement('div');d.style.cssText='padding:35px 10px;font-weight:900';d.textContent=c?.name||c?.no||'公開カード';stage.appendChild(d);
   }
-  function renderDamageArt(stage,c,attempt=0){
-    if(!stage||!stage.isConnected)return;
-    if(attempt===0){stage.innerHTML='';stage.classList.remove('loaded')}
-    const dom=renderedCardClone(c);
-    if(dom){stage.innerHTML='';stage.appendChild(dom);stage.classList.add('loaded');trace('DMG-ART-DOM-001',{card:c?.no||c?.name,attempt});return}
-    const ex=existingImage(c);
-    if(ex){try{const clone=ex.cloneNode(false);clone.className='v0772DamageImg';clone.removeAttribute('style');clone.removeAttribute('width');clone.removeAttribute('height');clone.removeAttribute('onload');clone.removeAttribute('onerror');clone.alt=c?.name||'';stage.innerHTML='';stage.appendChild(clone);stage.classList.add('loaded');trace('DMG-ART-CLONE-001',{card:c?.no||c?.name,attempt,src:String(clone.currentSrc||clone.src).slice(0,90)});return}catch(_e){}}
-    if(attempt<6){const waits=[0,60,120,220,360,520,760];setTimeout(()=>renderDamageArt(stage,c,attempt+1),waits[Math.min(attempt+1,waits.length-1)]);return}
+  function routeMeta(c){
+    let hasEmbedded=false,hasBpCache=false,hasImageTag=false,hasDb=false;
+    try{hasEmbedded=!!(typeof EMBEDDED_CARD_IMAGES!=='undefined'&&c?.no&&EMBEDDED_CARD_IMAGES[c.no])}catch(_e){}
+    try{hasBpCache=!!(typeof v050ImageUrls!=='undefined'&&c?.no&&v050ImageUrls[c.no])}catch(_e){}
+    try{hasImageTag=typeof imageTag==='function'}catch(_e){}
+    try{hasDb=typeof v050DbGet==='function'}catch(_e){}
+    return {card:c?.no||c?.name||'',hasImageTag,hasEmbedded,hasBpCache,hasImageUrl:!!c?.imageUrl,hasFallbackUrl:!!c?.imageFallbackUrl,hasDb};
+  }
+  function loadDirectUrls(stage,c){
     const urls=damageImageCandidates(c);
-    if(!urls.length){trace('ERR-DMG-ART-001',{card:c?.no||c?.name,reason:'no image candidates after post-render retries'});fallbackCard(stage,c);return}
-    stage.innerHTML='';const img=document.createElement('img');img.className='v0772DamageImg';img.alt=c?.name||'';stage.appendChild(img);let i=0;
-    const next=()=>{if(i>=urls.length){trace('ERR-DMG-ART-001',{card:c?.no||c?.name,reason:'all image candidates failed after post-render retries',count:urls.length});img.remove();fallbackCard(stage,c);return}const src=urls[i++];img.onload=()=>{stage.classList.add('loaded');trace('DMG-ART-URL-001',{card:c?.no||c?.name,index:i,src:String(src).slice(0,90)})};img.onerror=()=>next();img.src=src};next();
+    let i=0;
+    const failAll=()=>{
+      // BP01 can still exist only in IndexedDB. Try that before DOM fallback.
+      if(c?.no&&String(c.no).startsWith('BP01-')&&typeof v050DbGet==='function'){
+        Promise.resolve(v050DbGet(c.no)).then(b=>{
+          if(!stage?.isConnected)return;
+          if(b){
+            try{
+              const u=URL.createObjectURL(b),img=document.createElement('img');img.className='v0772DamageImg';img.alt=c?.name||'';
+              img.onload=()=>{stage.classList.add('loaded');trace('DMG-ART-IDB-001',{card:c?.no||c?.name})};
+              img.onerror=()=>domLast();img.src=u;stage.innerHTML='';stage.appendChild(img);return;
+            }catch(_e){}
+          }
+          domLast();
+        }).catch(()=>domLast());return;
+      }
+      domLast();
+    };
+    const domLast=()=>{
+      if(!stage?.isConnected)return;
+      const dom=renderedCardClone(c);
+      if(dom){stage.innerHTML='';stage.appendChild(dom);stage.classList.add('loaded');trace('DMG-ART-DOM-001',{card:c?.no||c?.name,phase:'last-resort'});return}
+      const meta=routeMeta(c);trace('ERR-DMG-ART-002',{...meta,reason:'official imageTag + direct URL + IDB + DOM all failed',candidateCount:urls.length});
+      fallbackCard(stage,c,'all official routes failed');
+    };
+    const next=()=>{
+      if(!stage?.isConnected)return;
+      if(i>=urls.length){failAll();return}
+      const src=urls[i++],img=document.createElement('img');img.className='v0772DamageImg';img.alt=c?.name||'';
+      img.onload=()=>{stage.classList.add('loaded');trace('DMG-ART-URL-001',{card:c?.no||c?.name,index:i,src:String(src).slice(0,90)})};
+      img.onerror=()=>next();stage.innerHTML='';stage.appendChild(img);img.src=src;
+    };
+    next();
+  }
+  function renderDamageArt(stage,c){
+    if(!stage||!stage.isConnected)return;
+    stage.innerHTML='';stage.classList.remove('loaded');
+    trace('DMG-ART-ROUTE-001',routeMeta(c));
+    // IMPORTANT: use the exact same imageTag route as the normal card UI FIRST.
+    // v0.7.78 incorrectly waited ~2.04s for DOM clones before trying this route,
+    // while the slow DAMAGE CHECK overlay lived only ~1.9s.
+    try{
+      if(typeof imageTag==='function'){
+        const wrap=document.createElement('div');wrap.innerHTML=imageTag(c,'v0772DamageImg');
+        const img=wrap.querySelector('img');
+        if(img){
+          img.removeAttribute('style');stage.appendChild(img);
+          let ticks=0,done=false;
+          const ok=()=>{if(done)return;done=true;stage.classList.add('loaded');trace('DMG-ART-IMAGETAG-001',{card:c?.no||c?.name,src:String(img.currentSrc||img.src).slice(0,90)})};
+          if(img.complete&&img.naturalWidth>20){ok();return}
+          img.addEventListener('load',ok,{once:true});
+          const poll=()=>{
+            if(done||!stage.isConnected)return;
+            if(img.complete&&img.naturalWidth>20){ok();return}
+            if(++ticks>=8){done=true;loadDirectUrls(stage,c);return}
+            setTimeout(poll,80);
+          };
+          setTimeout(poll,80);return;
+        }
+      }
+    }catch(e){trace('ERR-DMG-ART-IMAGETAG-001',{card:c?.no||c?.name,message:String(e)})}
+    loadDirectUrls(stage,c);
   }
   function setDamageActive(on){
     try{document.documentElement.classList.toggle('v0776DamageActive',!!on);document.body?.classList.toggle('v0776DamageActive',!!on)}catch(_e){}
-    if(on)clearAttack();
+    if(on){clearAttack();try{const a=document.getElementById('v0757ActionCenter');if(a)a.hidden=true}catch(_e){}}
   }
   function host(){let x=document.getElementById('v0772DamageOverlay');if(!x){x=document.createElement('div');x.id='v0772DamageOverlay';x.hidden=true;document.body.appendChild(x)}return x}
   function pump(){
@@ -3705,16 +3753,16 @@ html.v0776DamageActive #v0772AttackLayer,body.v0776DamageActive #v0772AttackLaye
     damageShowing=true;setDamageActive(true);
     const it=damageQueue.shift(),x=host();
     x.innerHTML='<div class="v0772DamageBox"><div class="v0772DamageHead">DAMAGE CHECK</div><div class="v0772DamageWho">'+esc(it.who)+'</div><div class="v0772DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0772DamageStage"></div><div class="v0772DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0772DamageLucky">★ LUCKY!</div>':'<div class="v0772DamageNormal">公開</div>')+'</div>';
-    x.hidden=false;const artStage=x.querySelector('.v0772DamageStage');setTimeout(()=>renderDamageArt(artStage,it.card,0),0);
+    x.hidden=false;const artStage=x.querySelector('.v0772DamageStage');setTimeout(()=>renderDamageArt(artStage,it.card),0);
     trace('DMG-REVEAL-001',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky});
     const d=revealDelay();clearTimeout(damageTimer);
     damageTimer=setTimeout(()=>{x.hidden=true;damageShowing=false;if(damageQueue.length)pump();else setDamageActive(false)},d)
   }
   globalThis.v0772QueueDamageReveal=function(def,cards,amount,lucky){clearAttack();cards=Array.isArray(cards)?cards.filter(Boolean):[];if(!cards.length){trace('ERR-DMG-REVEAL-001',{reason:'no cards',amount});return}const who=(def?.name||'PLAYER')+' のダメージチェック';cards.forEach((c,i)=>damageQueue.push({card:c,index:i+1,total:cards.length,who}));const totalMs=revealDelay()*cards.length+postDelay();busyUntil=Math.max(busyUntil,Date.now()+totalMs);nextCpuAt=Math.max(nextCpuAt,busyUntil);pump()};
-  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.77';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.77'})}catch(_e){}}
+  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.78';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.78'})}catch(_e){}}
   addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';damageQueue=[];damageShowing=false;setDamageActive(false);clearAttack();const d=document.getElementById('v0772DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
   setInterval(version,700);setTimeout(statusCheck,150);version();
-  console.info('Palworld OCG v0.7.77 integrated battle-core helpers loaded; v0.7.77 post-render DOM card clone + forced arrow hide');
+  console.info('Palworld OCG v0.7.78 integrated battle-core helpers loaded; official imageTag first + damage diagnostics');
 })();
 </script>
 
@@ -3726,7 +3774,7 @@ function v0772ApplyCoreSource(html){
   const status={AI_TURN_LEAD:true};
   const gateCode="if(typeof v0772GateCpuAttack==='function'&&v0772GateCpuAttack())return;";
 
-  // v0.7.77: do not depend on the exact aiTurn scheduling literal.
+  // v0.7.78: do not depend on the exact aiTurn scheduling literal.
   // The first aiAttackNext call of each CPU turn is held by v0772GateCpuAttack itself.
   // Only inject at the aiAttackNext function entrance, accepting several declaration styles.
   if(html.includes(gateCode)){
@@ -3775,7 +3823,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.77-integrated-battle-core");
+      h.set("x-palworld-bridge","v0.7.78-integrated-battle-core");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -3801,8 +3849,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.77 — 戦闘コア直挿し統合・DAMAGE CHECK実画像ローダー・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断・公式ルール同期";
-        m.start_url="/?pwa=1&v=0777";
+        m.description="Palworld OCG v0.7.78 — DAMAGE CHECK正式画像ルート直結・戦闘コア直挿し統合・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断・公式ルール同期";
+        m.start_url="/?pwa=1&v=0778";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -3815,7 +3863,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.77 integrated battle core + direct damage image loader + attack arrow + diagnostics\n";
+        sw+="\n// v0.7.78 integrated battle core + official imageTag-first damage reveal + attack arrow + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
