@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.75";
+const V="0.7.76";
 
 const PATCH=`
 <style id="v0738CenterRifleFix">
@@ -2582,8 +2582,8 @@ const PATCH=`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.70')title.textContent='v0.7.75';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.75'});
+      const title=document.querySelector('.v04Title');if(title&&title.textContent!=='v0.7.70')title.textContent='v0.7.76';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.76'});
       syncButton();
     }catch(_e){}
   }
@@ -3583,6 +3583,7 @@ const PATCH=`
 <style id="v0772IntegratedBattleCoreStyle">
 #v0772CoreError{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:2147483646;background:#6b1018;color:white;border:1px solid #ff7780;border-radius:10px;padding:7px 12px;font:800 11px/1.35 sans-serif;box-shadow:0 6px 24px #0008;max-width:90vw;text-align:center}
 #v0772AttackLayer{position:fixed;inset:0;z-index:2147482500;pointer-events:none;overflow:hidden}
+html.v0776DamageActive #v0772AttackLayer,body.v0776DamageActive #v0772AttackLayer{display:none!important}
 #v0772AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .v0772AttackRing{position:fixed;border:4px solid #ffd95b;border-radius:14px;box-shadow:0 0 0 3px #0009,0 0 22px #ffd95bcc;animation:v0772Pulse .7s ease-in-out infinite alternate}
 .v0772AttackRing.target{border-color:#ff6f62;box-shadow:0 0 0 3px #0009,0 0 24px #ff6f62cc}
@@ -3638,7 +3639,22 @@ const PATCH=`
     }
     return false;
   };
-  function existingImage(c){try{const name=flat(c?.name),no=flat(c?.no);const imgs=[...document.images];return imgs.find(i=>i.complete&&i.naturalWidth>20&&((name&&flat(i.alt)===name)||(no&&(i.dataset?.no===no||String(i.src).includes(no)))))||null}catch(_e){return null}}
+  function existingImage(c){
+    try{
+      const name=flat(c?.name),no=flat(c?.no),imgs=[...document.images].filter(i=>i.complete&&i.naturalWidth>20);
+      let hit=imgs.find(i=>((name&&flat(i.alt)===name)||(no&&(i.dataset?.no===no||String(i.src).includes(no)))));
+      if(hit)return hit;
+      for(const img of imgs){
+        let el=img,depth=0;
+        while(el&&depth++<7){
+          const txt=flat(el.textContent||'');
+          if((name&&txt.includes(name))||(no&&txt.includes(no)))return img;
+          el=el.parentElement;
+        }
+      }
+      return null;
+    }catch(_e){return null}
+  }
   function damageImageCandidates(c){
     const out=[],push=u=>{u=String(u||'').trim();if(u&&!out.includes(u))out.push(u)};
     try{const ex=existingImage(c);if(ex)push(ex.currentSrc||ex.src)}catch(_e){}
@@ -3673,13 +3689,26 @@ const PATCH=`
     };
     next();
   }
+  function setDamageActive(on){
+    try{document.documentElement.classList.toggle('v0776DamageActive',!!on);document.body?.classList.toggle('v0776DamageActive',!!on)}catch(_e){}
+    if(on)clearAttack();
+  }
   function host(){let x=document.getElementById('v0772DamageOverlay');if(!x){x=document.createElement('div');x.id='v0772DamageOverlay';x.hidden=true;document.body.appendChild(x)}return x}
-  function pump(){if(damageShowing||!damageQueue.length)return;damageShowing=true;const it=damageQueue.shift(),x=host();clearAttack();x.innerHTML='<div class="v0772DamageBox"><div class="v0772DamageHead">DAMAGE CHECK</div><div class="v0772DamageWho">'+esc(it.who)+'</div><div class="v0772DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0772DamageStage"></div><div class="v0772DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0772DamageLucky">★ LUCKY!</div>':'<div class="v0772DamageNormal">公開</div>')+'</div>';x.hidden=false;renderDamageArt(x.querySelector('.v0772DamageStage'),it.card);trace('DMG-REVEAL-001',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky});const d=revealDelay();clearTimeout(damageTimer);damageTimer=setTimeout(()=>{x.hidden=true;damageShowing=false;pump()},d)}
+  function pump(){
+    if(damageShowing||!damageQueue.length){if(!damageShowing&&!damageQueue.length)setDamageActive(false);return}
+    damageShowing=true;setDamageActive(true);
+    const it=damageQueue.shift(),x=host();
+    x.innerHTML='<div class="v0772DamageBox"><div class="v0772DamageHead">DAMAGE CHECK</div><div class="v0772DamageWho">'+esc(it.who)+'</div><div class="v0772DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0772DamageStage"></div><div class="v0772DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0772DamageLucky">★ LUCKY!</div>':'<div class="v0772DamageNormal">公開</div>')+'</div>';
+    x.hidden=false;renderDamageArt(x.querySelector('.v0772DamageStage'),it.card);
+    trace('DMG-REVEAL-001',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky});
+    const d=revealDelay();clearTimeout(damageTimer);
+    damageTimer=setTimeout(()=>{x.hidden=true;damageShowing=false;if(damageQueue.length)pump();else setDamageActive(false)},d)
+  }
   globalThis.v0772QueueDamageReveal=function(def,cards,amount,lucky){clearAttack();cards=Array.isArray(cards)?cards.filter(Boolean):[];if(!cards.length){trace('ERR-DMG-REVEAL-001',{reason:'no cards',amount});return}const who=(def?.name||'PLAYER')+' のダメージチェック';cards.forEach((c,i)=>damageQueue.push({card:c,index:i+1,total:cards.length,who}));const totalMs=revealDelay()*cards.length+postDelay();busyUntil=Math.max(busyUntil,Date.now()+totalMs);nextCpuAt=Math.max(nextCpuAt,busyUntil);pump()};
-  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.75';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.75'})}catch(_e){}}
-  addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';damageQueue=[];damageShowing=false;clearAttack();const d=document.getElementById('v0772DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
+  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.76';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.76'})}catch(_e){}}
+  addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';damageQueue=[];damageShowing=false;setDamageActive(false);clearAttack();const d=document.getElementById('v0772DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
   setInterval(version,700);setTimeout(statusCheck,150);version();
-  console.info('Palworld OCG v0.7.75 integrated battle-core helpers loaded; CPU lead delay is enforced at aiAttackNext entrance');
+  console.info('Palworld OCG v0.7.76 integrated battle-core helpers loaded; v0.7.76 DOM image clone + forced arrow hide');
 })();
 </script>
 
@@ -3691,7 +3720,7 @@ function v0772ApplyCoreSource(html){
   const status={AI_TURN_LEAD:true};
   const gateCode="if(typeof v0772GateCpuAttack==='function'&&v0772GateCpuAttack())return;";
 
-  // v0.7.75: do not depend on the exact aiTurn scheduling literal.
+  // v0.7.76: do not depend on the exact aiTurn scheduling literal.
   // The first aiAttackNext call of each CPU turn is held by v0772GateCpuAttack itself.
   // Only inject at the aiAttackNext function entrance, accepting several declaration styles.
   if(html.includes(gateCode)){
@@ -3740,7 +3769,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.75-integrated-battle-core");
+      h.set("x-palworld-bridge","v0.7.76-integrated-battle-core");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -3766,8 +3795,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.75 — 戦闘コア直挿し統合・DAMAGE CHECK実画像ローダー・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断・公式ルール同期";
-        m.start_url="/?pwa=1&v=0775";
+        m.description="Palworld OCG v0.7.76 — 戦闘コア直挿し統合・DAMAGE CHECK実画像ローダー・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断・公式ルール同期";
+        m.start_url="/?pwa=1&v=0776";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -3780,7 +3809,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.75 integrated battle core + direct damage image loader + attack arrow + diagnostics\n";
+        sw+="\n// v0.7.76 integrated battle core + direct damage image loader + attack arrow + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
