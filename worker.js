@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.85";
+const V="0.7.86";
 
 const PATCH=String.raw`
 
@@ -16,7 +16,7 @@ const PATCH=String.raw`
       queued=false;flushes++;
       const rs=lastRecords;lastRecords=[];
       for(const cb of Array.from(callbacks)){
-        try{callbackRuns++;cb(rs,nativeObserver)}catch(e){try{console.warn('[v0.7.85 observer callback]',e)}catch(_e){}}
+        try{callbackRuns++;cb(rs,nativeObserver)}catch(e){try{console.warn('[v0.7.86 observer callback]',e)}catch(_e){}}
       }
     },90);
   });
@@ -30,7 +30,7 @@ const PATCH=String.raw`
   }
   globalThis.v0781SharedObserver=SharedObserver;
   globalThis.__v0781ObserverHub={callbacks,nativeObserver,get count(){return callbacks.size},get flushes(){return flushes},get callbackRuns(){return callbackRuns}};
-  console.info('Palworld OCG v0.7.85 stability hub: shared MutationObserver active');
+  console.info('Palworld OCG v0.7.86 stability hub: shared MutationObserver active');
 })();
 </script>
 <style id="v0738CenterRifleFix">
@@ -234,11 +234,11 @@ const PATCH=String.raw`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title)title.textContent='v0.7.85';
+      if(title)title.textContent='v0.7.86';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.85';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.86';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -1102,7 +1102,7 @@ const PATCH=String.raw`
         '</div></div>';
     };
   }
-  /* v0.7.85: normal attack arrows are owned only by the integrated battle core. */
+  /* v0.7.86: normal attack arrows are owned only by the integrated battle core. */
   if(typeof chooseBlock==='function'){
     const baseChooseBlock=chooseBlock;
     chooseBlock=function(uid){
@@ -2101,7 +2101,7 @@ const PATCH=String.raw`
   addEventListener('pageshow',sync,{passive:true});
   addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,250);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.85 compact effect-choice UI applied (legacy DAMAGE CHECK styling disabled)');
+  console.info('Palworld OCG v0.7.86 compact effect-choice UI applied (legacy DAMAGE CHECK styling disabled)');
 })();
 </script>
 
@@ -2472,8 +2472,8 @@ const PATCH=String.raw`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title)title.textContent='v0.7.85';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.85'});
+      const title=document.querySelector('.v04Title');if(title)title.textContent='v0.7.86';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.86'});
       syncButton();
     }catch(_e){}
   }
@@ -2731,7 +2731,7 @@ const PATCH=String.raw`
   if(globalThis.__v0762DiagnosticsApplied)return;
   globalThis.__v0762DiagnosticsApplied=true;
 
-  const VERSION='0.7.85';
+  const VERSION='0.7.86';
   const STORE='palworld_diag_v0762';
   const MAX=80;
   const OFFICIAL_QA_TOTAL=97;
@@ -2792,7 +2792,7 @@ const PATCH=String.raw`
   }
   globalThis.palDiagRecord=record;
 
-  // v0.7.85: remove old successful test-play entries that were mistakenly stored as errors.
+  // v0.7.86: remove old successful test-play entries that were mistakenly stored as errors.
   try{const a=load(),b=a.filter(e=>!(e&&e.code==='TEST-PLAY-0781'));if(b.length!==a.length)save(b)}catch(_e){}
 
   function checkPlayer(pl,label,issues){
@@ -2989,7 +2989,7 @@ const PATCH=String.raw`
 (()=>{
   if(globalThis.__v0763FullSuiteApplied)return;
   globalThis.__v0763FullSuiteApplied=true;
-  const VERSION='0.7.85', STORE='palworld_suite_v0763';
+  const VERSION='0.7.86', STORE='palworld_suite_v0763';
   let busy=false, queued=false;
 
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -3215,7 +3215,7 @@ const PATCH=String.raw`
 (()=>{
   if(globalThis.__v0764TierDeckGuardApplied)return;
   globalThis.__v0764TierDeckGuardApplied=true;
-  const VERSION='0.7.85';
+  const VERSION='0.7.86';
   const STORE='palworld_tier_deck_guard_v0764';
   const tierFingerprints=new Set();
   let tierDepth=0,tierUiUntil=0,scanQueued=false,wrapping=false,bpRetryTimer=0,bpRetryCount=0,bpWaitToastAt=0;
@@ -3543,15 +3543,15 @@ const PATCH=String.raw`
   globalThis.palAuditTierDecks=()=>auditAll('manualApi');
   globalThis.palTierDeckGuardStatus=()=>loadLog();
   install();setTimeout(install,700);setTimeout(()=>{wrapTierFunctions();auditAll('lateBoot')},2200);
-  console.info('Palworld OCG v0.7.85 Tier legal-deck guard applied with BP01 sync defer');
+  console.info('Palworld OCG v0.7.86 Tier legal-deck guard applied with BP01 sync defer');
 })();
 </script>
 
 
 
 <style id="v0781IntegratedBattleCoreStyle">
-/* v0.7.85 — single-owner battle visuals. Old attack/DAMAGE CHECK renderers are disabled. */
-#v0781AttackLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
+/* v0.7.86 — stable serialized battle visuals. Attack cue DOM is reused and DAMAGE CHECK is sequenced. */
+#v0781AttackLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility 0s linear .12s;contain:layout paint style}#v0781AttackLayer.v0786Visible{opacity:1;visibility:visible;transition:opacity .12s ease,visibility 0s}
 #v0781AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .v0781AttackRing{position:fixed;border:3px solid #ffd95b;border-radius:12px;box-shadow:0 0 0 2px #fff7b0 inset,0 0 18px #ffc83d;animation:v0781Ring .55s ease-in-out infinite alternate}
 .v0781AttackRing.target{border-color:#ff695e;box-shadow:0 0 0 2px #ffd0cc inset,0 0 19px #ff4d40}
@@ -3560,8 +3560,7 @@ const PATCH=String.raw`
 
 #v0781CoreError{position:fixed;left:50%;top:max(8px,env(safe-area-inset-top));transform:translateX(-50%);z-index:2147483646;max-width:92vw;padding:8px 14px;border-radius:12px;border:1px solid #ff918b;background:#7b1119f5;color:#fff;font:900 12px/1.25 sans-serif;box-shadow:0 7px 24px #000c}
 
-#v0781DamageOverlay{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;background:#0009;pointer-events:none;padding:10px}
-#v0781DamageOverlay[hidden]{display:none!important}
+#v0781DamageOverlay{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;background:#0009;pointer-events:none;padding:10px;opacity:0;visibility:hidden;transition:opacity .14s ease,visibility 0s linear .14s}#v0781DamageOverlay.v0786Visible{opacity:1;visibility:visible;transition:opacity .14s ease,visibility 0s}#v0781DamageOverlay[hidden]{display:none!important}
 .v0781DamageBox{width:min(580px,92vw);max-height:96vh;overflow:hidden;background:linear-gradient(180deg,#123529,#081510);border:2px solid #e7ca68;border-radius:20px;color:#fff;text-align:center;padding:11px 18px 13px;box-shadow:0 18px 48px #000d}
 .v0781DamageHead{font:1000 21px/1.1 sans-serif;letter-spacing:.09em;color:#f5df8d}.v0781DamageWho{font:800 11px/1.25 sans-serif;opacity:.9;margin-top:3px}.v0781DamageCount{font:900 11px/1.2 sans-serif;color:#d8ddeb;margin-top:4px}
 .v0781DamageStage{height:min(330px,60vh);width:min(250px,45vw);margin:8px auto;background-position:center;background-repeat:no-repeat;background-size:contain;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 10px 24px #0008 inset;position:relative}
@@ -3569,14 +3568,14 @@ const PATCH=String.raw`
 .v0781DamageStage.loaded::before{display:none}
 .v0781DamageStage .card{width:205px!important;height:290px!important;transform:none!important;pointer-events:none!important;margin:auto!important}
 .v0781DamageName{font:1000 18px/1.25 sans-serif}.v0781DamageLucky{margin-top:7px;font:1000 26px/1.1 sans-serif;color:#ffe45f;text-shadow:0 0 12px #ffe45f88,0 2px 2px #000}.v0781DamageNormal{margin-top:6px;font:900 12px/1.2 sans-serif;color:#cfe8dd}
-html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLayer,html.v0781DamageActive #v0745BattleFxLayer,body.v0781DamageActive #v0745BattleFxLayer,html.v0781DamageActive #v0757ActionCenter,body.v0781DamageActive #v0757ActionCenter,html.v0781DamageActive .v0756CpuAction,body.v0781DamageActive .v0756CpuAction{display:none!important}
+html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLayer{opacity:0!important;visibility:hidden!important}html.v0781DamageActive #v0745BattleFxLayer,body.v0781DamageActive #v0745BattleFxLayer,html.v0781DamageActive #v0757ActionCenter,body.v0781DamageActive #v0757ActionCenter,html.v0781DamageActive .v0756CpuAction,body.v0781DamageActive .v0756CpuAction{display:none!important}
 @media(max-height:520px) and (orientation:landscape){#v0781AttackLabel{top:6%;font-size:11px;padding:5px 9px}.v0781DamageBox{width:min(540px,90vw);padding:6px 12px 8px}.v0781DamageHead{font-size:16px}.v0781DamageWho,.v0781DamageCount{font-size:9px}.v0781DamageStage{height:min(275px,68vh);width:min(205px,34vw);margin:4px auto}.v0781DamageName{font-size:14px}.v0781DamageLucky{font-size:20px;margin-top:3px}.v0781DamageNormal{font-size:10px;margin-top:3px}}
 </style>
 <script id="v0781IntegratedBattleCoreScript">
 (()=>{
   if(globalThis.__v0781IntegratedCoreApplied)return;globalThis.__v0781IntegratedCoreApplied=true;
   const SPEED_KEY='palworld_cpu_speed_v0769';
-  let resumeKey='',nextCpuAt=0,busyUntil=0,attackTimer=0,damageTimer=0,damageQueue=[],damageShowing=false,cpuGateTurn='',lastDamageKey='',lastQueueAt=0;
+  let resumeKey='',nextCpuAt=0,busyUntil=0,attackTimer=0,attackKey='',damageTimer=0,damageQueue=[],damageShowing=false,cpuGateTurn='',cpuGateTimer=0,cpuGateDue=0,lastDamageKey='',lastQueueAt=0;
   const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
   const flat=s=>String(s??'').replace(/\s+/g,' ').trim();
   function stress(){try{return !!(globalThis.v077Stress?.active||G?.stressMode||G?.cpuStress)}catch(_e){return false}}
@@ -3596,11 +3595,14 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function playerEl(def){try{const boxes=[...document.querySelectorAll('.v04PlayerBox,.v04Controls .v04PlayerBox,.v04SideMeta,.playerBox')];const name=flat(def?.name);return boxes.find(x=>name&&flat(x.textContent).includes(name))||boxes[0]||document.querySelector('.v04Controls')||document.querySelector('.v04Play')}catch(_e){return document.querySelector('.v04Play')}}
   function targetCard(attOwner,target){try{const d=other(attOwner);if(target?.type==='pal')return d?.pals?.find(x=>x.uid===target.uid)||null;if(target?.type==='structure')return d?.supports?.find(x=>x.uid===target.uid)||null}catch(_e){}return null}
   function attackNodes(attOwner,atk,target){const src=cardEl(atk?.uid);let dst=null,name='';if(target?.type==='player'){const d=other(attOwner);dst=playerEl(d);name=d?.name||'PLAYER'}else{const c=targetCard(attOwner,target);dst=cardEl(c?.uid||target?.uid);name=c?.name||'対象'}return {src,dst,name}}
-  function clearAttack(){clearTimeout(attackTimer);const l=document.getElementById('v0781AttackLayer');if(l)l.innerHTML=''}
-  function drawAttack(attOwner,atk,target){try{const {src,dst,name}=attackNodes(attOwner,atk,target);if(!src||!dst)return false;const sr=src.getBoundingClientRect(),dr=dst.getBoundingClientRect();if(sr.width<5||dr.width<5)return false;let l=document.getElementById('v0781AttackLayer');if(!l){l=document.createElement('div');l.id='v0781AttackLayer';document.body.appendChild(l)}const sx=sr.left+sr.width/2,sy=sr.top+sr.height/2,dx=dr.left+dr.width/2,dy=dr.top+dr.height/2,pad=5;l.innerHTML='<div class="v0781AttackRing" style="left:'+(sr.left-pad)+'px;top:'+(sr.top-pad)+'px;width:'+(sr.width+pad*2)+'px;height:'+(sr.height+pad*2)+'px"></div><div class="v0781AttackRing target" style="left:'+(dr.left-pad)+'px;top:'+(dr.top-pad)+'px;width:'+(dr.width+pad*2)+'px;height:'+(dr.height+pad*2)+'px"></div><svg><defs><marker id="v0781ArrowHead" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#ffd95b"></path></marker></defs><line x1="'+sx+'" y1="'+sy+'" x2="'+dx+'" y2="'+dy+'" stroke="#ffd95b" stroke-width="7" stroke-linecap="round" marker-end="url(#v0781ArrowHead)" style="filter:drop-shadow(0 2px 3px #000)"></line></svg><div id="v0781AttackLabel">攻撃　'+esc(atk?.name||'攻撃側')+' → '+esc(name)+'</div>';clearTimeout(attackTimer);attackTimer=setTimeout(clearAttack,Math.max(1600,preDelay()+750));trace('ATK-VIS-001',{from:atk?.no||atk?.name,to:target?.type==='player'?'PLAYER':target?.uid});return true}catch(e){trace('ERR-ATK-VIS-001',{message:String(e)});return false}}
-  globalThis.v0781MaybeDelayAttack=function(attOwner,atk,target,targetCard,after){drawAttack(attOwner,atk,target);let ai=false;try{ai=!!attOwner?.isAI||attOwner===G?.a}catch(_e){}if(!ai||stress())return false;const key=String(atk?.uid)+'|'+String(target?.type)+'|'+String(target?.uid??'player');if(resumeKey===key){resumeKey='';return false}const d=preDelay();if(d<=0)return false;resumeKey=key;nextCpuAt=Math.max(nextCpuAt,Date.now()+d+postDelay());trace('CPU-DELAY-001',{ms:d,key});setTimeout(()=>{try{declareBattle(attOwner,atk.uid,target,after)}catch(e){resumeKey='';trace('ERR-CPU-DELAY-001',{message:String(e)})}},d);return true};
+  function attackSig(atk,target){return String(G?.turnSeq??'')+'|'+String(atk?.uid??'')+'|'+String(target?.type??'')+'|'+String(target?.uid??'player')}
+  function attackLayer(){let l=document.getElementById('v0781AttackLayer');if(!l){l=document.createElement('div');l.id='v0781AttackLayer';document.body.appendChild(l)}return l}
+  function clearAttack(){clearTimeout(attackTimer);const l=document.getElementById('v0781AttackLayer');if(l)l.classList.remove('v0786Visible')}
+  function armAttackTimeout(){clearTimeout(attackTimer);attackTimer=setTimeout(()=>{try{if(pendingBlock||pendingQuick){armAttackTimeout();return}}catch(_e){}clearAttack()},Math.max(1700,preDelay()+950))}
+  function drawAttack(attOwner,atk,target){try{const key=attackSig(atk,target),l=attackLayer();if(attackKey===key&&l.childElementCount){l.classList.add('v0786Visible');armAttackTimeout();trace('ATK-VIS-KEEP-086',{key});return true}const {src,dst,name}=attackNodes(attOwner,atk,target);if(!src||!dst)return false;const sr=src.getBoundingClientRect(),dr=dst.getBoundingClientRect();if(sr.width<5||dr.width<5)return false;const sx=sr.left+sr.width/2,sy=sr.top+sr.height/2,dx=dr.left+dr.width/2,dy=dr.top+dr.height/2,pad=5;l.innerHTML='<div class="v0781AttackRing" style="left:'+(sr.left-pad)+'px;top:'+(sr.top-pad)+'px;width:'+(sr.width+pad*2)+'px;height:'+(sr.height+pad*2)+'px"></div><div class="v0781AttackRing target" style="left:'+(dr.left-pad)+'px;top:'+(dr.top-pad)+'px;width:'+(dr.width+pad*2)+'px;height:'+(dr.height+pad*2)+'px"></div><svg><defs><marker id="v0781ArrowHead" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#ffd95b"></path></marker></defs><line x1="'+sx+'" y1="'+sy+'" x2="'+dx+'" y2="'+dy+'" stroke="#ffd95b" stroke-width="7" stroke-linecap="round" marker-end="url(#v0781ArrowHead)" style="filter:drop-shadow(0 2px 3px #000)"></line></svg><div id="v0781AttackLabel">攻撃　'+esc(atk?.name||'攻撃側')+' → '+esc(name)+'</div>';attackKey=key;l.classList.add('v0786Visible');armAttackTimeout();trace('ATK-VIS-NEW-086',{key,from:atk?.no||atk?.name,to:target?.type==='player'?'PLAYER':target?.uid});return true}catch(e){trace('ERR-ATK-VIS-001',{message:String(e)});return false}}
+  globalThis.v0781MaybeDelayAttack=function(attOwner,atk,target,targetCard,after){const key=attackSig(atk,target);if(resumeKey===key){resumeKey='';trace('ATK-RESUME-NO-REDRAW-086',{key});return false}drawAttack(attOwner,atk,target);let ai=false;try{ai=!!attOwner?.isAI||attOwner===G?.a}catch(_e){}if(!ai||stress())return false;const d=preDelay();if(d<=0)return false;resumeKey=key;nextCpuAt=Math.max(nextCpuAt,Date.now()+d+postDelay());trace('CPU-DELAY-001',{ms:d,key});setTimeout(()=>{try{declareBattle(attOwner,atk.uid,target,after)}catch(e){resumeKey='';trace('ERR-CPU-DELAY-001',{message:String(e)})}},d);return true};
   globalThis.v0781RefreshAttackCue=function(attOwner,atk,target){drawAttack(attOwner,atk,target)};
-  globalThis.v0781GateCpuAttack=function(){if(stress())return false;const now=Date.now();let turnKey='';try{turnKey=String(G?.turnSeq??'')+'|'+String(G?.turn??'')}catch(_e){}if(turnKey&&G?.turn==='a'&&cpuGateTurn!==turnKey){cpuGateTurn=turnKey;let lead=0;try{lead=Number(globalThis.v0781CpuTurnLeadDelay?.()||0)}catch(_e){}nextCpuAt=Math.max(nextCpuAt,now+Math.max(0,lead));trace('CPU-TURN-LEAD-001',{ms:Math.max(0,lead),turn:G?.turnSeq})}const gate=Math.max(nextCpuAt,busyUntil);if(gate>now+25){const wait=gate-now+35;trace('CPU-ATTACK-GATE-001',{ms:wait,turn:G?.turnSeq});setTimeout(()=>{try{aiAttackNext()}catch(_e){}},wait);return true}return false};
+  globalThis.v0781GateCpuAttack=function(){if(stress())return false;const now=Date.now();let turnKey='';try{turnKey=String(G?.turnSeq??'')+'|'+String(G?.turn??'')}catch(_e){}if(turnKey&&G?.turn==='a'&&cpuGateTurn!==turnKey){cpuGateTurn=turnKey;let lead=0;try{lead=Number(globalThis.v0781CpuTurnLeadDelay?.()||0)}catch(_e){}nextCpuAt=Math.max(nextCpuAt,now+Math.max(0,lead));trace('CPU-TURN-LEAD-001',{ms:Math.max(0,lead),turn:G?.turnSeq})}const gate=Math.max(nextCpuAt,busyUntil);if(gate>now+25){const due=gate+35,wait=Math.max(30,due-now);if(!cpuGateTimer||Math.abs(cpuGateDue-due)>80){clearTimeout(cpuGateTimer);cpuGateDue=due;cpuGateTimer=setTimeout(()=>{cpuGateTimer=0;cpuGateDue=0;try{aiAttackNext()}catch(_e){}},wait);trace('CPU-ATTACK-GATE-086',{ms:wait,turn:G?.turnSeq})}return true}if(cpuGateTimer){clearTimeout(cpuGateTimer);cpuGateTimer=0;cpuGateDue=0}return false};
 
   function artSources(c){
     const out=[],push=(route,u)=>{u=String(u||'').trim();if(u&&!out.some(x=>x.src===u))out.push({route,src:u})};
@@ -3628,8 +3630,8 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function renderDamageArt(stage,c){if(!stage||!stage.isConnected)return;stage.classList.remove('loaded');stage.innerHTML='';stage.style.backgroundImage='';const items=artSources(c);trace('DMG-ART-ROUTE-079',{card:c?.no||c?.name,sourceRoutes:items.map(x=>x.route),hasNo:!!c?.no});setStageSource(stage,c,items,0)}
   function setDamageActive(on){try{document.documentElement.classList.toggle('v0781DamageActive',!!on);document.body?.classList.toggle('v0781DamageActive',!!on)}catch(_e){}if(on){clearAttack();try{const a=document.getElementById('v0757ActionCenter');if(a)a.hidden=true}catch(_e){}}}
   function host(){let x=document.getElementById('v0781DamageOverlay');if(!x){x=document.createElement('div');x.id='v0781DamageOverlay';x.hidden=true;document.body.appendChild(x)}return x}
-  function pump(){if(damageShowing||!damageQueue.length){if(!damageShowing&&!damageQueue.length)setDamageActive(false);return}damageShowing=true;setDamageActive(true);const it=damageQueue.shift(),x=host();x.innerHTML='<div class="v0781DamageBox"><div class="v0781DamageHead">DAMAGE CHECK</div><div class="v0781DamageWho">'+esc(it.who)+'</div><div class="v0781DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0781DamageStage"></div><div class="v0781DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0781DamageLucky">★ LUCKY!</div>':'<div class="v0781DamageNormal">公開</div>')+'</div>';x.hidden=false;renderDamageArt(x.querySelector('.v0781DamageStage'),it.card);trace('DMG-REVEAL-001',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky,source:it.source||'core'});const d=revealDelay();clearTimeout(damageTimer);damageTimer=setTimeout(()=>{x.hidden=true;damageShowing=false;if(damageQueue.length)pump();else setDamageActive(false)},d)}
-  function queueDamage(def,cards,source='core'){cards=Array.isArray(cards)?cards.filter(Boolean):[];if(!cards.length){trace('ERR-DMG-REVEAL-001',{reason:'no cards',source});return false}const key=cards.map(c=>String(c.uid??c.no??c.name)).join('|')+'|'+String(G?.turnSeq??'');if(key===lastDamageKey&&Date.now()-lastQueueAt<1200)return false;lastDamageKey=key;lastQueueAt=Date.now();clearAttack();const who=(def?.name||'PLAYER')+' のダメージチェック';cards.forEach((c,i)=>damageQueue.push({card:c,index:i+1,total:cards.length,who,source}));const totalMs=revealDelay()*cards.length+postDelay();busyUntil=Math.max(busyUntil,Date.now()+totalMs);nextCpuAt=Math.max(nextCpuAt,busyUntil);pump();return true}
+  function pump(){if(damageShowing||!damageQueue.length){if(!damageShowing&&!damageQueue.length)setDamageActive(false);return}damageShowing=true;setDamageActive(true);const it=damageQueue.shift(),x=host();x.innerHTML='<div class="v0781DamageBox"><div class="v0781DamageHead">DAMAGE CHECK</div><div class="v0781DamageWho">'+esc(it.who)+'</div><div class="v0781DamageCount">'+it.index+' / '+it.total+'枚目</div><div class="v0781DamageStage"></div><div class="v0781DamageName">'+esc(it.card?.name||it.card?.no||'公開カード')+'</div>'+(it.card?.lucky?'<div class="v0781DamageLucky">★ LUCKY!</div>':'<div class="v0781DamageNormal">公開</div>')+'</div>';x.hidden=false;requestAnimationFrame(()=>x.classList.add('v0786Visible'));renderDamageArt(x.querySelector('.v0781DamageStage'),it.card);trace('DMG-REVEAL-086',{card:it.card?.no||it.card?.name,index:it.index,total:it.total,lucky:!!it.card?.lucky,source:it.source||'core'});const d=revealDelay();clearTimeout(damageTimer);damageTimer=setTimeout(()=>{damageShowing=false;if(damageQueue.length){pump();return}x.classList.remove('v0786Visible');setTimeout(()=>{if(!damageShowing&&!damageQueue.length){x.hidden=true;setDamageActive(false)}},150)},d)}
+  function queueDamage(def,cards,source='core'){cards=Array.isArray(cards)?cards.filter(Boolean):[];if(!cards.length){trace('ERR-DMG-REVEAL-001',{reason:'no cards',source});return false}const key=cards.map(c=>String(c.uid??c.no??c.name)).join('|')+'|'+String(G?.turnSeq??'');if(key===lastDamageKey&&Date.now()-lastQueueAt<1200)return false;lastDamageKey=key;lastQueueAt=Date.now();clearAttack();const who=(def?.name||'PLAYER')+' のダメージチェック';cards.forEach((c,i)=>damageQueue.push({card:c,index:i+1,total:cards.length,who,source}));const totalMs=revealDelay()*cards.length+postDelay()+180;busyUntil=Math.max(busyUntil,Date.now()+totalMs);nextCpuAt=Math.max(nextCpuAt,busyUntil);pump();return true}
   globalThis.v0781QueueDamageReveal=function(def,cards,amount,lucky){return queueDamage(def,cards,'core')};
 
   function cardByName(pl,name,used){const arr=pl?.grave||[];for(let i=arr.length-1;i>=0;i--){const c=arr[i];if(used.has(c?.uid))continue;if(flat(c?.name)===flat(name)){used.add(c.uid);return c}}return null}
@@ -3645,11 +3647,11 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   }
   try{if(typeof log==='function'&&!log.__v0781DamageFallbackWrapped){const base=log;const wrapped=function(msg){const r=base.apply(this,arguments);try{if(/Damage Check|Lucky Pal/i.test(String(msg||'')))setTimeout(fallbackDamageFromLogs,0)}catch(_e){}return r};wrapped.__v0781DamageFallbackWrapped=true;wrapped.__v0781Old=base;log=wrapped}}catch(e){trace('ERR-DMG-FALLBACK-INSTALL-079',{message:String(e)})}
 
-  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.85';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.85'})}catch(_e){}}
-  addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';damageQueue=[];damageShowing=false;lastDamageKey='';lastQueueAt=0;setDamageActive(false);clearAttack();const d=document.getElementById('v0781DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
+  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.86';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.86'})}catch(_e){}}
+  addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';attackKey='';damageQueue=[];damageShowing=false;lastDamageKey='';lastQueueAt=0;clearTimeout(cpuGateTimer);cpuGateTimer=0;cpuGateDue=0;setDamageActive(false);clearAttack();const d=document.getElementById('v0781DamageOverlay');if(d){d.classList.remove('v0786Visible');d.hidden=true}setTimeout(()=>{version();statusCheck()},80)},{passive:true});
   try{if(typeof render==='function'&&!render.__v0781VersionWrapped){const baseRender=render;const wrapped=function(){const r=baseRender.apply(this,arguments);setTimeout(version,0);return r};wrapped.__v0781VersionWrapped=true;wrapped.__v0781Old=baseRender;render=wrapped}}catch(_e){}
   setTimeout(statusCheck,150);setTimeout(version,900);version();
-  console.info('Palworld OCG v0.7.85 integrated battle visuals loaded: single-owner attack FX + direct background DAMAGE CHECK art + log fallback');
+  console.info('Palworld OCG v0.7.86 integrated battle visuals loaded: stable single-draw attack cue + serialized DAMAGE CHECK');
 })();
 </script>
 
@@ -3671,7 +3673,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function selectedConfigFromDom(){
     const old=load(), hand={};let total=0;
     document.querySelectorAll('#v0781TestOverlay select[data-no]').forEach(function(sel){const n=Math.max(0,Number(sel.value)||0);if(n){hand[sel.getAttribute('data-no')]=n;total+=n}});
-    return {deckKey:String(document.getElementById('v0781TestDeckKey')?.value||currentDeckKey()),souls:Math.max(0,Math.min(10,Number(document.getElementById('v0781TestSouls')?.value)||0)),fillToFive:!!document.getElementById('v0781TestFill')?.checked,hand:hand,total:total,lastUpdated:Date.now(),version:'0.7.85',previous:old?.version||''};
+    return {deckKey:String(document.getElementById('v0781TestDeckKey')?.value||currentDeckKey()),souls:Math.max(0,Math.min(10,Number(document.getElementById('v0781TestSouls')?.value)||0)),fillToFive:!!document.getElementById('v0781TestFill')?.checked,hand:hand,total:total,lastUpdated:Date.now(),version:'0.7.86',previous:old?.version||''};
   }
   globalThis.v0781TestCountChanged=function(sel){
     const all=Array.from(document.querySelectorAll('#v0781TestOverlay select[data-no]'));const total=all.reduce(function(a,x){return a+(Number(x.value)||0)},0);
@@ -3717,17 +3719,17 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function renderReady(){
     if(!G?.p)return;const cards=G.p.hand.map(function(c){try{return cardHTML(c)}catch(_e){return '<div class="card">'+h(c?.name||c?.no||'CARD')+'</div>'}}).join('');
     const app=document.getElementById('app');if(!app)return;
-    app.innerHTML='<div class="modal"><div class="modalCard v0781TestReady"><h2>🧪 テストプレイ開始確認 <span class="badge official">v0.7.85</span></h2><div class="good">指定した初期状態を適用しました。通常対戦のルール・保存デッキは変更していません。</div><div style="margin:7px 0;font-weight:900">YOU ソウル '+standingSouls(G.p)+'/'+G.p.souls.length+'　手札 '+G.p.hand.length+'枚</div><div class="hand" style="margin:8px 0">'+cards+'</div><div class="choices"><button class="v0781TestStart" onclick="v0781BeginTestBattle()">この状態で開始</button><button onclick="showStart()">開始画面へ戻る</button></div></div></div>'
+    app.innerHTML='<div class="modal"><div class="modalCard v0781TestReady"><h2>🧪 テストプレイ開始確認 <span class="badge official">v0.7.86</span></h2><div class="good">指定した初期状態を適用しました。通常対戦のルール・保存デッキは変更していません。</div><div style="margin:7px 0;font-weight:900">YOU ソウル '+standingSouls(G.p)+'/'+G.p.souls.length+'　手札 '+G.p.hand.length+'枚</div><div class="hand" style="margin:8px 0">'+cards+'</div><div class="choices"><button class="v0781TestStart" onclick="v0781BeginTestBattle()">この状態で開始</button><button onclick="showStart()">開始画面へ戻る</button></div></div></div>'
   }
   globalThis.v0781BeginTestBattle=function(){if(!G)return;try{playerMulligan(false)}catch(e){alert('テスト開始に失敗しました: '+String(e?.message||e))}};
   function enhanceStart(){
-    try{const badge=document.querySelector('h2 .badge.official');if(badge)badge.textContent='v0.7.85';const actions=document.querySelector('.v047StartActions');if(actions&&!document.getElementById('v0781TestEntry')){const b=document.createElement('button');b.id='v0781TestEntry';b.className='v0781TestEntry';b.textContent='🧪 テストプレイ';b.onclick=v0781OpenTestPlay;actions.appendChild(b)}}catch(_e){}
+    try{const badge=document.querySelector('h2 .badge.official');if(badge)badge.textContent='v0.7.86';const actions=document.querySelector('.v047StartActions');if(actions&&!document.getElementById('v0781TestEntry')){const b=document.createElement('button');b.id='v0781TestEntry';b.className='v0781TestEntry';b.textContent='🧪 テストプレイ';b.onclick=v0781OpenTestPlay;actions.appendChild(b)}}catch(_e){}
   }
   try{if(typeof showStart==='function'&&!showStart.__v0781TestWrapped){const base=showStart;const w=function(){const r=base.apply(this,arguments);enhanceStart();return r};w.__v0781TestWrapped=true;w.__v0781Old=base;showStart=w}}catch(_e){}
   try{if(typeof setupGame==='function'&&!setupGame.__v0781TestWrapped){const base=setupGame;const w=function(){const wants=launching;const r=base.apply(this,arguments);if(wants){setTimeout(function(){try{if(applyConfig())renderReady()}catch(e){launching=false;alert('テスト初期設定の適用に失敗しました: '+String(e?.message||e))}},0)}return r};w.__v0781TestWrapped=true;w.__v0781Old=base;setupGame=w}}catch(_e){}
   addEventListener('pageshow',function(){setTimeout(enhanceStart,120)},{passive:true});
   enhanceStart();
-  console.info('Palworld OCG v0.7.85 test-play mode loaded');
+  console.info('Palworld OCG v0.7.86 test-play mode loaded');
 })();
 </script>
 
@@ -3800,10 +3802,10 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
       card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(uid)}});
     });
   }
-  try{if(typeof renderMulligan==='function'){var base=renderMulligan;renderMulligan=function(){var r=base.apply(this,arguments);requestAnimationFrame(bind);setTimeout(bind,80);return r}}}catch(e){console.warn('[v0.7.85 mulligan detail wrapper]',e)}
+  try{if(typeof renderMulligan==='function'){var base=renderMulligan;renderMulligan=function(){var r=base.apply(this,arguments);requestAnimationFrame(bind);setTimeout(bind,80);return r}}}catch(e){console.warn('[v0.7.86 mulligan detail wrapper]',e)}
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail()});
   setTimeout(bind,50);setTimeout(bind,400);
-  console.info('Palworld OCG v0.7.85 mulligan card-tap detail enabled');
+  console.info('Palworld OCG v0.7.86 mulligan card-tap detail enabled');
 })();
 </script>
 
@@ -3811,7 +3813,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
 (()=>{
   if(globalThis.__v0784NegativeDamageGuardApplied)return;
   globalThis.__v0784NegativeDamageGuardApplied=true;
-  const VERSION='0.7.85';
+  const VERSION='0.7.86';
   let busy=false,lastSig='',lastAt=0;
 
   function allZoneCards(){
@@ -3922,13 +3924,13 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   }
   cleanLegacy();install();setTimeout(install,300);setTimeout(install,1200);
   addEventListener('pageshow',()=>setTimeout(install,80),{passive:true});
-  console.info('Palworld OCG v0.7.85 negative Damage origin trace + self-repair enabled');
+  console.info('Palworld OCG v0.7.86 negative Damage origin trace + self-repair enabled');
 })();
 </script>
 
 
 <style id="v0785CardDetailDismissStyle">
-/* v0.7.85 — every old showCardInfo modal gets a permanently reachable close control. */
+/* v0.7.86 — every old showCardInfo modal gets a permanently reachable close control. */
 .modal.v0785ClosableCardDetail{pointer-events:auto!important}
 .modal.v0785ClosableCardDetail>.modalCard{position:relative!important;max-height:94dvh!important;overflow:auto!important;padding-top:42px!important}
 .v0785CardDetailClose{
@@ -4015,7 +4017,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){const ms=[...document.querySelectorAll('.modal.v0785ClosableCardDetail')];if(ms.length){e.preventDefault();closeModal(ms[ms.length-1])}}},true);
   addEventListener('popstate',()=>{const ms=[...document.querySelectorAll('.modal.v0785ClosableCardDetail')];if(ms.length)closeModal(ms[ms.length-1],true)},{passive:true});
   scan();setTimeout(scan,250);
-  console.info('Palworld OCG v0.7.85 card-detail dismiss fix enabled');
+  console.info('Palworld OCG v0.7.86 card-detail dismiss fix enabled');
 })();
 </script>
 
@@ -4055,7 +4057,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.85-card-detail-dismiss");
+      h.set("x-palworld-bridge","v0.7.86-stable-battle-visuals");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -4082,8 +4084,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.85 — 安定化・テストプレイ・BP01同期待ちTier誤判定修正・戦闘表示整理・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断";
-        m.start_url="/?pwa=1&v=0785";
+        m.description="Palworld OCG v0.7.86 — 安定化・テストプレイ・BP01同期待ちTier誤判定修正・戦闘表示整理・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断";
+        m.start_url="/?pwa=1&v=0786";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -4096,7 +4098,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.85 stability hub + test play + tier BP01 sync defer + clean battle visuals + direct damage art + diagnostics\n";
+        sw+="\n// v0.7.86 stable serialized attack cue + test play + tier BP01 sync defer + direct damage art + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
