@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.86";
+const V="0.7.87";
 
 const PATCH=String.raw`
 
@@ -16,7 +16,7 @@ const PATCH=String.raw`
       queued=false;flushes++;
       const rs=lastRecords;lastRecords=[];
       for(const cb of Array.from(callbacks)){
-        try{callbackRuns++;cb(rs,nativeObserver)}catch(e){try{console.warn('[v0.7.86 observer callback]',e)}catch(_e){}}
+        try{callbackRuns++;cb(rs,nativeObserver)}catch(e){try{console.warn('[v0.7.87 observer callback]',e)}catch(_e){}}
       }
     },90);
   });
@@ -30,7 +30,7 @@ const PATCH=String.raw`
   }
   globalThis.v0781SharedObserver=SharedObserver;
   globalThis.__v0781ObserverHub={callbacks,nativeObserver,get count(){return callbacks.size},get flushes(){return flushes},get callbackRuns(){return callbackRuns}};
-  console.info('Palworld OCG v0.7.86 stability hub: shared MutationObserver active');
+  console.info('Palworld OCG v0.7.87 stability hub: shared MutationObserver active');
 })();
 </script>
 <style id="v0738CenterRifleFix">
@@ -234,11 +234,11 @@ const PATCH=String.raw`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title)title.textContent='v0.7.86';
+      if(title)title.textContent='v0.7.87';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.86';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.87';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -933,6 +933,17 @@ const PATCH=String.raw`
 .v0745QuickRow .card{height:88px!important;width:78px!important;min-width:78px!important}
 .v0745QuickBtns{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .v0745QuickBtns button{padding:7px 4px!important;font-size:8px!important;font-weight:900!important;border-radius:8px!important}
+/* v0.7.87 — fixed interrupt sheet: no vertical jump during re-render/image load. */
+.modal.v0787QuickModal{overflow-anchor:none!important;overscroll-behavior:none!important}
+.modal.v0745CombatModal.v0787QuickModal>.modalCard{height:min(228px,38dvh)!important;min-height:min(188px,34dvh)!important;max-height:none!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;contain:layout paint style!important;overflow-anchor:none!important}
+.modal.v0745CombatModal.v0787QuickModal .v0745CombatHead{flex:0 0 auto!important;margin-bottom:3px!important}
+.v0787QuickList{display:flex!important;flex:1 1 auto!important;min-height:0!important;gap:6px!important;overflow-x:auto!important;overflow-y:hidden!important;align-items:stretch!important;scroll-snap-type:x proximity!important;overflow-anchor:none!important;overscroll-behavior-x:contain!important;padding:1px 1px 3px!important}
+.modal.v0745CombatModal.v0787QuickModal .v0745QuickRow{flex:0 0 min(275px,68vw)!important;width:min(275px,68vw)!important;min-width:min(275px,68vw)!important;height:116px!important;min-height:116px!important;max-height:116px!important;grid-template-columns:72px minmax(0,1fr)!important;gap:6px!important;border:1px solid #29463a!important;border-radius:9px!important;padding:4px!important;scroll-snap-align:start!important;box-sizing:border-box!important;overflow:hidden!important;overflow-anchor:none!important}
+.modal.v0745CombatModal.v0787QuickModal .v0745QuickRow .card{height:102px!important;width:66px!important;min-width:66px!important;max-width:66px!important;margin:0!important}
+.modal.v0745CombatModal.v0787QuickModal .v0745QuickBtns{gap:4px!important}
+.modal.v0745CombatModal.v0787QuickModal .v0745QuickBtns button{min-height:32px!important;padding:5px 3px!important;line-height:1.12!important}
+.modal.v0745CombatModal.v0787QuickModal .v0745CombatActions{flex:0 0 auto!important;position:static!important;margin-top:3px!important;padding-top:3px!important}
+@media(max-height:520px) and (orientation:landscape){.modal.v0745CombatModal.v0787QuickModal>.modalCard{height:178px!important;min-height:178px!important;max-height:178px!important;width:min(460px,74vw)!important}.modal.v0745CombatModal.v0787QuickModal .v0745QuickRow{height:92px!important;min-height:92px!important;max-height:92px!important;grid-template-columns:58px minmax(0,1fr)!important;flex-basis:min(250px,66vw)!important;width:min(250px,66vw)!important;min-width:min(250px,66vw)!important}.modal.v0745CombatModal.v0787QuickModal .v0745QuickRow .card{height:82px!important;width:52px!important;min-width:52px!important;max-width:52px!important}.modal.v0745CombatModal.v0787QuickModal .v0745QuickBtns button{min-height:27px!important;padding:3px 2px!important;font-size:7px!important}}
 
 /* Attack arrow / impact / result toast. Appended to <html>, so body rotation does not distort coordinates. */
 #v0745BattleFxLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
@@ -1096,13 +1107,13 @@ const PATCH=String.raw`
         '<button '+(G.p.hand.length<2?'disabled':'')+' onclick="event.stopPropagation();chooseInterrupt('+c.uid+',\'discard\')">このカード＋手札1枚</button>'+
         '</div></div></div>'
       ).join('');
-      return '<div class="modal v0745CombatModal"><div class="modalCard">'+
+      return '<div class="modal v0745CombatModal v0787QuickModal"><div class="modalCard">'+
         '<div class="v0745CombatHead"><div><h2>割り込みを使いますか？</h2><div class="v0745CombatSub">相手ターンのバトル中。使うカードとコストを選択してください。</div></div></div>'+
-        rows+'<div class="v0745CombatActions"><button class="v0745Skip" onclick="skipInterrupt()">使わない</button></div>'+
+        '<div class="v0787QuickList">'+rows+'</div><div class="v0745CombatActions"><button class="v0745Skip" onclick="skipInterrupt()">使わない</button></div>'+
         '</div></div>';
     };
   }
-  /* v0.7.86: normal attack arrows are owned only by the integrated battle core. */
+  /* v0.7.87: normal attack arrows are owned only by the integrated battle core. */
   if(typeof chooseBlock==='function'){
     const baseChooseBlock=chooseBlock;
     chooseBlock=function(uid){
@@ -1120,10 +1131,35 @@ const PATCH=String.raw`
 
   if(typeof chooseInterrupt==='function'){
     const baseChooseInterrupt=chooseInterrupt;
+    function v0787HideQuickSheet(){
+      try{document.querySelectorAll('.modal.v0745CombatModal').forEach(m=>{if(/割り込みを使いますか/.test(m.textContent||'')){m.style.visibility='hidden';m.style.pointerEvents='none'}})}catch(_e){}
+    }
     chooseInterrupt=function(uid,mode){
-      let name='';try{name=pendingQuick?.ints?.find(x=>x.uid===uid)?.name||''}catch(_e){}
-      const r=baseChooseInterrupt(uid,mode);
-      toast('<b>INTERRUPT</b> '+safeText(name));
+      const before=pendingQuick;
+      if(!before)return;
+      let name='',card=null;try{card=before?.ints?.find(x=>x.uid===uid)||null;name=card?.name||''}catch(_e){}
+      if(!card){toast('割り込みカードを確認できません');return}
+      try{
+        if(mode==='soul'&&standingSouls(G.p)<1){toast('ソウルが足りません');return}
+        if(mode==='discard'&&G.p.hand.filter(x=>x.uid!==uid).length<1){toast('追加で捨てる手札がありません');return}
+      }catch(_e){}
+      v0787HideQuickSheet();
+      const hadCard=()=>{try{return G.p.hand.some(x=>x.uid===uid)}catch(_e){return true}};
+      let r;
+      try{r=baseChooseInterrupt(uid,mode)}catch(e){try{render()}catch(_e){};toast('割り込み処理でエラー');throw e}
+      let success=false;
+      try{
+        if(mode==='soul')success=!hadCard()||pendingQuick!==before;
+        else success=pendingQuick!==before&&!!pendingChoice;
+      }catch(_e){}
+      if(success){
+        requestAnimationFrame(()=>{try{document.querySelectorAll('.modal.v0745CombatModal').forEach(m=>{if(/割り込みを使いますか/.test(m.textContent||''))m.remove()})}catch(_e){}});
+        if(mode==='discard')toast('<b>INTERRUPT</b> 追加で捨てる手札を選択');
+        else toast('<b>INTERRUPT</b> '+safeText(name));
+      }else{
+        setTimeout(()=>{try{if(pendingQuick===before)render()}catch(_e){}},0);
+        toast('割り込みを使用できません');
+      }
       return r;
     };
   }
@@ -1133,6 +1169,7 @@ const PATCH=String.raw`
     try{
       const app=document.querySelector('.app.v04');
       if(app)app.classList.add('v0745CombatUX');
+      try{if(!pendingQuick&&pendingChoice)document.querySelectorAll('.modal.v0745CombatModal').forEach(m=>{if(/割り込みを使いますか/.test(m.textContent||''))m.remove()})}catch(_e){}
       const play=playRoot();
       if(!play)return;
 /* Compact generic target-selection sheets and long-press card details. */
@@ -2101,7 +2138,7 @@ const PATCH=String.raw`
   addEventListener('pageshow',sync,{passive:true});
   addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,250);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.86 compact effect-choice UI applied (legacy DAMAGE CHECK styling disabled)');
+  console.info('Palworld OCG v0.7.87 compact effect-choice UI applied (legacy DAMAGE CHECK styling disabled)');
 })();
 </script>
 
@@ -2472,8 +2509,8 @@ const PATCH=String.raw`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title)title.textContent='v0.7.86';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.86'});
+      const title=document.querySelector('.v04Title');if(title)title.textContent='v0.7.87';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.87'});
       syncButton();
     }catch(_e){}
   }
@@ -2731,7 +2768,7 @@ const PATCH=String.raw`
   if(globalThis.__v0762DiagnosticsApplied)return;
   globalThis.__v0762DiagnosticsApplied=true;
 
-  const VERSION='0.7.86';
+  const VERSION='0.7.87';
   const STORE='palworld_diag_v0762';
   const MAX=80;
   const OFFICIAL_QA_TOTAL=97;
@@ -2792,7 +2829,7 @@ const PATCH=String.raw`
   }
   globalThis.palDiagRecord=record;
 
-  // v0.7.86: remove old successful test-play entries that were mistakenly stored as errors.
+  // v0.7.87: remove old successful test-play entries that were mistakenly stored as errors.
   try{const a=load(),b=a.filter(e=>!(e&&e.code==='TEST-PLAY-0781'));if(b.length!==a.length)save(b)}catch(_e){}
 
   function checkPlayer(pl,label,issues){
@@ -2989,7 +3026,7 @@ const PATCH=String.raw`
 (()=>{
   if(globalThis.__v0763FullSuiteApplied)return;
   globalThis.__v0763FullSuiteApplied=true;
-  const VERSION='0.7.86', STORE='palworld_suite_v0763';
+  const VERSION='0.7.87', STORE='palworld_suite_v0763';
   let busy=false, queued=false;
 
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -3215,7 +3252,7 @@ const PATCH=String.raw`
 (()=>{
   if(globalThis.__v0764TierDeckGuardApplied)return;
   globalThis.__v0764TierDeckGuardApplied=true;
-  const VERSION='0.7.86';
+  const VERSION='0.7.87';
   const STORE='palworld_tier_deck_guard_v0764';
   const tierFingerprints=new Set();
   let tierDepth=0,tierUiUntil=0,scanQueued=false,wrapping=false,bpRetryTimer=0,bpRetryCount=0,bpWaitToastAt=0;
@@ -3543,14 +3580,14 @@ const PATCH=String.raw`
   globalThis.palAuditTierDecks=()=>auditAll('manualApi');
   globalThis.palTierDeckGuardStatus=()=>loadLog();
   install();setTimeout(install,700);setTimeout(()=>{wrapTierFunctions();auditAll('lateBoot')},2200);
-  console.info('Palworld OCG v0.7.86 Tier legal-deck guard applied with BP01 sync defer');
+  console.info('Palworld OCG v0.7.87 Tier legal-deck guard applied with BP01 sync defer');
 })();
 </script>
 
 
 
 <style id="v0781IntegratedBattleCoreStyle">
-/* v0.7.86 — stable serialized battle visuals. Attack cue DOM is reused and DAMAGE CHECK is sequenced. */
+/* v0.7.87 — stable serialized battle visuals. Attack cue DOM is reused and DAMAGE CHECK is sequenced. */
 #v0781AttackLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility 0s linear .12s;contain:layout paint style}#v0781AttackLayer.v0786Visible{opacity:1;visibility:visible;transition:opacity .12s ease,visibility 0s}
 #v0781AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .v0781AttackRing{position:fixed;border:3px solid #ffd95b;border-radius:12px;box-shadow:0 0 0 2px #fff7b0 inset,0 0 18px #ffc83d;animation:v0781Ring .55s ease-in-out infinite alternate}
@@ -3647,11 +3684,11 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   }
   try{if(typeof log==='function'&&!log.__v0781DamageFallbackWrapped){const base=log;const wrapped=function(msg){const r=base.apply(this,arguments);try{if(/Damage Check|Lucky Pal/i.test(String(msg||'')))setTimeout(fallbackDamageFromLogs,0)}catch(_e){}return r};wrapped.__v0781DamageFallbackWrapped=true;wrapped.__v0781Old=base;log=wrapped}}catch(e){trace('ERR-DMG-FALLBACK-INSTALL-079',{message:String(e)})}
 
-  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.86';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.86'})}catch(_e){}}
+  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.87';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.87'})}catch(_e){}}
   addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';attackKey='';damageQueue=[];damageShowing=false;lastDamageKey='';lastQueueAt=0;clearTimeout(cpuGateTimer);cpuGateTimer=0;cpuGateDue=0;setDamageActive(false);clearAttack();const d=document.getElementById('v0781DamageOverlay');if(d){d.classList.remove('v0786Visible');d.hidden=true}setTimeout(()=>{version();statusCheck()},80)},{passive:true});
   try{if(typeof render==='function'&&!render.__v0781VersionWrapped){const baseRender=render;const wrapped=function(){const r=baseRender.apply(this,arguments);setTimeout(version,0);return r};wrapped.__v0781VersionWrapped=true;wrapped.__v0781Old=baseRender;render=wrapped}}catch(_e){}
   setTimeout(statusCheck,150);setTimeout(version,900);version();
-  console.info('Palworld OCG v0.7.86 integrated battle visuals loaded: stable single-draw attack cue + serialized DAMAGE CHECK');
+  console.info('Palworld OCG v0.7.87 integrated battle visuals loaded: stable single-draw attack cue + serialized DAMAGE CHECK');
 })();
 </script>
 
@@ -3673,7 +3710,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function selectedConfigFromDom(){
     const old=load(), hand={};let total=0;
     document.querySelectorAll('#v0781TestOverlay select[data-no]').forEach(function(sel){const n=Math.max(0,Number(sel.value)||0);if(n){hand[sel.getAttribute('data-no')]=n;total+=n}});
-    return {deckKey:String(document.getElementById('v0781TestDeckKey')?.value||currentDeckKey()),souls:Math.max(0,Math.min(10,Number(document.getElementById('v0781TestSouls')?.value)||0)),fillToFive:!!document.getElementById('v0781TestFill')?.checked,hand:hand,total:total,lastUpdated:Date.now(),version:'0.7.86',previous:old?.version||''};
+    return {deckKey:String(document.getElementById('v0781TestDeckKey')?.value||currentDeckKey()),souls:Math.max(0,Math.min(10,Number(document.getElementById('v0781TestSouls')?.value)||0)),fillToFive:!!document.getElementById('v0781TestFill')?.checked,hand:hand,total:total,lastUpdated:Date.now(),version:'0.7.87',previous:old?.version||''};
   }
   globalThis.v0781TestCountChanged=function(sel){
     const all=Array.from(document.querySelectorAll('#v0781TestOverlay select[data-no]'));const total=all.reduce(function(a,x){return a+(Number(x.value)||0)},0);
@@ -3719,17 +3756,17 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function renderReady(){
     if(!G?.p)return;const cards=G.p.hand.map(function(c){try{return cardHTML(c)}catch(_e){return '<div class="card">'+h(c?.name||c?.no||'CARD')+'</div>'}}).join('');
     const app=document.getElementById('app');if(!app)return;
-    app.innerHTML='<div class="modal"><div class="modalCard v0781TestReady"><h2>🧪 テストプレイ開始確認 <span class="badge official">v0.7.86</span></h2><div class="good">指定した初期状態を適用しました。通常対戦のルール・保存デッキは変更していません。</div><div style="margin:7px 0;font-weight:900">YOU ソウル '+standingSouls(G.p)+'/'+G.p.souls.length+'　手札 '+G.p.hand.length+'枚</div><div class="hand" style="margin:8px 0">'+cards+'</div><div class="choices"><button class="v0781TestStart" onclick="v0781BeginTestBattle()">この状態で開始</button><button onclick="showStart()">開始画面へ戻る</button></div></div></div>'
+    app.innerHTML='<div class="modal"><div class="modalCard v0781TestReady"><h2>🧪 テストプレイ開始確認 <span class="badge official">v0.7.87</span></h2><div class="good">指定した初期状態を適用しました。通常対戦のルール・保存デッキは変更していません。</div><div style="margin:7px 0;font-weight:900">YOU ソウル '+standingSouls(G.p)+'/'+G.p.souls.length+'　手札 '+G.p.hand.length+'枚</div><div class="hand" style="margin:8px 0">'+cards+'</div><div class="choices"><button class="v0781TestStart" onclick="v0781BeginTestBattle()">この状態で開始</button><button onclick="showStart()">開始画面へ戻る</button></div></div></div>'
   }
   globalThis.v0781BeginTestBattle=function(){if(!G)return;try{playerMulligan(false)}catch(e){alert('テスト開始に失敗しました: '+String(e?.message||e))}};
   function enhanceStart(){
-    try{const badge=document.querySelector('h2 .badge.official');if(badge)badge.textContent='v0.7.86';const actions=document.querySelector('.v047StartActions');if(actions&&!document.getElementById('v0781TestEntry')){const b=document.createElement('button');b.id='v0781TestEntry';b.className='v0781TestEntry';b.textContent='🧪 テストプレイ';b.onclick=v0781OpenTestPlay;actions.appendChild(b)}}catch(_e){}
+    try{const badge=document.querySelector('h2 .badge.official');if(badge)badge.textContent='v0.7.87';const actions=document.querySelector('.v047StartActions');if(actions&&!document.getElementById('v0781TestEntry')){const b=document.createElement('button');b.id='v0781TestEntry';b.className='v0781TestEntry';b.textContent='🧪 テストプレイ';b.onclick=v0781OpenTestPlay;actions.appendChild(b)}}catch(_e){}
   }
   try{if(typeof showStart==='function'&&!showStart.__v0781TestWrapped){const base=showStart;const w=function(){const r=base.apply(this,arguments);enhanceStart();return r};w.__v0781TestWrapped=true;w.__v0781Old=base;showStart=w}}catch(_e){}
   try{if(typeof setupGame==='function'&&!setupGame.__v0781TestWrapped){const base=setupGame;const w=function(){const wants=launching;const r=base.apply(this,arguments);if(wants){setTimeout(function(){try{if(applyConfig())renderReady()}catch(e){launching=false;alert('テスト初期設定の適用に失敗しました: '+String(e?.message||e))}},0)}return r};w.__v0781TestWrapped=true;w.__v0781Old=base;setupGame=w}}catch(_e){}
   addEventListener('pageshow',function(){setTimeout(enhanceStart,120)},{passive:true});
   enhanceStart();
-  console.info('Palworld OCG v0.7.86 test-play mode loaded');
+  console.info('Palworld OCG v0.7.87 test-play mode loaded');
 })();
 </script>
 
@@ -3802,10 +3839,10 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
       card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(uid)}});
     });
   }
-  try{if(typeof renderMulligan==='function'){var base=renderMulligan;renderMulligan=function(){var r=base.apply(this,arguments);requestAnimationFrame(bind);setTimeout(bind,80);return r}}}catch(e){console.warn('[v0.7.86 mulligan detail wrapper]',e)}
+  try{if(typeof renderMulligan==='function'){var base=renderMulligan;renderMulligan=function(){var r=base.apply(this,arguments);requestAnimationFrame(bind);setTimeout(bind,80);return r}}}catch(e){console.warn('[v0.7.87 mulligan detail wrapper]',e)}
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail()});
   setTimeout(bind,50);setTimeout(bind,400);
-  console.info('Palworld OCG v0.7.86 mulligan card-tap detail enabled');
+  console.info('Palworld OCG v0.7.87 mulligan card-tap detail enabled');
 })();
 </script>
 
@@ -3813,7 +3850,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
 (()=>{
   if(globalThis.__v0784NegativeDamageGuardApplied)return;
   globalThis.__v0784NegativeDamageGuardApplied=true;
-  const VERSION='0.7.86';
+  const VERSION='0.7.87';
   let busy=false,lastSig='',lastAt=0;
 
   function allZoneCards(){
@@ -3924,13 +3961,13 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   }
   cleanLegacy();install();setTimeout(install,300);setTimeout(install,1200);
   addEventListener('pageshow',()=>setTimeout(install,80),{passive:true});
-  console.info('Palworld OCG v0.7.86 negative Damage origin trace + self-repair enabled');
+  console.info('Palworld OCG v0.7.87 negative Damage origin trace + self-repair enabled');
 })();
 </script>
 
 
 <style id="v0785CardDetailDismissStyle">
-/* v0.7.86 — every old showCardInfo modal gets a permanently reachable close control. */
+/* v0.7.87 — every old showCardInfo modal gets a permanently reachable close control. */
 .modal.v0785ClosableCardDetail{pointer-events:auto!important}
 .modal.v0785ClosableCardDetail>.modalCard{position:relative!important;max-height:94dvh!important;overflow:auto!important;padding-top:42px!important}
 .v0785CardDetailClose{
@@ -4017,9 +4054,33 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){const ms=[...document.querySelectorAll('.modal.v0785ClosableCardDetail')];if(ms.length){e.preventDefault();closeModal(ms[ms.length-1])}}},true);
   addEventListener('popstate',()=>{const ms=[...document.querySelectorAll('.modal.v0785ClosableCardDetail')];if(ms.length)closeModal(ms[ms.length-1],true)},{passive:true});
   scan();setTimeout(scan,250);
-  console.info('Palworld OCG v0.7.86 card-detail dismiss fix enabled');
+  console.info('Palworld OCG v0.7.87 card-detail dismiss fix enabled');
 })();
 </script>
+
+<style id="v0787QuickStableFinalStyle">
+/* Final override: legacy v0748/v0754 sheets must not resize the active interrupt window. */
+.modal.v0745CombatModal.v0787QuickModal{overflow-anchor:none!important;overscroll-behavior:none!important}
+.modal.v0745CombatModal.v0787QuickModal>.modalCard{
+  width:min(470px,76vw)!important;max-width:470px!important;
+  height:220px!important;min-height:220px!important;max-height:220px!important;
+  overflow:hidden!important;display:flex!important;flex-direction:column!important;
+  contain:layout paint style!important;overflow-anchor:none!important;
+}
+.modal.v0745CombatModal.v0787QuickModal .v0787QuickList{
+  display:flex!important;flex:1 1 auto!important;min-height:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  gap:6px!important;align-items:stretch!important;scroll-snap-type:x proximity!important;overflow-anchor:none!important;
+}
+.modal.v0745CombatModal.v0787QuickModal .v0745QuickRow{
+  flex:0 0 270px!important;width:270px!important;min-width:270px!important;
+  height:116px!important;min-height:116px!important;max-height:116px!important;overflow:hidden!important;
+}
+.modal.v0745CombatModal.v0787QuickModal .v0745CombatActions{position:static!important;flex:0 0 auto!important}
+@media(max-height:520px) and (orientation:landscape){
+  .modal.v0745CombatModal.v0787QuickModal>.modalCard{width:min(460px,74vw)!important;max-width:460px!important;height:178px!important;min-height:178px!important;max-height:178px!important}
+  .modal.v0745CombatModal.v0787QuickModal .v0745QuickRow{flex-basis:248px!important;width:248px!important;min-width:248px!important;height:92px!important;min-height:92px!important;max-height:92px!important}
+}
+</style>
 
 
 `;
@@ -4057,7 +4118,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.86-stable-battle-visuals");
+      h.set("x-palworld-bridge","v0.7.87-stable-battle-visuals");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -4084,8 +4145,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.86 — 安定化・テストプレイ・BP01同期待ちTier誤判定修正・戦闘表示整理・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断";
-        m.start_url="/?pwa=1&v=0786";
+        m.description="Palworld OCG v0.7.87 — 安定化・テストプレイ・BP01同期待ちTier誤判定修正・戦闘表示整理・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断";
+        m.start_url="/?pwa=1&v=0787";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -4098,7 +4159,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.86 stable serialized attack cue + test play + tier BP01 sync defer + direct damage art + diagnostics\n";
+        sw+="\n// v0.7.87 stable serialized attack cue + test play + tier BP01 sync defer + direct damage art + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
