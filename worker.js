@@ -1,5 +1,5 @@
 const UPSTREAM="https://palworld-game-bcy.pages.dev";
-const V="0.7.84";
+const V="0.7.85";
 
 const PATCH=String.raw`
 
@@ -16,7 +16,7 @@ const PATCH=String.raw`
       queued=false;flushes++;
       const rs=lastRecords;lastRecords=[];
       for(const cb of Array.from(callbacks)){
-        try{callbackRuns++;cb(rs,nativeObserver)}catch(e){try{console.warn('[v0.7.84 observer callback]',e)}catch(_e){}}
+        try{callbackRuns++;cb(rs,nativeObserver)}catch(e){try{console.warn('[v0.7.85 observer callback]',e)}catch(_e){}}
       }
     },90);
   });
@@ -30,7 +30,7 @@ const PATCH=String.raw`
   }
   globalThis.v0781SharedObserver=SharedObserver;
   globalThis.__v0781ObserverHub={callbacks,nativeObserver,get count(){return callbacks.size},get flushes(){return flushes},get callbackRuns(){return callbackRuns}};
-  console.info('Palworld OCG v0.7.84 stability hub: shared MutationObserver active');
+  console.info('Palworld OCG v0.7.85 stability hub: shared MutationObserver active');
 })();
 </script>
 <style id="v0738CenterRifleFix">
@@ -234,11 +234,11 @@ const PATCH=String.raw`
       }
 
       const title=document.querySelector('.v04Title');
-      if(title)title.textContent='v0.7.84';
+      if(title)title.textContent='v0.7.85';
 
       /* 起動画面のバージョン表示もWorker実装と同期 */
       document.querySelectorAll('.badge.official').forEach(b=>{
-        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.84';
+        if(/^v?0\.7\.\d+/.test((b.textContent||'').trim())) b.textContent='v0.7.85';
       });
 
       /* CPUは手札カードを見せず枚数だけ */
@@ -1102,7 +1102,7 @@ const PATCH=String.raw`
         '</div></div>';
     };
   }
-  /* v0.7.84: normal attack arrows are owned only by the integrated battle core. */
+  /* v0.7.85: normal attack arrows are owned only by the integrated battle core. */
   if(typeof chooseBlock==='function'){
     const baseChooseBlock=chooseBlock;
     chooseBlock=function(uid){
@@ -2101,7 +2101,7 @@ const PATCH=String.raw`
   addEventListener('pageshow',sync,{passive:true});
   addEventListener('resize',schedule,{passive:true});
   sync();setTimeout(sync,250);setTimeout(sync,900);
-  console.info('Palworld OCG v0.7.84 compact effect-choice UI applied (legacy DAMAGE CHECK styling disabled)');
+  console.info('Palworld OCG v0.7.85 compact effect-choice UI applied (legacy DAMAGE CHECK styling disabled)');
 })();
 </script>
 
@@ -2472,8 +2472,8 @@ const PATCH=String.raw`
   function sync(){
     queued=false;
     try{
-      const title=document.querySelector('.v04Title');if(title)title.textContent='v0.7.84';
-      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.84'});
+      const title=document.querySelector('.v04Title');if(title)title.textContent='v0.7.85';
+      document.querySelectorAll('.badge.official').forEach(function(b){if(/^v?0\.7\.\d+/.test((b.textContent||'').trim()))b.textContent='v0.7.85'});
       syncButton();
     }catch(_e){}
   }
@@ -2731,7 +2731,7 @@ const PATCH=String.raw`
   if(globalThis.__v0762DiagnosticsApplied)return;
   globalThis.__v0762DiagnosticsApplied=true;
 
-  const VERSION='0.7.84';
+  const VERSION='0.7.85';
   const STORE='palworld_diag_v0762';
   const MAX=80;
   const OFFICIAL_QA_TOTAL=97;
@@ -2792,7 +2792,7 @@ const PATCH=String.raw`
   }
   globalThis.palDiagRecord=record;
 
-  // v0.7.84: remove old successful test-play entries that were mistakenly stored as errors.
+  // v0.7.85: remove old successful test-play entries that were mistakenly stored as errors.
   try{const a=load(),b=a.filter(e=>!(e&&e.code==='TEST-PLAY-0781'));if(b.length!==a.length)save(b)}catch(_e){}
 
   function checkPlayer(pl,label,issues){
@@ -2989,7 +2989,7 @@ const PATCH=String.raw`
 (()=>{
   if(globalThis.__v0763FullSuiteApplied)return;
   globalThis.__v0763FullSuiteApplied=true;
-  const VERSION='0.7.84', STORE='palworld_suite_v0763';
+  const VERSION='0.7.85', STORE='palworld_suite_v0763';
   let busy=false, queued=false;
 
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -3215,7 +3215,7 @@ const PATCH=String.raw`
 (()=>{
   if(globalThis.__v0764TierDeckGuardApplied)return;
   globalThis.__v0764TierDeckGuardApplied=true;
-  const VERSION='0.7.84';
+  const VERSION='0.7.85';
   const STORE='palworld_tier_deck_guard_v0764';
   const tierFingerprints=new Set();
   let tierDepth=0,tierUiUntil=0,scanQueued=false,wrapping=false,bpRetryTimer=0,bpRetryCount=0,bpWaitToastAt=0;
@@ -3543,14 +3543,14 @@ const PATCH=String.raw`
   globalThis.palAuditTierDecks=()=>auditAll('manualApi');
   globalThis.palTierDeckGuardStatus=()=>loadLog();
   install();setTimeout(install,700);setTimeout(()=>{wrapTierFunctions();auditAll('lateBoot')},2200);
-  console.info('Palworld OCG v0.7.84 Tier legal-deck guard applied with BP01 sync defer');
+  console.info('Palworld OCG v0.7.85 Tier legal-deck guard applied with BP01 sync defer');
 })();
 </script>
 
 
 
 <style id="v0781IntegratedBattleCoreStyle">
-/* v0.7.84 — single-owner battle visuals. Old attack/DAMAGE CHECK renderers are disabled. */
+/* v0.7.85 — single-owner battle visuals. Old attack/DAMAGE CHECK renderers are disabled. */
 #v0781AttackLayer{position:fixed;inset:0;z-index:2147483000;pointer-events:none;overflow:hidden}
 #v0781AttackLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .v0781AttackRing{position:fixed;border:3px solid #ffd95b;border-radius:12px;box-shadow:0 0 0 2px #fff7b0 inset,0 0 18px #ffc83d;animation:v0781Ring .55s ease-in-out infinite alternate}
@@ -3645,11 +3645,11 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   }
   try{if(typeof log==='function'&&!log.__v0781DamageFallbackWrapped){const base=log;const wrapped=function(msg){const r=base.apply(this,arguments);try{if(/Damage Check|Lucky Pal/i.test(String(msg||'')))setTimeout(fallbackDamageFromLogs,0)}catch(_e){}return r};wrapped.__v0781DamageFallbackWrapped=true;wrapped.__v0781Old=base;log=wrapped}}catch(e){trace('ERR-DMG-FALLBACK-INSTALL-079',{message:String(e)})}
 
-  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.84';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.84'})}catch(_e){}}
+  function version(){try{const t=document.querySelector('.v04Title');if(t&&!G?.cpuVsCpu)t.textContent='v0.7.85';document.querySelectorAll('.badge.official').forEach(b=>{if(/^v?0\.7\.\d+/.test(flat(b.textContent)))b.textContent='v0.7.85'})}catch(_e){}}
   addEventListener('pageshow',()=>{resumeKey='';nextCpuAt=busyUntil=0;cpuGateTurn='';damageQueue=[];damageShowing=false;lastDamageKey='';lastQueueAt=0;setDamageActive(false);clearAttack();const d=document.getElementById('v0781DamageOverlay');if(d)d.hidden=true;setTimeout(()=>{version();statusCheck()},80)},{passive:true});
   try{if(typeof render==='function'&&!render.__v0781VersionWrapped){const baseRender=render;const wrapped=function(){const r=baseRender.apply(this,arguments);setTimeout(version,0);return r};wrapped.__v0781VersionWrapped=true;wrapped.__v0781Old=baseRender;render=wrapped}}catch(_e){}
   setTimeout(statusCheck,150);setTimeout(version,900);version();
-  console.info('Palworld OCG v0.7.84 integrated battle visuals loaded: single-owner attack FX + direct background DAMAGE CHECK art + log fallback');
+  console.info('Palworld OCG v0.7.85 integrated battle visuals loaded: single-owner attack FX + direct background DAMAGE CHECK art + log fallback');
 })();
 </script>
 
@@ -3671,7 +3671,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function selectedConfigFromDom(){
     const old=load(), hand={};let total=0;
     document.querySelectorAll('#v0781TestOverlay select[data-no]').forEach(function(sel){const n=Math.max(0,Number(sel.value)||0);if(n){hand[sel.getAttribute('data-no')]=n;total+=n}});
-    return {deckKey:String(document.getElementById('v0781TestDeckKey')?.value||currentDeckKey()),souls:Math.max(0,Math.min(10,Number(document.getElementById('v0781TestSouls')?.value)||0)),fillToFive:!!document.getElementById('v0781TestFill')?.checked,hand:hand,total:total,lastUpdated:Date.now(),version:'0.7.84',previous:old?.version||''};
+    return {deckKey:String(document.getElementById('v0781TestDeckKey')?.value||currentDeckKey()),souls:Math.max(0,Math.min(10,Number(document.getElementById('v0781TestSouls')?.value)||0)),fillToFive:!!document.getElementById('v0781TestFill')?.checked,hand:hand,total:total,lastUpdated:Date.now(),version:'0.7.85',previous:old?.version||''};
   }
   globalThis.v0781TestCountChanged=function(sel){
     const all=Array.from(document.querySelectorAll('#v0781TestOverlay select[data-no]'));const total=all.reduce(function(a,x){return a+(Number(x.value)||0)},0);
@@ -3717,17 +3717,17 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   function renderReady(){
     if(!G?.p)return;const cards=G.p.hand.map(function(c){try{return cardHTML(c)}catch(_e){return '<div class="card">'+h(c?.name||c?.no||'CARD')+'</div>'}}).join('');
     const app=document.getElementById('app');if(!app)return;
-    app.innerHTML='<div class="modal"><div class="modalCard v0781TestReady"><h2>🧪 テストプレイ開始確認 <span class="badge official">v0.7.84</span></h2><div class="good">指定した初期状態を適用しました。通常対戦のルール・保存デッキは変更していません。</div><div style="margin:7px 0;font-weight:900">YOU ソウル '+standingSouls(G.p)+'/'+G.p.souls.length+'　手札 '+G.p.hand.length+'枚</div><div class="hand" style="margin:8px 0">'+cards+'</div><div class="choices"><button class="v0781TestStart" onclick="v0781BeginTestBattle()">この状態で開始</button><button onclick="showStart()">開始画面へ戻る</button></div></div></div>'
+    app.innerHTML='<div class="modal"><div class="modalCard v0781TestReady"><h2>🧪 テストプレイ開始確認 <span class="badge official">v0.7.85</span></h2><div class="good">指定した初期状態を適用しました。通常対戦のルール・保存デッキは変更していません。</div><div style="margin:7px 0;font-weight:900">YOU ソウル '+standingSouls(G.p)+'/'+G.p.souls.length+'　手札 '+G.p.hand.length+'枚</div><div class="hand" style="margin:8px 0">'+cards+'</div><div class="choices"><button class="v0781TestStart" onclick="v0781BeginTestBattle()">この状態で開始</button><button onclick="showStart()">開始画面へ戻る</button></div></div></div>'
   }
   globalThis.v0781BeginTestBattle=function(){if(!G)return;try{playerMulligan(false)}catch(e){alert('テスト開始に失敗しました: '+String(e?.message||e))}};
   function enhanceStart(){
-    try{const badge=document.querySelector('h2 .badge.official');if(badge)badge.textContent='v0.7.84';const actions=document.querySelector('.v047StartActions');if(actions&&!document.getElementById('v0781TestEntry')){const b=document.createElement('button');b.id='v0781TestEntry';b.className='v0781TestEntry';b.textContent='🧪 テストプレイ';b.onclick=v0781OpenTestPlay;actions.appendChild(b)}}catch(_e){}
+    try{const badge=document.querySelector('h2 .badge.official');if(badge)badge.textContent='v0.7.85';const actions=document.querySelector('.v047StartActions');if(actions&&!document.getElementById('v0781TestEntry')){const b=document.createElement('button');b.id='v0781TestEntry';b.className='v0781TestEntry';b.textContent='🧪 テストプレイ';b.onclick=v0781OpenTestPlay;actions.appendChild(b)}}catch(_e){}
   }
   try{if(typeof showStart==='function'&&!showStart.__v0781TestWrapped){const base=showStart;const w=function(){const r=base.apply(this,arguments);enhanceStart();return r};w.__v0781TestWrapped=true;w.__v0781Old=base;showStart=w}}catch(_e){}
   try{if(typeof setupGame==='function'&&!setupGame.__v0781TestWrapped){const base=setupGame;const w=function(){const wants=launching;const r=base.apply(this,arguments);if(wants){setTimeout(function(){try{if(applyConfig())renderReady()}catch(e){launching=false;alert('テスト初期設定の適用に失敗しました: '+String(e?.message||e))}},0)}return r};w.__v0781TestWrapped=true;w.__v0781Old=base;setupGame=w}}catch(_e){}
   addEventListener('pageshow',function(){setTimeout(enhanceStart,120)},{passive:true});
   enhanceStart();
-  console.info('Palworld OCG v0.7.84 test-play mode loaded');
+  console.info('Palworld OCG v0.7.85 test-play mode loaded');
 })();
 </script>
 
@@ -3800,10 +3800,10 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
       card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(uid)}});
     });
   }
-  try{if(typeof renderMulligan==='function'){var base=renderMulligan;renderMulligan=function(){var r=base.apply(this,arguments);requestAnimationFrame(bind);setTimeout(bind,80);return r}}}catch(e){console.warn('[v0.7.84 mulligan detail wrapper]',e)}
+  try{if(typeof renderMulligan==='function'){var base=renderMulligan;renderMulligan=function(){var r=base.apply(this,arguments);requestAnimationFrame(bind);setTimeout(bind,80);return r}}}catch(e){console.warn('[v0.7.85 mulligan detail wrapper]',e)}
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDetail()});
   setTimeout(bind,50);setTimeout(bind,400);
-  console.info('Palworld OCG v0.7.84 mulligan card-tap detail enabled');
+  console.info('Palworld OCG v0.7.85 mulligan card-tap detail enabled');
 })();
 </script>
 
@@ -3811,7 +3811,7 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
 (()=>{
   if(globalThis.__v0784NegativeDamageGuardApplied)return;
   globalThis.__v0784NegativeDamageGuardApplied=true;
-  const VERSION='0.7.84';
+  const VERSION='0.7.85';
   let busy=false,lastSig='',lastAt=0;
 
   function allZoneCards(){
@@ -3922,7 +3922,100 @@ html.v0781DamageActive #v0781AttackLayer,body.v0781DamageActive #v0781AttackLaye
   }
   cleanLegacy();install();setTimeout(install,300);setTimeout(install,1200);
   addEventListener('pageshow',()=>setTimeout(install,80),{passive:true});
-  console.info('Palworld OCG v0.7.84 negative Damage origin trace + self-repair enabled');
+  console.info('Palworld OCG v0.7.85 negative Damage origin trace + self-repair enabled');
+})();
+</script>
+
+
+<style id="v0785CardDetailDismissStyle">
+/* v0.7.85 — every old showCardInfo modal gets a permanently reachable close control. */
+.modal.v0785ClosableCardDetail{pointer-events:auto!important}
+.modal.v0785ClosableCardDetail>.modalCard{position:relative!important;max-height:94dvh!important;overflow:auto!important;padding-top:42px!important}
+.v0785CardDetailClose{
+  position:fixed!important;
+  top:max(7px,env(safe-area-inset-top))!important;
+  right:max(9px,env(safe-area-inset-right))!important;
+  z-index:2147483647!important;
+  width:42px!important;height:42px!important;border-radius:50%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:0!important;margin:0!important;
+  border:2px solid #9ce5bc!important;background:#092019f2!important;color:#fff!important;
+  box-shadow:0 4px 18px #000c,0 0 0 2px #143b2d!important;
+  font-size:27px!important;font-weight:1000!important;line-height:1!important;
+  touch-action:manipulation!important;
+}
+.v0785CardDetailClose:active{transform:scale(.92)!important}
+@media(max-height:520px) and (orientation:landscape){
+  .modal.v0785ClosableCardDetail>.modalCard{max-height:96dvh!important;padding-top:35px!important}
+  .v0785CardDetailClose{width:35px!important;height:35px!important;font-size:23px!important;top:4px!important;right:5px!important}
+}
+</style>
+<script id="v0785CardDetailDismissScript">
+(()=>{
+  if(globalThis.__v0785CardDetailDismissApplied)return;
+  globalThis.__v0785CardDetailDismissApplied=true;
+
+  function isOldCardDetail(modal){
+    if(!modal||!modal.classList?.contains('modal'))return false;
+    if(modal.id==='v0754FullDetailOverlay'||modal.id==='v0783MullDetailOverlay')return false;
+    const cardDetail=modal.querySelector('.cardDetail');
+    const big=modal.querySelector('.v04BigCard');
+    if(!cardDetail||!big)return false;
+    const t=String(modal.textContent||'');
+    return /実カード画像|状態\s*:\s*(?:REST|STAND)|POWER|STRIKE|戦闘力|耐久力/i.test(t);
+  }
+  function closeModal(modal,fromPop){
+    if(!modal)return;
+    try{modal.remove()}catch(_e){}
+    try{if(typeof refreshV04Detail==='function')refreshV04Detail()}catch(_e){}
+    try{if(!fromPop&&history.state&&history.state.v0785CardDetail)history.back()}catch(_e){}
+  }
+  function ensureBackState(modal){
+    try{
+      if(modal.dataset.v0785HistoryBound==='1')return;
+      modal.dataset.v0785HistoryBound='1';
+      if(!(history.state&&history.state.v0785CardDetail)){
+        const st=Object.assign({},history.state||{},{v0785CardDetail:true});history.pushState(st,'',location.href);
+      }
+    }catch(_e){}
+  }
+  function decorate(modal){
+    if(!isOldCardDetail(modal))return false;
+    modal.classList.add('v0785ClosableCardDetail');
+    ensureBackState(modal);
+    if(!modal.querySelector('.v0785CardDetailClose')){
+      const b=document.createElement('button');
+      b.type='button';b.className='v0785CardDetailClose';b.textContent='×';
+      b.setAttribute('aria-label','カード詳細を閉じる');
+      b.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation()});
+      b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closeModal(modal)});
+      (modal.querySelector('.modalCard')||modal).appendChild(b);
+    }
+    if(modal.dataset.v0785BackdropBound!=='1'){
+      modal.dataset.v0785BackdropBound='1';
+      modal.addEventListener('click',e=>{if(e.target===modal){e.preventDefault();e.stopPropagation();closeModal(modal)}});
+    }
+    return true;
+  }
+  function scan(){
+    try{
+      const ms=[...document.querySelectorAll('.modal')].filter(isOldCardDetail);
+      if(ms.length>1)ms.slice(0,-1).forEach(m=>{try{m.remove()}catch(_e){}});
+      if(ms.length)decorate(ms[ms.length-1]);
+    }catch(_e){}
+  }
+  try{
+    if(typeof showCardInfo==='function'&&!showCardInfo.__v0785DismissWrapped){
+      const old=showCardInfo;
+      const wrapped=function(){try{document.querySelectorAll('.modal.v0785ClosableCardDetail').forEach(m=>m.remove())}catch(_e){}const r=old.apply(this,arguments);requestAnimationFrame(scan);setTimeout(scan,35);return r};
+      wrapped.__v0785DismissWrapped=true;wrapped.__v0785DismissOld=old;globalThis.showCardInfo=wrapped;
+    }
+  }catch(_e){}
+  try{new globalThis.v0781SharedObserver(scan).observe(document.documentElement,{childList:true,subtree:true})}catch(_e){}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){const ms=[...document.querySelectorAll('.modal.v0785ClosableCardDetail')];if(ms.length){e.preventDefault();closeModal(ms[ms.length-1])}}},true);
+  addEventListener('popstate',()=>{const ms=[...document.querySelectorAll('.modal.v0785ClosableCardDetail')];if(ms.length)closeModal(ms[ms.length-1],true)},{passive:true});
+  scan();setTimeout(scan,250);
+  console.info('Palworld OCG v0.7.85 card-detail dismiss fix enabled');
 })();
 </script>
 
@@ -3962,7 +4055,7 @@ export default{
     try{
       const r=await fetch(new Request(target.toString(),request));
       const h=new Headers(r.headers);
-      h.set("x-palworld-bridge","v0.7.84-stable-test-play-diag");
+      h.set("x-palworld-bridge","v0.7.85-card-detail-dismiss");
 
       if(["/","/index.html","/manifest.webmanifest","/sw.js"].includes(u.pathname))noCache(h);
 
@@ -3989,8 +4082,8 @@ export default{
         let m={};try{m=JSON.parse(await r.text())}catch{}
         m.name=m.name||"Palworld OCG";
         m.short_name=m.short_name||"Palworld OCG";
-        m.description="Palworld OCG v0.7.84 — 安定化・テストプレイ・BP01同期待ちTier誤判定修正・戦闘表示整理・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断";
-        m.start_url="/?pwa=1&v=0784";
+        m.description="Palworld OCG v0.7.85 — 安定化・テストプレイ・BP01同期待ちTier誤判定修正・戦闘表示整理・DAMAGE CHECK画像・攻撃矢印・CPU可読速度・Tier合法性ガード・全検査・診断";
+        m.start_url="/?pwa=1&v=0785";
         m.scope="/";
         m.display=m.display||"standalone";
         m.orientation="landscape";
@@ -4003,7 +4096,7 @@ export default{
 
       if(u.pathname==="/sw.js"){
         let sw=await r.text();
-        sw+="\n// v0.7.84 stability hub + test play + tier BP01 sync defer + clean battle visuals + direct damage art + diagnostics\n";
+        sw+="\n// v0.7.85 stability hub + test play + tier BP01 sync defer + clean battle visuals + direct damage art + diagnostics\n";
         h.delete("content-length");
         h.delete("content-encoding");
         h.delete("etag");
